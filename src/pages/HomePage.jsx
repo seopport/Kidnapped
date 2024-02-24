@@ -1,8 +1,8 @@
-import Map from 'components/Map';
+import Location from 'components/Location';
 const HomePage = () => {
   return (
     <div>
-      <Map />
+      <Location />
     </div>
   );
 };
