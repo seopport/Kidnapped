@@ -12,7 +12,7 @@ import { FaStar } from 'react-icons/fa';
 const Review = () => {
   const [gradeStar, setGradeStar] = useState(0);
   const [isOptionMenuOpen, setIsOptionMenuOpen] = useState(false);
-  const modalBg = useRef();
+  //   const modalBg = useRef();
 
   //이건 Star라는 컴포넌트
   // 생성된 Star 컴포넌트가 FaStar 컴포넌트를 만들어낸다
@@ -21,18 +21,14 @@ const Review = () => {
     return <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />;
   };
 
-  const handleOptionMenuModalClose = (e) => {
-    //currenteveent = 리뷰전체컨테이너
-    //target = 클릭한 요소
-    console.log('리뷰컨테이너 ref의 current', modalBg.current, '클릭이벤트 target', e.target, e.currentTarget);
-    if (modalBg.current === e.target) {
-      console.log('first2');
+  const handleOptionMenuModalClose = () => {
+    if (isOptionMenuOpen) {
       setIsOptionMenuOpen(false);
     }
   };
 
   return (
-    <StReviewTapContainer>
+    <StReviewTapContainer onClick={handleOptionMenuModalClose}>
       <StReviewFormContainer>
         <StReviewTextArea placeholder="리뷰를 작성해주세요." />
         <StDropdownFormButtonWrap>
@@ -56,7 +52,7 @@ const Review = () => {
       </StReviewFormContainer>
       {/* 리뷰댓글 */}
       <StReviewContainer>
-        <StModalBackground onClick={handleOptionMenuModalClose} ref={modalBg} $isOptionMenuOpen={isOptionMenuOpen} />
+        {/* <StModalBackground onClick={handleOptionMenuModalClose} ref={modalBg} $isOptionMenuOpen={isOptionMenuOpen} /> */}
         <StReviewInfoWrap>
           <StReviewWriterProfileImage>르</StReviewWriterProfileImage>
           <StReviewProfileWrap>
@@ -213,15 +209,15 @@ export const StOptionsMenuModal = styled.ul`
   position: absolute;
 `;
 
-export const StModalBackground = styled.div`
-  background-color: transparent;
-  z-index: 999;
-  width: 335px;
-  height: 100%;
-  margin-top: 800px;
-  position: fixed;
-  display: ${(props) => (props.$isOptionMenuOpen ? 'block' : 'none')};
-`;
+// export const StModalBackground = styled.div`
+//   background-color: transparent;
+//   z-index: 999;
+//   width: 335px;
+//   height: 100%;
+//   margin-top: 800px;
+//   position: fixed;
+//   display: ${(props) => (props.$isOptionMenuOpen ? 'block' : 'none')};
+// `;
 
 export const StGradeModal = styled.ul`
   display: flex;
