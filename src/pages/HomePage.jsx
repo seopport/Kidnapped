@@ -1,8 +1,8 @@
-import Location from 'components/Location';
+import MapLoader from 'components/MapLoader';
 const HomePage = () => {
   return (
     <div>
-      <Location />
+      <MapLoader />
     </div>
   );
 };
