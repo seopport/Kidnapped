@@ -1,3 +1,11 @@
 {
-  "reviews": []
+  "reviews": [
+    {
+      "reviewId": "리뷰 아이디",
+      "userId": "유저 아이디",
+      "nickname": "유저 닉네임",
+      "content": "리뷰 내용",
+      "createdAt": "작성 날짜"
+    }
+  ]
 }

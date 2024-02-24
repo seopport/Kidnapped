@@ -1,14 +1,17 @@
-import React from 'react'
-import styled from 'styled-components'
-import colors from 'styles/theme'
+import React from 'react';
+import styled from 'styled-components';
+import colors from 'styles/theme';
+import Review from './Review';
 
 const SideBar = () => {
   return (
-    <StSideBar></StSideBar>
-  )
-}
+    <StSideBar>
+      <Review />
+    </StSideBar>
+  );
+};
 
-export default SideBar
+export default SideBar;
 
 export const StSideBar = styled.div`
   position: absolute;
@@ -18,4 +21,4 @@ export const StSideBar = styled.div`
   height: 100vh;
   background-color: ${colors.subColor};
   z-index: 2;
-`
+`;

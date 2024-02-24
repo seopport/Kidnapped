@@ -4,13 +4,15 @@ import React from 'react';
 import styled from 'styled-components';
 
 const HomePage = () => {
-  return <div>
-    <StContainer>
-      <Header />
-      <SideBar />
-      <StMap />
-    </StContainer>
-  </div>
+  return (
+    <div>
+      <StContainer>
+        <Header />
+        <SideBar />
+        <StMap />
+      </StContainer>
+    </div>
+  );
 };
 
 export default HomePage;
@@ -21,7 +23,7 @@ export const StContainer = styled.main`
   height: 100vh;
   z-index: 2;
   overflow: hidden;
-`
+`;
 // TODO: 추후 Map 구현 후 style만 적용후 제거 -> Map Component 추가후 수정하시면 됩니다 :)
 export const StMap = styled.div`
   position: absolute;
@@ -31,4 +33,4 @@ export const StMap = styled.div`
   height: 100vh;
   background-color: lightgray;
   z-index: 1;
-`
+`;
