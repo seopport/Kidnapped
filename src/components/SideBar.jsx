@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import colors from 'styles/theme'
 
 const SideBar = () => {
-    return (
-        <StSideBar></StSideBar>
-    )
+  return (
+    <StSideBar></StSideBar>
+  )
 }
 
 export default SideBar
