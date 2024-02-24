@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import colors from 'styles/theme';
-import { IoIosArrowUp } from 'react-icons/io';
-import { IoIosArrowDown } from 'react-icons/io';
+// import { IoIosArrowUp } from 'react-icons/io';
+// import { IoIosArrowDown } from 'react-icons/io';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { GoPencil } from 'react-icons/go';
 import { FaRegTrashAlt } from 'react-icons/fa';
@@ -10,16 +10,17 @@ import { FaRegStar } from 'react-icons/fa';
 import { FaStar } from 'react-icons/fa';
 
 const Review = () => {
-  const [gradeStar, setGradeStar] = useState(['⭐']);
-  // 서버에서 평점 받아와서 숫자로 set하고 숫자에따라 map?
+  const [gradeStar, setGradeStar] = useState(0);
 
-  const [isClicked, setIsClicked] = useState(false);
+  //이건 Star라는 컴포넌트
+  // 생성된 Star 컴포넌트가 FaStar 컴포넌트를 만들어낸다
+  //생성된 별 아이콘을 클릭했을때 handleStarIconClick가 실행되고 그 클릭된 별아이콘의 인덱스값으로 gradeStar가 set됨
+  const Star = ({ selected = false, handleStarIconClick = (f) => f }) => {
+    return <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />;
+  };
 
-  const handleGradeStarClick = (gradeValue) => {
-    //gradeValue 키값까지 FaStar로바꿔라
-    setIsClicked(true);
-    return;
-    // <FaStar /> * gradeValue;
+  const handleStarIconClick = (index) => {
+    setGradeStar(index);
   };
 
   return (
@@ -30,23 +31,22 @@ const Review = () => {
           <StGradeDropdown>
             <span style={{ marginRight: '3px' }}>평점</span>
             <StStarContainer>
-              {[1, 2, 3, 4, 5].map((item) => {
-                // 1, 2, 3...이 아이템으로 각각 들어감
-                return <StEmptyStar $isClicked={isClicked} key={item} onClick={() => handleGradeStarClick(item)} />;
+              {/* Star라는 컴포넌트 5개가 만들어짐 */}
+              {/* selected 프롭스는 gradeStar가 index보다 크면  true가 됨 */}
+              {/* handleStarIconClick 함수 프롭스도 넘겨줌 */}
+              {[1, 2, 3, 4, 5].map((index) => {
+                return (
+                  <Star
+                    key={index}
+                    selected={gradeStar >= index}
+                    handleStarIconClick={() => handleStarIconClick(index)}
+                  />
+                );
               })}
+              {/* <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />; */}
             </StStarContainer>
-
-            {/* 클릭하면 별 채워지게*/}
-            {/* <IoIosArrowDown style={{ marginTop: '2px' }} /> */}
           </StGradeDropdown>
-          {/* 평점 모달 */}
-          {/* <StGradeModal>
-            <li>⭐</li>
-            <li>⭐⭐</li>
-            <li>⭐⭐⭐</li>
-            <li>⭐⭐⭐⭐</li>
-            <li>⭐⭐⭐⭐⭐</li>
-          </StGradeModal> */}
+
           <StReviewFormBottom>등록</StReviewFormBottom>
         </StDropdownFormButtonWrap>
       </StReviewFormContainer>
@@ -58,9 +58,7 @@ const Review = () => {
               <div style={{ display: 'flex', marginBottom: '3px' }}>
                 <StReviewWriterNicnkname>르탄이..</StReviewWriterNicnkname>
                 <StReviewGrade>
-                  {gradeStar.map((item) => {
-                    return item;
-                  })}
+                  <FaStar />
                 </StReviewGrade>
                 {/* 별 개수에 따라 회색별 조건부렌더링? */}
               </div>
@@ -89,9 +87,8 @@ const Review = () => {
   );
 };
 
-export const StEmptyStar = styled(FaRegStar)`
-  //이걸개별적으로 적용해야하는데
-  background-color: ${(props) => (props.$isClicked ? 'black' : 'yellow')};
+export const StStarIcon = styled(FaStar)`
+  border: 1px solid ${colors.starColor};
 `;
 
 export const StReviewTapContainer = styled.div`
