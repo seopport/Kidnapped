@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import colors from 'styles/theme';
 // import { IoIosArrowUp } from 'react-icons/io';
@@ -11,6 +11,8 @@ import { FaStar } from 'react-icons/fa';
 
 const Review = () => {
   const [gradeStar, setGradeStar] = useState(0);
+  const [isOptionMenuOpen, setIsOptionMenuOpen] = useState(false);
+  const modalBg = useRef();
 
   //이건 Star라는 컴포넌트
   // 생성된 Star 컴포넌트가 FaStar 컴포넌트를 만들어낸다
@@ -19,8 +21,14 @@ const Review = () => {
     return <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />;
   };
 
-  const handleStarIconClick = (index) => {
-    setGradeStar(index);
+  const handleOptionMenuModalClose = (e) => {
+    //currenteveent = 리뷰전체컨테이너
+    //target = 클릭한 요소
+    console.log('리뷰컨테이너 ref의 current', modalBg.current, '클릭이벤트 target', e.target, e.currentTarget);
+    if (modalBg.current === e.target) {
+      console.log('first2');
+      setIsOptionMenuOpen(false);
+    }
   };
 
   return (
@@ -36,11 +44,7 @@ const Review = () => {
               {/* handleStarIconClick 함수 프롭스도 넘겨줌 */}
               {[1, 2, 3, 4, 5].map((index) => {
                 return (
-                  <Star
-                    key={index}
-                    selected={gradeStar >= index}
-                    handleStarIconClick={() => handleStarIconClick(index)}
-                  />
+                  <Star key={index} selected={gradeStar >= index} handleStarIconClick={() => setGradeStar(index)} />
                 );
               })}
               {/* <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />; */}
@@ -50,7 +54,9 @@ const Review = () => {
           <StReviewFormBottom>등록</StReviewFormBottom>
         </StDropdownFormButtonWrap>
       </StReviewFormContainer>
+      {/* 리뷰댓글 */}
       <StReviewContainer>
+        <StModalBackground onClick={handleOptionMenuModalClose} ref={modalBg} $isOptionMenuOpen={isOptionMenuOpen} />
         <StReviewInfoWrap>
           <StReviewWriterProfileImage>르</StReviewWriterProfileImage>
           <StReviewProfileWrap>
@@ -66,10 +72,10 @@ const Review = () => {
             </div>
 
             {/* 점점점 메뉴 버튼 */}
-            <StHiOutlineDotsVertical />
+            <StHiOutlineDotsVertical onClick={() => setIsOptionMenuOpen(true)} />
           </StReviewProfileWrap>
         </StReviewInfoWrap>
-        <StOptionsMenuModal>
+        <StOptionsMenuModal $isOptionMenuOpen={isOptionMenuOpen}>
           <li style={{ display: 'flex' }}>
             <GoPencil style={{ marginRight: '3px' }} />
             수정
@@ -97,6 +103,7 @@ export const StReviewTapContainer = styled.div`
   margin: 0 auto;
   color: ${colors.subColor};
   padding-bottom: 20px;
+  position: relative;
 `;
 
 export const StReviewFormContainer = styled.div`
@@ -186,11 +193,12 @@ export const StHiOutlineDotsVertical = styled(HiOutlineDotsVertical)`
 `;
 
 export const StOptionsMenuModal = styled.ul`
+  z-index: 999;
   width: 65px;
   height: 65px;
   font-size: 12px;
   padding: 10px;
-  display: flex;
+  display: ${(props) => (props.$isOptionMenuOpen ? 'flex' : 'none')};
   flex-direction: column;
   gap: 15px;
   position: absolute;
@@ -202,6 +210,17 @@ export const StOptionsMenuModal = styled.ul`
   box-shadow: 2px 1px 6.6px rgba(0, 0, 0, 0.13);
   border-radius: 10px;
   cursor: pointer;
+  position: absolute;
+`;
+
+export const StModalBackground = styled.div`
+  background-color: transparent;
+  z-index: 999;
+  width: 335px;
+  height: 100%;
+  margin-top: 800px;
+  position: fixed;
+  display: ${(props) => (props.$isOptionMenuOpen ? 'block' : 'none')};
 `;
 
 export const StGradeModal = styled.ul`
