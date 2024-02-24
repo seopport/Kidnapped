@@ -1,7 +1,10 @@
-import React from 'react';
-
+import Map from 'components/Map';
 const HomePage = () => {
-  return <div>HomePage</div>;
+  return (
+    <div>
+      <Map />
+    </div>
+  );
 };
 
 export default HomePage;

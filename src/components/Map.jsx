@@ -1,7 +1,5 @@
-import React from 'react';
-
-const Home = () => {
-  return <div>Home</div>;
+const Map = () => {
+  return <div>안녕</div>;
 };
 
-export default Home;
+export default Map;
