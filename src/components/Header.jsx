@@ -27,6 +27,7 @@ export const StHeader = styled.header`
     width: 100vw;
     height: 68px;
     background: ${colors.mainColor};
+    z-index: 3;
 `
 export const StHeaderTitle = styled.h1`
     font-weight: 700;
