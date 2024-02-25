@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { login } from '../redux/modules/authSlice';
+import { __login } from '../redux/modules/authSlice';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import useForm from 'hooks/useForm';
@@ -20,20 +20,21 @@ const LoginPage = () => {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     if (isLoginMode) {
+      dispatch(__login({ id, password }));
       //로그인 처리
-      try {
-        const { data } = await authApi.post('/login?expiresIn=30m', {
-          id,
-          password
-        });
-        const { accessToken, nickname, avatar, userId } = data;
-        if (data.success) {
-          dispatch(login({ accessToken, nickname, avatar, userId }));
-          toast.success('로그인 성공!');
-        }
-      } catch (err) {
-        toast.error(err.response.data.message);
-      }
+      // try {
+      //   const { data } = await authApi.post('/login?expiresIn=30m', {
+      //     id,
+      //     password
+      //   });
+      //   const { accessToken, nickname, avatar, userId } = data;
+      //   if (data.success) {
+      //     dispatch(login({ accessToken, nickname, avatar, userId }));
+      //     toast.success('로그인 성공!');
+      //   }
+      // } catch (err) {
+      //   toast.error(err.response.data.message);
+      // }
     } else {
       // 회원가입 처리
       try {
