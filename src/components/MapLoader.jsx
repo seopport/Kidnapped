@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 const { kakao } = window;
 
 const Location = () => {
+  const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
   const [positions, setPositions] = useState([]);
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
@@ -47,12 +48,8 @@ const Location = () => {
               lat: data[i].y,
               lng: data[i].x
             },
-            content: `
-            ${placeName}
-            ${roadAddress}
-            ${jibunAddress}
-            ${phoneNumber}
-            `
+            placeName,
+            roadAddress
           });
           // @ts-ignore
           bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
@@ -95,6 +92,10 @@ const Location = () => {
     setPositions(positions);
   }, [map]);
 
+  const handleMarkerClick = (index) => {
+    setSelectedMarkerIndex(index);
+  };
+
   return (
     <StMapContiner>
       <StMapSize // 지도를 표시할 Container
@@ -108,16 +109,20 @@ const Location = () => {
         <MapTypeControl position={kakao.maps.ControlPosition.TOPRIGHT} />
 
         {/* 마커 생성 후 지도에 표시 */}
-        <MarkerClusterer
-          averageCenter={true} // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-          minLevel={6} // 클러스터 할 최소 지도 레벨
-        >
-          {markers.map((marker) => (
+        <MarkerClusterer averageCenter={true} minLevel={6}>
+          {markers.map((marker, index) => (
             <MapMarker
-              key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+              key={`marker-${marker.position.lat},${marker.position.lng}`}
               position={marker.position}
+              onClick={() => handleMarkerClick(index)}
             >
-              <div style={{ color: '#000' }}>{marker.content}</div>
+              {/* 해당 마커에 대한 오버레이 */}
+              {index === selectedMarkerIndex && (
+                <CustomOverlay>
+                  <StPlaceName>{marker.placeName}</StPlaceName>
+                  <p>{marker.roadAddress}</p>
+                </CustomOverlay>
+              )}
             </MapMarker>
           ))}
         </MarkerClusterer>
@@ -133,6 +138,17 @@ const StMapContiner = styled.div`
 const StMapSize = styled(Map)`
   width: 100%;
   height: 100%;
+`;
+
+const CustomOverlay = styled.div`
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+const StPlaceName = styled.p`
+  font-size: 19px;
+  font-weight: bold;
 `;
 
 export default Location;
