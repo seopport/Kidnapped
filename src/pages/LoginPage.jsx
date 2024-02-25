@@ -21,8 +21,18 @@ const LoginPage = () => {
     event.preventDefault();
     if (isLoginMode) {
       //로그인 처리
-      dispatch(login());
-      toast.success('로그인 성공!');
+      try {
+        const { data } = await axios.post('https://moneyfulpublicpolicy.co.kr/login', {
+          id,
+          password
+        });
+        if (data.success) {
+          dispatch(login(data.accessToken));
+          toast.success('로그인 성공!');
+        }
+      } catch (err) {
+        toast.error(err.response.data.message);
+      }
     } else {
       // 회원가입 처리
       try {
