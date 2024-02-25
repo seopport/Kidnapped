@@ -1,8 +1,38 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/modules/authSlice';
 import styled from 'styled-components';
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
   const [isLoginMode, setIsLoginMode] = useState(true);
+  const initialState = {
+    id: '',
+    password: '',
+    nickname: ''
+  };
+
+  const [formState, setFormState] = useState(initialState);
+  const { id, password, nickname } = formState;
+
+  const onChangeHandler = (event) => {
+    const { name, value } = event.target;
+    setFormState((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
+    if (isLoginMode) {
+      //로그인 처리
+      dispatch(login());
+      alert('로그인 성공');
+    } else {
+      // 회원가입 처리
+      setIsLoginMode(true);
+      setFormState(initialState);
+      alert('회원가입 성공');
+    }
+  };
 
   return (
     <StLayoutImage>
@@ -10,15 +40,23 @@ const LoginPage = () => {
         <StHomeLink>Home</StHomeLink>
         <StLoginPageTitle>"너 납치된 거야"</StLoginPageTitle>
         <StLoginBox>
-          <StLoginForm>
+          <StLoginForm onSubmit={onSubmitHandler}>
             <StFormTitle>Kidnapped</StFormTitle>
             <StFormSubTitle>{isLoginMode ? '로그인' : '회원가입'}</StFormSubTitle>
-            <StLoginInput placeholder="아이디" />
-            <StLoginInput placeholder="비밀번호" />
-            {!isLoginMode && <StLoginInput placeholder="닉네임 (2자 이상)" minLength={2} />}
+            <StLoginInput name="id" value={id} onChange={onChangeHandler} placeholder="아이디" />
+            <StLoginInput name="password" value={password} onChange={onChangeHandler} placeholder="비밀번호" />
+            {!isLoginMode && (
+              <StLoginInput
+                name="nickname"
+                value={nickname}
+                onChange={onChangeHandler}
+                placeholder="닉네임 (2자 이상)"
+                minLength={2}
+              />
+            )}
             <StLoginButton>{isLoginMode ? '로그인' : '회원가입'}</StLoginButton>
             <StToggleBox>
-              <span>회원이 아니신가요?</span>
+              <span>{isLoginMode ? '회원이 아니신가요?' : '이미 회원이신가요?'}</span>
               <span onClick={() => setIsLoginMode((prev) => !prev)}>{isLoginMode ? '회원가입' : '로그인'}</span>
             </StToggleBox>
           </StLoginForm>
@@ -108,6 +146,10 @@ const StToggleBox = styled.div`
   & span:last-child {
     color: #171e2e;
     text-decoration: underline;
+    user-select: none;
     cursor: pointer;
+    &:hover {
+      color: purple;
+    }
   }
 `;
