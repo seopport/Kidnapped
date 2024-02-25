@@ -34,7 +34,7 @@ const Location = () => {
 
         for (var i = 0; i < data.length; i++) {
           const id = data[i].id; // 장소 ID
-          const placeName = data[i].place_name; // 장소 ID
+          const placeName = data[i].place_name; // 장소명
           const categoryName = data[i].category_name; // 카테고리 이름
           const phoneNumber = data[i].phone; // 전화번호
           const jibunAddress = data[i].address_name; // 전체 지번 주소
@@ -49,7 +49,9 @@ const Location = () => {
               lng: data[i].x
             },
             placeName,
-            roadAddress
+            roadAddress,
+            phoneNumber,
+            placeUrl
           });
           // @ts-ignore
           bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
@@ -95,6 +97,9 @@ const Location = () => {
   const handleMarkerClick = (index) => {
     setSelectedMarkerIndex(index);
   };
+  const handleCloseButtonClick = () => {
+    setSelectedMarkerIndex(null);
+  };
 
   return (
     <StMapContiner>
@@ -119,8 +124,11 @@ const Location = () => {
               {/* 해당 마커에 대한 오버레이 */}
               {index === selectedMarkerIndex && (
                 <CustomOverlay>
+                  <StCloseButton onClick={handleCloseButtonClick}>x</StCloseButton>
                   <StPlaceName>{marker.placeName}</StPlaceName>
-                  <p>{marker.roadAddress}</p>
+                  <StRoadAddress>{marker.roadAddress}</StRoadAddress>
+                  <StPhoneNumber>{marker.phoneNumber}</StPhoneNumber>
+                  <StPlaceUrl>{marker.placeUrl}</StPlaceUrl>
                 </CustomOverlay>
               )}
             </MapMarker>
@@ -142,13 +150,29 @@ const StMapSize = styled(Map)`
 
 const CustomOverlay = styled.div`
   background-color: white;
-  padding: 20px;
-  border-radius: 5px;
+  padding: 26px;
+  border-radius: 9px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 const StPlaceName = styled.p`
-  font-size: 19px;
+  font-size: 15px;
   font-weight: bold;
+`;
+const StRoadAddress = styled.p`
+  font-size: 11px;
+  margin-top: 5px;
+`;
+const StPhoneNumber = styled.p``;
+const StPlaceUrl = styled.p``;
+const StCloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #007bff;
 `;
 
 export default Location;
