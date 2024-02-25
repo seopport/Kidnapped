@@ -24,6 +24,7 @@ const Review = () => {
   const [isGradeInvalid, setIsGradeinvalid] = useState(false);
   const [isModifying, setIsModifying] = useState(false);
   const [reviewId, setReviewId] = useState('');
+  const [clickedReviewId, setClickedReviewId] = useState(null);
 
   useEffect(() => {
     const loadReviews = async () => {
@@ -44,12 +45,6 @@ const Review = () => {
   const handleStarIconClick = (idx) => {
     setGradeStar(idx);
     setIsGradeinvalid(false);
-  };
-
-  const handleModalClose = () => {
-    if (isOptionMenuOpen) {
-      setIsOptionMenuOpen(false);
-    }
   };
 
   const MakeStar = ({ grade }) => {
@@ -175,21 +170,13 @@ const Review = () => {
     return;
   };
 
-  const handleOptionButtonClick = (e, id) => {
-    e.stopPropagation();
-    for (const review of reviews) {
-      console.log(review.id, id);
-      //그 리뷰만 열리게..
-      if (review.id === id) {
-        setIsOptionMenuOpen(true);
-      }
-    }
-    // reviews.map((item) => {
-    //   if (item.id === id) {
-    //     setIsOptionMenuOpen(true);
-    //   }
-    // });
+  const handleOptionButtonClick = (id) => {
+    setClickedReviewId(id);
   };
+
+  // const handleModalClose = () => {
+  //   setClickedReviewId(null);
+  // };
 
   return (
     <StReviewTapContainer>
@@ -237,7 +224,7 @@ const Review = () => {
       {reviews?.map((item, idx) => {
         const randomColor = randomBrightColor();
         return (
-          <StReviewContainer key={item.id} $reviewLength={reviews.length} onClick={handleModalClose}>
+          <StReviewContainer key={item.id} $reviewLength={reviews.length}>
             <StReviewInfoWrap>
               <StReviewWriterProfileImage $randomColor={randomColor}>{item.nickname[0]}</StReviewWriterProfileImage>
               <StReviewProfileWrap>
@@ -254,25 +241,29 @@ const Review = () => {
 
                 {/* 점점점 메뉴 버튼!!!!!!!!!!!!!!!!!!!!!!!!! */}
                 {/* todo: 리덕스에서 받아온 유저 아이디와 인자로받아온 userId가 같아야만 메뉴 출력 */}
-                <StHiOutlineDotsVertical onClick={(e) => handleOptionButtonClick(e, item.id)} />
+                <StHiOutlineDotsVertical onClick={() => handleOptionButtonClick(item.id)} />
               </StReviewProfileWrap>
             </StReviewInfoWrap>
-            <StOptionsMenuModal $isOptionMenuOpen={isOptionMenuOpen}>
-              {/* 수정 */}
-              <li
-                onClick={() => handleModifyReviewButtonClick(item.userId, item.id, item.content, item.grade)}
-                style={{ display: 'flex', padding: '10px' }}
-              >
-                <GoPencil style={{ marginRight: '3px' }} />
-                수정
-              </li>
 
-              {/* 삭제 */}
-              <li onClick={() => handleDeleteReviewButtonClick(item.id)} style={{ display: 'flex', padding: '10px' }}>
-                <FaRegTrashAlt style={{ marginRight: '3px' }} />
-                삭제
-              </li>
-            </StOptionsMenuModal>
+            {/* 모달!!!!!!!!!!!!!--------- */}
+            {clickedReviewId === item.id && (
+              <StOptionsMenuModal>
+                {/* 수정 */}
+                <li
+                  onClick={() => handleModifyReviewButtonClick(item.userId, item.id, item.content, item.grade)}
+                  style={{ display: 'flex', padding: '10px' }}
+                >
+                  <GoPencil style={{ marginRight: '3px' }} />
+                  수정
+                </li>
+
+                {/* 삭제 */}
+                <li onClick={() => handleDeleteReviewButtonClick(item.id)} style={{ display: 'flex', padding: '10px' }}>
+                  <FaRegTrashAlt style={{ marginRight: '3px' }} />
+                  삭제
+                </li>
+              </StOptionsMenuModal>
+            )}
 
             {/* 리뷰 내용 */}
             <StReviewContent>{item.content} </StReviewContent>
@@ -409,8 +400,10 @@ export const StOptionsMenuModal = styled.ul`
   height: 65px;
   font-size: 12px;
 
-  display: ${(props) => (props.$isOptionMenuOpen ? 'flex' : 'none')};
+  /* display: ${(props) => (props.$isOptionMenuOpen ? 'flex' : 'none')}; */
+  display: flex;
   flex-direction: column;
+
   position: absolute;
   top: 25px;
   align-items: center;
