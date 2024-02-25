@@ -80,7 +80,7 @@ const Review = () => {
       return;
     }
     if (gradeStar === 0) {
-      alert('평점을 선택해주세요.');
+      alert('별점을 선택해주세요.');
       setIsGradeinvalid(true);
       return;
     }
@@ -118,6 +118,7 @@ const Review = () => {
 
   // 리뷰 수정 클릭 ----------------------------------
   const handleModifyReviewButtonClick = async (userId, reviewId, content, grade) => {
+    textArea.current.focus();
     setIsModifying(true);
     setReviewContent(content);
     setModifiedReviewContent(content);
@@ -140,6 +141,7 @@ const Review = () => {
       alert('수정이 완료되었습니다.');
       setIsModifying(false);
       setReviewContent('');
+      setGradeStar(0);
     } catch (error) {
       alert('오류가 발생했습니다. 잠시후 다시 시도해주세요.');
       console.log(error);
