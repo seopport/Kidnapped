@@ -1,24 +1,27 @@
 {
   "reviews": [
     {
-      "reviewId": "1",
+      "id": "1",
       "userId": "유저 아이디",
       "nickname": "유저 닉네임",
       "content": "리뷰 내용",
+      "grade": "3",
       "createdAt": "작성 날짜"
     },
     {
-      "reviewId": "2",
+      "id": "2",
       "userId": "1",
       "nickname": "르탄이",
       "content": "신테마가 대전에 생겨서 와봤는데 재밌네요! 직원분들도 친절하시고 설명도 너무 좋았어요~",
+      "grade": "4",
       "createdAt": "24.02.23"
     },
     {
-      "reviewId": "3",
+      "id": "3",
       "userId": "2",
       "nickname": "삼탄이",
       "content": "허쉬초콜릿 드링크 프로틴 운동 후 에너지충전엔 초콜릿 드링크 허쉬 프로틴의 비밀",
+      "grade": "2",
       "createdAt": "24.02.24"
     }
   ]

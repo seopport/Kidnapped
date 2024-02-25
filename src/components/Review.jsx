@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import colors from 'styles/theme';
 // import { IoIosArrowUp } from 'react-icons/io';
@@ -8,27 +8,55 @@ import { GoPencil } from 'react-icons/go';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { FaRegStar } from 'react-icons/fa';
 import { FaStar } from 'react-icons/fa';
+import reviewApi from 'api/reviewApi';
 
 const Review = () => {
   const [gradeStar, setGradeStar] = useState(0);
   const [isOptionMenuOpen, setIsOptionMenuOpen] = useState(false);
-  //   const modalBg = useRef();
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const loadReviews = async () => {
+      const { data: reviewData } = await reviewApi.get();
+      setReviews(reviewData);
+    };
+
+    loadReviews();
+  }, []);
+
+  console.log(reviews);
 
   //이건 Star라는 컴포넌트
   // 생성된 Star 컴포넌트가 FaStar 컴포넌트를 만들어낸다
   //생성된 별 아이콘을 클릭했을때 handleStarIconClick가 실행되고 그 클릭된 별아이콘의 인덱스값으로 gradeStar가 set됨
-  const Star = ({ selected = false, handleStarIconClick = (f) => f }) => {
+  const Star = ({ selected = false, handleStarIconClick }) => {
     return <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />;
   };
 
-  const handleOptionMenuModalClose = () => {
+  const handleDeleteReview = () => {
+    if (window.confirm('리뷰를 삭제하시겠습니끼?')) {
+    } else {
+      alert('삭제취소');
+    }
+  };
+
+  const handleModalClose = () => {
     if (isOptionMenuOpen) {
       setIsOptionMenuOpen(false);
     }
   };
 
+  const MakeStar = ({ grade }) => {
+    const starArray = [...Array(5)].fill(false);
+    for (let i = 0; i < grade; i++) {
+      starArray[i] = true;
+    }
+    const stars = starArray.map((i) => <FaStar color={starArray[i - 1] ? 'gold' : 'grey'} />);
+    return stars;
+  };
+
   return (
-    <StReviewTapContainer onClick={handleOptionMenuModalClose}>
+    <StReviewTapContainer>
       <StReviewFormContainer>
         <StReviewTextArea placeholder="리뷰를 작성해주세요." />
         <StDropdownFormButtonWrap>
@@ -50,41 +78,43 @@ const Review = () => {
           <StReviewFormBottom>등록</StReviewFormBottom>
         </StDropdownFormButtonWrap>
       </StReviewFormContainer>
-      {/* 리뷰댓글 */}
-      <StReviewContainer>
-        {/* <StModalBackground onClick={handleOptionMenuModalClose} ref={modalBg} $isOptionMenuOpen={isOptionMenuOpen} /> */}
-        <StReviewInfoWrap>
-          <StReviewWriterProfileImage>르</StReviewWriterProfileImage>
-          <StReviewProfileWrap>
-            <div>
-              <div style={{ display: 'flex', marginBottom: '3px' }}>
-                <StReviewWriterNicnkname>르탄이..</StReviewWriterNicnkname>
-                <StReviewGrade>
-                  <FaStar />
-                </StReviewGrade>
-                {/* 별 개수에 따라 회색별 조건부렌더링? */}
-              </div>
-              <StReviewCreationDate>24.02.23</StReviewCreationDate>
-            </div>
 
-            {/* 점점점 메뉴 버튼 */}
-            <StHiOutlineDotsVertical onClick={() => setIsOptionMenuOpen(true)} />
-          </StReviewProfileWrap>
-        </StReviewInfoWrap>
-        <StOptionsMenuModal $isOptionMenuOpen={isOptionMenuOpen}>
-          <li style={{ display: 'flex' }}>
-            <GoPencil style={{ marginRight: '3px' }} />
-            수정
-          </li>
-          <li style={{ display: 'flex' }}>
-            <FaRegTrashAlt style={{ marginRight: '3px' }} />
-            삭제
-          </li>
-        </StOptionsMenuModal>
-        <StReviewContent>
-          신테마가 대전에 생겨서 와봤는데 재밌네요! 직원분들도 친절하시고 설명도 너무 좋았어요~
-        </StReviewContent>
-      </StReviewContainer>
+      {/* 리뷰댓글 */}
+      {reviews.map((item) => {
+        return (
+          <StReviewContainer onClick={handleModalClose}>
+            <StReviewInfoWrap>
+              <StReviewWriterProfileImage>르</StReviewWriterProfileImage>
+              <StReviewProfileWrap>
+                <div>
+                  <div style={{ display: 'flex', marginBottom: '3px' }}>
+                    <StReviewWriterNicnkname>{item.nickname}</StReviewWriterNicnkname>
+                    <StReviewGrade>
+                      {/* todo: item.grade 만큼 배열을 만들고 그배열길이 만큼 노란별 만들고, 5-배열길이 만큼 회색별생성 */}
+                      <MakeStar grade={item.grade} />
+                    </StReviewGrade>
+                  </div>
+                  <StReviewCreationDate>{item.createdAt}</StReviewCreationDate>
+                </div>
+
+                {/* 점점점 메뉴 버튼 */}
+                <StHiOutlineDotsVertical onClick={() => setIsOptionMenuOpen(true)} />
+              </StReviewProfileWrap>
+            </StReviewInfoWrap>
+            <StOptionsMenuModal $isOptionMenuOpen={isOptionMenuOpen}>
+              <li style={{ display: 'flex', padding: '10px' }}>
+                <GoPencil style={{ marginRight: '3px' }} />
+                수정
+              </li>
+              <li style={{ display: 'flex', padding: '10px' }} onClick={handleDeleteReview}>
+                <FaRegTrashAlt style={{ marginRight: '3px' }} />
+                삭제
+              </li>
+            </StOptionsMenuModal>
+            <StReviewContent>{item.content} </StReviewContent>
+          </StReviewContainer>
+        );
+      })}
     </StReviewTapContainer>
   );
 };
@@ -193,10 +223,9 @@ export const StOptionsMenuModal = styled.ul`
   width: 65px;
   height: 65px;
   font-size: 12px;
-  padding: 10px;
+
   display: ${(props) => (props.$isOptionMenuOpen ? 'flex' : 'none')};
   flex-direction: column;
-  gap: 15px;
   position: absolute;
   top: 25px;
   align-items: center;
