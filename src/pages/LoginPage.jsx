@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/modules/authSlice';
 import styled from 'styled-components';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -25,12 +26,12 @@ const LoginPage = () => {
     if (isLoginMode) {
       //로그인 처리
       dispatch(login());
-      alert('로그인 성공');
+      toast.success('로그인 성공!');
     } else {
       // 회원가입 처리
       setIsLoginMode(true);
       setFormState(initialState);
-      alert('회원가입 성공');
+      toast.success('회원가입 성공!');
     }
   };
 
