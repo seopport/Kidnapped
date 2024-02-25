@@ -17,8 +17,19 @@ const Review = () => {
   const [reviews, setReviews] = useState([]);
   const [reviewContent, setReviewContent] = useState('');
   const textArea = useRef();
-  const gradeWrap = useRef();
   const [isGradeInvalid, setIsGradeinvalid] = useState(false);
+  const [isModifying, setIsModifying] = useState(false);
+  const [modifiedReviewContent, setModifiedReviewContent] = useState();
+
+  //#region
+  const year = new Date().getFullYear();
+  const month = new Date().getMonth() + 1;
+  const date = new Date().getDate();
+  const week = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const day = week[new Date().getDay()];
+
+  const creationDate = [year, month, date].join('.') + ' ' + day;
+  //#endregion
 
   useEffect(() => {
     const loadReviews = async () => {
@@ -56,16 +67,8 @@ const Review = () => {
     setReviewContent(e.target.value);
   };
 
-  const year = new Date().getFullYear();
-  const month = new Date().getMonth() + 1;
-  const date = new Date().getDate();
-  const week = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
-  const day = week[new Date().getDay()];
-
-  const creationDate = [year, month, date].join('.') + ' ' + day;
-  console.log('🚀 ~ Review ~ creationDate:', creationDate);
-
-  const handleAddReviewButton = async () => {
+  // 리뷰 등록 ----------------------------------
+  const handleAddReviewButtonClick = async () => {
     if (!reviewContent.trim()) {
       alert('리뷰를 작성해주세요.');
       textArea.current.focus();
@@ -94,15 +97,53 @@ const Review = () => {
     }
   };
 
-  const handleDeleteReview = async (id) => {
+  // 리뷰 삭제 ----------------------------------
+  const handleDeleteReviewButtonClick = async (id) => {
     if (window.confirm('리뷰를 삭제하시겠습니끼?')) {
       try {
         await reviewApi.delete(`/${id}`);
         alert('리뷰가 삭제되었습니다.');
       } catch (error) {}
     } else {
-      alert('삭제취소');
     }
+  };
+
+  const [reviewId, setReviewId] = useState('');
+
+  // 리뷰 수정 클릭 ----------------------------------
+  const handleModifyReviewButtonClick = async (userId, reviewId, content) => {
+    setIsModifying(true);
+    setReviewContent(content);
+    setModifiedReviewContent(content);
+    setReviewId(reviewId);
+  };
+
+  // 리뷰 수정 완료
+  const handleCompleteButtonClick = async () => {
+    if (reviewContent === modifiedReviewContent) {
+      alert('수정 된 내용이 없습니다.');
+      return;
+    }
+    setModifiedReviewContent(reviewContent);
+    const newContent = { content: reviewContent };
+
+    try {
+      await reviewApi.patch(`/${reviewId}`, newContent);
+      alert('수정이 완료되었습니다.');
+      setIsModifying(false);
+      setReviewContent('');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 리뷰 수정 취소
+  const handleCancelButtonClick = async () => {
+    if (window.confirm('수정을 취소하시겠습니까?')) {
+      setReviewContent('');
+      setIsModifying(false);
+    }
+    return;
   };
 
   const randomBrightColor = () => {
@@ -125,9 +166,11 @@ const Review = () => {
           value={reviewContent}
           onChange={handleReviewContent}
           placeholder="리뷰를 작성해주세요."
+          maxLength={250}
+          spellCheck={false}
         />
-        <StDropdownFormButtonWrap>
-          <StGradeWrap ref={gradeWrap}>
+        <StFormButtonWrap>
+          <StGradeWrap>
             <span style={{ marginRight: '3px' }}>평점</span>
             <StStarContainer style={{ marginRight: '3px' }}>
               {/* Star라는 컴포넌트 5개가 만들어짐 */}
@@ -142,9 +185,19 @@ const Review = () => {
             </StStarContainer>
             {isGradeInvalid && <AiOutlineExclamationCircle color={'red'} />}
           </StGradeWrap>
-
-          <StReviewFormBottom onClick={handleAddReviewButton}>등록</StReviewFormBottom>
-        </StDropdownFormButtonWrap>
+          <div style={{ display: 'flex', gap: '3px' }}>
+            {!isModifying ? (
+              <>
+                <StReviewFormBottom onClick={handleAddReviewButtonClick}>등록</StReviewFormBottom>
+              </>
+            ) : (
+              <>
+                <StReviewFormBottom onClick={handleCompleteButtonClick}>완료</StReviewFormBottom>
+                <StReviewFormBottom onClick={() => handleCancelButtonClick()}>취소</StReviewFormBottom>
+              </>
+            )}
+          </div>
+        </StFormButtonWrap>
       </StReviewFormContainer>
 
       {/* 리뷰댓글 */}
@@ -167,19 +220,28 @@ const Review = () => {
                 </div>
 
                 {/* 점점점 메뉴 버튼 */}
+                {/* //리덕스에서 받아온 유저 아이디와 인자로받아온 userId가 같아야만 메뉴 출력 */}
                 <StHiOutlineDotsVertical onClick={() => setIsOptionMenuOpen(true)} />
               </StReviewProfileWrap>
             </StReviewInfoWrap>
             <StOptionsMenuModal $isOptionMenuOpen={isOptionMenuOpen}>
-              <li style={{ display: 'flex', padding: '10px' }}>
+              {/* 수정 */}
+              <li
+                onClick={() => handleModifyReviewButtonClick(item.userId, item.id, item.content)}
+                style={{ display: 'flex', padding: '10px' }}
+              >
                 <GoPencil style={{ marginRight: '3px' }} />
                 수정
               </li>
-              <li style={{ display: 'flex', padding: '10px' }} onClick={() => handleDeleteReview(item.id)}>
+
+              {/* 삭제 */}
+              <li onClick={() => handleDeleteReviewButtonClick(item.id)} style={{ display: 'flex', padding: '10px' }}>
                 <FaRegTrashAlt style={{ marginRight: '3px' }} />
                 삭제
               </li>
             </StOptionsMenuModal>
+
+            {/* 리뷰 내용 */}
             <StReviewContent>{item.content} </StReviewContent>
           </StReviewContainer>
         );
@@ -215,12 +277,10 @@ export const StReviewTextArea = styled.textarea`
   height: 92px;
   border-radius: 10px;
   padding: 10px;
-  /* box-shadow: 2px 1px 6.6px rgba(255, 5, 5, 0.6); */
-  margin-bottom: 5px;
   resize: none;
 `;
 
-export const StDropdownFormButtonWrap = styled.div`
+export const StFormButtonWrap = styled.div`
   display: flex;
   justify-content: space-between;
 `;
@@ -234,7 +294,7 @@ export const StGradeWrap = styled.div`
 `;
 
 export const StReviewFormBottom = styled.div`
-  width: 60px;
+  width: 57px;
   height: 30px;
   background-color: ${colors.mainColor};
   color: white;
@@ -243,18 +303,22 @@ export const StReviewFormBottom = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  border: 1px solid ${colors.subColor};
+  font-size: 12px;
+  transition: all 0.2s;
+  margin-top: 3px;
+
+  &:hover {
+    background-color: #f54f26;
+  }
 `;
 
 export const StReviewContainer = styled.div`
-  min-height: 140px;
+  padding: 20px 0;
   width: 100%;
   display: flex;
   justify-content: center;
-  //리뷰 하나면 보터 탑바텀 둘다, 하나이상이면 탑만
   border-top: 1px solid ${colors.subColor};
-  border-bottom: ${(props) => (props.$reviewLength === 1 ? `1px solid ${colors.subColor}` : 'none')}; //조건부 렌더링 필
+  border-bottom: ${(props) => (props.$reviewLength === 1 ? `1px solid ${colors.subColor}` : 'none')};
   flex-direction: column;
   position: relative;
 `;
@@ -351,6 +415,7 @@ export const StReviewCreationDate = styled.span`
 export const StReviewContent = styled.div`
   line-height: 23px;
   font-size: 14px;
+  padding: 0 5px;
 `;
 
 export const StStarContainer = styled.div`
