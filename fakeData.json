@@ -5,7 +5,7 @@
       "userId": "유저 아이디",
       "nickname": "유저 닉네임",
       "content": "제발 악!!!!!!!!!ㅇㄴ",
-      "grade": "3",
+      "grade": 5,
       "createdAt": "24.03.28 화요일"
     },
     {
@@ -38,6 +38,38 @@
       "nickname": "오리",
       "content": "ds",
       "grade": 2,
+      "createdAt": "2024.2.25 일요일"
+    },
+    {
+      "id": "f441c2c4-260e-4db9-bc3d-413079fd8b13",
+      "userId": "1",
+      "nickname": "오리",
+      "content": "ㄴㅇㄹ",
+      "grade": 5,
+      "createdAt": "2024.2.25 일요일"
+    },
+    {
+      "id": "4aa8e110-76ae-460c-9fd2-4489ab9ca09f",
+      "userId": "1",
+      "nickname": "오리",
+      "content": "ㅎ로",
+      "grade": "",
+      "createdAt": "2024.2.25 일요일"
+    },
+    {
+      "id": "e3a87855-5ba0-4fec-88d2-42750e5469b1",
+      "userId": "1",
+      "nickname": "오리",
+      "content": "ㅇㄹㄴㄹ",
+      "grade": "",
+      "createdAt": "2024.2.25 일요일"
+    },
+    {
+      "id": "801f78ba-adf3-4860-8f08-47b3e34a5243",
+      "userId": "1",
+      "nickname": "오리",
+      "content": "ㅇㄹㄴㄹ",
+      "grade": "",
       "createdAt": "2024.2.25 일요일"
     }
   ]

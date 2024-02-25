@@ -47,6 +47,11 @@ const Review = () => {
     return <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />;
   };
 
+  const handleStarIconClick = (idx) => {
+    setGradeStar(idx);
+    setIsGradeinvalid(false);
+  };
+
   const handleModalClose = () => {
     if (isOptionMenuOpen) {
       setIsOptionMenuOpen(false);
@@ -109,23 +114,26 @@ const Review = () => {
   };
 
   const [reviewId, setReviewId] = useState('');
+  const [modifiedGradeStar, setModifiedGradeStar] = useState(0);
 
   // 리뷰 수정 클릭 ----------------------------------
-  const handleModifyReviewButtonClick = async (userId, reviewId, content) => {
+  const handleModifyReviewButtonClick = async (userId, reviewId, content, grade) => {
     setIsModifying(true);
     setReviewContent(content);
     setModifiedReviewContent(content);
     setReviewId(reviewId);
+    setGradeStar(grade);
+    setModifiedGradeStar(grade);
   };
 
   // 리뷰 수정 완료
   const handleCompleteButtonClick = async () => {
-    if (reviewContent === modifiedReviewContent) {
+    if (reviewContent === modifiedReviewContent && gradeStar === modifiedGradeStar) {
       alert('수정 된 내용이 없습니다.');
       return;
     }
     setModifiedReviewContent(reviewContent);
-    const newContent = { content: reviewContent };
+    const newContent = { content: reviewContent, grade: +gradeStar };
 
     try {
       await reviewApi.patch(`/${reviewId}`, newContent);
@@ -133,6 +141,7 @@ const Review = () => {
       setIsModifying(false);
       setReviewContent('');
     } catch (error) {
+      alert('오류가 발생했습니다. 잠시후 다시 시도해주세요.');
       console.log(error);
     }
   };
@@ -151,11 +160,6 @@ const Review = () => {
     const colorG = Math.floor(Math.random() * 128 + 128).toString(16);
     const colorB = Math.floor(Math.random() * 128 + 128).toString(16);
     return `#${colorR + colorG + colorB}`;
-  };
-
-  const handleStarIconClick = (idx) => {
-    setGradeStar(idx);
-    setIsGradeinvalid(false);
   };
 
   return (
@@ -183,7 +187,7 @@ const Review = () => {
               })}
               {/* <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />; */}
             </StStarContainer>
-            {isGradeInvalid && <AiOutlineExclamationCircle color={'red'} />}
+            {isGradeInvalid && !isModifying && <AiOutlineExclamationCircle color={'red'} />}
           </StGradeWrap>
           <div style={{ display: 'flex', gap: '3px' }}>
             {!isModifying ? (
@@ -227,7 +231,7 @@ const Review = () => {
             <StOptionsMenuModal $isOptionMenuOpen={isOptionMenuOpen}>
               {/* 수정 */}
               <li
-                onClick={() => handleModifyReviewButtonClick(item.userId, item.id, item.content)}
+                onClick={() => handleModifyReviewButtonClick(item.userId, item.id, item.content, item.grade)}
                 style={{ display: 'flex', padding: '10px' }}
               >
                 <GoPencil style={{ marginRight: '3px' }} />
@@ -334,7 +338,8 @@ export const StReviewWriterProfileImage = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: ${(props) => props.$randomColor}; //TOOD: 랜덤생성
+  /* background-color: ${(props) => props.$randomColor}; //TOOD: 랜덤생성 */
+  background-color: #c4a6dd; //TOOD: 랜덤생성
   display: flex;
   line-height: 37px;
   justify-content: center;
