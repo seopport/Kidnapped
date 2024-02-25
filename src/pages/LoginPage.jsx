@@ -22,7 +22,7 @@ const LoginPage = () => {
     if (isLoginMode) {
       //로그인 처리
       try {
-        const { data } = await authApi.post('/login', {
+        const { data } = await authApi.post('/login?expiresIn=30m', {
           id,
           password
         });
