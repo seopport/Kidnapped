@@ -16,9 +16,9 @@ const Review = () => {
   const reviews = useSelector((state) => state.reviewSlice.reviews);
 
   const textArea = useRef();
+  const modalRef = useRef();
   const [gradeStar, setGradeStar] = useState(0);
   const [modifiedGradeStar, setModifiedGradeStar] = useState(0);
-  const [isOptionMenuOpen, setIsOptionMenuOpen] = useState(false);
   const [reviewContent, setReviewContent] = useState('');
   const [modifiedReviewContent, setModifiedReviewContent] = useState();
   const [isGradeInvalid, setIsGradeinvalid] = useState(false);
@@ -174,9 +174,9 @@ const Review = () => {
     setClickedReviewId(id);
   };
 
-  // const handleModalClose = () => {
-  //   setClickedReviewId(null);
-  // };
+  const handleModalClose = () => {
+    if (modalRef.current) setClickedReviewId(null);
+  };
 
   return (
     <StReviewTapContainer>
@@ -224,7 +224,7 @@ const Review = () => {
       {reviews?.map((item, idx) => {
         const randomColor = randomBrightColor();
         return (
-          <StReviewContainer key={item.id} $reviewLength={reviews.length}>
+          <StReviewContainer key={item.id} onClick={handleModalClose} $reviewLength={reviews.length}>
             <StReviewInfoWrap>
               <StReviewWriterProfileImage $randomColor={randomColor}>{item.nickname[0]}</StReviewWriterProfileImage>
               <StReviewProfileWrap>
@@ -247,7 +247,7 @@ const Review = () => {
 
             {/* 모달!!!!!!!!!!!!!--------- */}
             {clickedReviewId === item.id && (
-              <StOptionsMenuModal>
+              <StOptionsMenuModal ref={modalRef}>
                 {/* 수정 */}
                 <li
                   onClick={() => handleModifyReviewButtonClick(item.userId, item.id, item.content, item.grade)}
