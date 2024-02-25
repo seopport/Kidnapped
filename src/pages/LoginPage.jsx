@@ -4,25 +4,20 @@ import { login } from '../redux/modules/authSlice';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import useForm from 'hooks/useForm';
+import axios from 'axios';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const [isLoginMode, setIsLoginMode] = useState(true);
-
-  // const [formState, setFormState] = useState(initialState);
   const { formState, onChangeHandler, resetForm } = useForm({
     id: '',
     password: '',
     nickname: ''
   });
+
   const { id, password, nickname } = formState;
 
-  // const onChangeHandler = (event) => {
-  //   const { name, value } = event.target;
-  //   setFormState((prev) => ({ ...prev, [name]: value }));
-  // };
-
-  const onSubmitHandler = (event) => {
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
     if (isLoginMode) {
       //로그인 처리
@@ -30,9 +25,20 @@ const LoginPage = () => {
       toast.success('로그인 성공!');
     } else {
       // 회원가입 처리
-      setIsLoginMode(true);
-      resetForm();
-      toast.success('회원가입 성공!');
+      try {
+        const { data } = await axios.post('https://moneyfulpublicpolicy.co.kr/register', {
+          id,
+          password,
+          nickname
+        });
+        if (data.success) {
+          setIsLoginMode(true);
+          resetForm();
+          toast.success('회원가입 성공!');
+        }
+      } catch (err) {
+        toast.error(err.response.data.message);
+      }
     }
   };
 
