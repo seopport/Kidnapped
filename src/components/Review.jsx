@@ -14,6 +14,8 @@ const Review = () => {
   const [gradeStar, setGradeStar] = useState(0);
   const [isOptionMenuOpen, setIsOptionMenuOpen] = useState(false);
   const [reviews, setReviews] = useState([]);
+  const [reviewContent, setReviewContent] = useState('');
+  const textArea = useRef();
 
   useEffect(() => {
     const loadReviews = async () => {
@@ -23,8 +25,6 @@ const Review = () => {
 
     loadReviews();
   }, []);
-
-  console.log(reviews);
 
   //이건 Star라는 컴포넌트
   // 생성된 Star 컴포넌트가 FaStar 컴포넌트를 만들어낸다
@@ -51,14 +51,64 @@ const Review = () => {
     for (let i = 0; i < grade; i++) {
       starArray[i] = true;
     }
-    const stars = starArray.map((i) => <FaStar color={starArray[i - 1] ? 'gold' : 'grey'} />);
+    // 별 5개 생성
+    const stars = starArray.map((value, idx) => <FaStar key={idx} color={value ? 'gold' : 'grey'} />);
     return stars;
+  };
+
+  const handleReviewContent = (e) => {
+    setReviewContent(e.target.value);
+  };
+
+  const year = new Date().getFullYear();
+  const month = new Date().getMonth() + 1;
+  const date = new Date().getDate();
+  const week = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+  const day = week[new Date().getDay()];
+
+  const creationDate = [year, month, date].join('.') + ' ' + day;
+  console.log('🚀 ~ Review ~ creationDate:', creationDate);
+
+  const handleAddReviewButton = async () => {
+    if (!reviewContent.trim()) {
+      alert('리뷰를 작성해주세요.');
+      textArea.current.focus();
+      return;
+    }
+
+    const newRivew = {
+      id: crypto.randomUUID(),
+      userId: '1', //스토어에서 받아온 아이디, 닉네임
+      nickname: '오리',
+      content: reviewContent,
+      grade: gradeStar,
+      createdAt: creationDate
+    };
+
+    try {
+      await reviewApi.post('', newRivew);
+      alert('리뷰가 등록되었습니다.');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const randomBrightColor = () => {
+    const colorR = Math.floor(Math.random() * 128 + 128).toString(16);
+    const colorG = Math.floor(Math.random() * 128 + 128).toString(16);
+    const colorB = Math.floor(Math.random() * 128 + 128).toString(16);
+    return `#${colorR + colorG + colorB}`;
   };
 
   return (
     <StReviewTapContainer>
       <StReviewFormContainer>
-        <StReviewTextArea placeholder="리뷰를 작성해주세요." />
+        <StReviewTextArea
+          ref={textArea}
+          value={reviewContent}
+          onChange={handleReviewContent}
+          placeholder="리뷰를 작성해주세요."
+        />
         <StDropdownFormButtonWrap>
           <StGradeDropdown>
             <span style={{ marginRight: '3px' }}>평점</span>
@@ -66,31 +116,30 @@ const Review = () => {
               {/* Star라는 컴포넌트 5개가 만들어짐 */}
               {/* selected 프롭스는 gradeStar가 index보다 크면  true가 됨 */}
               {/* handleStarIconClick 함수 프롭스도 넘겨줌 */}
-              {[1, 2, 3, 4, 5].map((index) => {
-                return (
-                  <Star key={index} selected={gradeStar >= index} handleStarIconClick={() => setGradeStar(index)} />
-                );
+              {[1, 2, 3, 4, 5].map((idx) => {
+                return <Star key={idx} selected={gradeStar >= idx} handleStarIconClick={() => setGradeStar(idx)} />;
               })}
               {/* <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />; */}
             </StStarContainer>
           </StGradeDropdown>
 
-          <StReviewFormBottom>등록</StReviewFormBottom>
+          <StReviewFormBottom onClick={handleAddReviewButton}>등록</StReviewFormBottom>
         </StDropdownFormButtonWrap>
       </StReviewFormContainer>
 
       {/* 리뷰댓글 */}
-      {reviews.map((item) => {
+      {reviews?.map((item, idx) => {
+        const randomColor = randomBrightColor();
         return (
-          <StReviewContainer onClick={handleModalClose}>
+          <StReviewContainer key={item.id} $reviewLength={reviews.length} onClick={handleModalClose}>
             <StReviewInfoWrap>
-              <StReviewWriterProfileImage>르</StReviewWriterProfileImage>
+              <StReviewWriterProfileImage $randomColor={randomColor}>{item.nickname[0]}</StReviewWriterProfileImage>
               <StReviewProfileWrap>
                 <div>
                   <div style={{ display: 'flex', marginBottom: '3px' }}>
                     <StReviewWriterNicnkname>{item.nickname}</StReviewWriterNicnkname>
-                    <StReviewGrade>
-                      {/* todo: item.grade 만큼 배열을 만들고 그배열길이 만큼 노란별 만들고, 5-배열길이 만큼 회색별생성 */}
+                    <StReviewGrade key={item.id}>
+                      {/* 별점 */}
                       <MakeStar grade={item.grade} />
                     </StReviewGrade>
                   </div>
@@ -115,6 +164,7 @@ const Review = () => {
           </StReviewContainer>
         );
       })}
+      <div style={{ margin: '0', height: '1px', backgroundColor: colors.subColor }}></div>
     </StReviewTapContainer>
   );
 };
@@ -125,7 +175,7 @@ export const StStarIcon = styled(FaStar)`
 
 export const StReviewTapContainer = styled.div`
   width: 335px;
-  background-color: seashell; //임시
+  background-color: white; //임시
   margin: 0 auto;
   color: ${colors.subColor};
   padding-bottom: 20px;
@@ -134,7 +184,6 @@ export const StReviewTapContainer = styled.div`
 
 export const StReviewFormContainer = styled.div`
   width: 100%;
-  border: 1px solid green;
   margin-bottom: 20px;
   position: relative;
 `;
@@ -144,6 +193,9 @@ export const StReviewTextArea = styled.textarea`
   height: 92px;
   border-radius: 10px;
   padding: 10px;
+  /* box-shadow: 2px 1px 6.6px rgba(255, 5, 5, 0.6); */
+  margin-bottom: 5px;
+  resize: none;
 `;
 
 export const StDropdownFormButtonWrap = styled.div`
@@ -166,7 +218,8 @@ export const StReviewFormBottom = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
+  font-size: 14px;
+  border: 1px solid ${colors.subColor};
 `;
 
 export const StReviewContainer = styled.div`
@@ -176,7 +229,7 @@ export const StReviewContainer = styled.div`
   justify-content: center;
   //리뷰 하나면 보터 탑바텀 둘다, 하나이상이면 탑만
   border-top: 1px solid ${colors.subColor};
-  border-bottom: 1px solid ${colors.subColor}; //조건부 렌더링 필
+  border-bottom: ${(props) => (props.$reviewLength === 1 ? `1px solid ${colors.subColor}` : 'none')}; //조건부 렌더링 필
   flex-direction: column;
   position: relative;
 `;
@@ -192,24 +245,27 @@ export const StReviewWriterProfileImage = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #c8c4f5; //TOOD: 랜덤생성
+  background-color: ${(props) => props.$randomColor}; //TOOD: 랜덤생성
   display: flex;
-  align-items: center;
+  line-height: 37px;
   justify-content: center;
-  font-weight: bold;
   flex-shrink: 0;
+  color: #494949;
+  font-size: 15px;
+  border: 1px solid ${colors.mainTextColor};
 `;
 
 export const StReviewProfileWrap = styled.div`
-  margin-left: 10px;
+  margin-left: 7px;
   display: flex;
   justify-content: space-between;
   width: 100%;
 `;
 
 export const StReviewWriterNicnkname = styled.span`
-  font-size: 16px;
+  font-size: 14px;
   margin-right: 5px;
+  font-weight: bold;
 `;
 
 export const StHiOutlineDotsVertical = styled(HiOutlineDotsVertical)`
@@ -238,16 +294,6 @@ export const StOptionsMenuModal = styled.ul`
   position: absolute;
 `;
 
-// export const StModalBackground = styled.div`
-//   background-color: transparent;
-//   z-index: 999;
-//   width: 335px;
-//   height: 100%;
-//   margin-top: 800px;
-//   position: fixed;
-//   display: ${(props) => (props.$isOptionMenuOpen ? 'block' : 'none')};
-// `;
-
 export const StGradeModal = styled.ul`
   display: flex;
   flex-direction: column;
@@ -267,7 +313,9 @@ export const StGradeModal = styled.ul`
   border-radius: 10px;
 `;
 
-export const StReviewGrade = styled.div``;
+export const StReviewGrade = styled.div`
+  font-size: 13px;
+`;
 
 export const StReviewCreationDate = styled.span`
   font-size: 13px;

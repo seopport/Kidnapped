@@ -6,7 +6,7 @@
       "nickname": "유저 닉네임",
       "content": "리뷰 내용",
       "grade": "3",
-      "createdAt": "작성 날짜"
+      "createdAt": "24.03.28 화"
     },
     {
       "id": "2",
@@ -14,7 +14,7 @@
       "nickname": "르탄이",
       "content": "신테마가 대전에 생겨서 와봤는데 재밌네요! 직원분들도 친절하시고 설명도 너무 좋았어요~",
       "grade": "4",
-      "createdAt": "24.02.23"
+      "createdAt": "24.02.23 금"
     },
     {
       "id": "3",
@@ -22,7 +22,71 @@
       "nickname": "삼탄이",
       "content": "허쉬초콜릿 드링크 프로틴 운동 후 에너지충전엔 초콜릿 드링크 허쉬 프로틴의 비밀",
       "grade": "2",
-      "createdAt": "24.02.24"
+      "createdAt": "24.02.24 목요일"
+    },
+    {
+      "id": "ac9d1783-8b07-4733-96f9-0c7c0064e8a9",
+      "userId": "1",
+      "nickname": "nickname",
+      "content": "",
+      "grade": 0,
+      "createdAt": "2024.2.25 일요일"
+    },
+    {
+      "id": "fc3b0ed1-3dae-456f-92a2-d7f6bc905e28",
+      "userId": "1",
+      "nickname": "nickname",
+      "content": "   ",
+      "grade": 0,
+      "createdAt": "2024.2.25 일요일"
+    },
+    {
+      "id": "0e4d3716-155b-4da9-95d5-82e879bc1015",
+      "userId": "1",
+      "nickname": "nickname",
+      "content": "",
+      "grade": 0,
+      "createdAt": "2024.2.25 일요일"
+    },
+    {
+      "id": "11afa9dd-d0ef-4ebf-863e-fcbafddc274d",
+      "userId": "1",
+      "nickname": "오리",
+      "content": "d",
+      "grade": 0,
+      "createdAt": "2024.2.25 일요일"
+    },
+    {
+      "id": "530c4c2c-52c4-4270-a9f5-e437cee9ffb0",
+      "userId": "1",
+      "nickname": "오리",
+      "content": "d",
+      "grade": 0,
+      "createdAt": "2024.2.25 일요일"
+    },
+    {
+      "id": "825d4abe-03f3-4a53-bebf-4e2f0673a808",
+      "userId": "1",
+      "nickname": "오리",
+      "content": "d",
+      "grade": 0,
+      "createdAt": "2024.2.25 일요일"
+    },
+    {
+      "id": "2ef3c6bf-fe73-4a53-875b-a1394d0d9316",
+      "userId": "1",
+      "nickname": "오리",
+      "content": "d",
+      "grade": 0,
+      "createdAt": "2024.2.25 일요일"
+    },
+    {
+      "id": "da9035a9-ed10-48d1-8702-d389fd7a64a7",
+      "userId": "1",
+      "nickname": "오리",
+      "content": "hng",
+      "grade": 0,
+      "createdAt": "2024.2.25 일요일"
     }
   ]
 }
