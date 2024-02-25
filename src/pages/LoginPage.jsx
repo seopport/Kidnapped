@@ -4,7 +4,7 @@ import { login } from '../redux/modules/authSlice';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import useForm from 'hooks/useForm';
-import axios from 'axios';
+import { authApi } from 'api';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const LoginPage = () => {
     if (isLoginMode) {
       //로그인 처리
       try {
-        const { data } = await axios.post('https://moneyfulpublicpolicy.co.kr/login', {
+        const { data } = await authApi.post('/login', {
           id,
           password
         });
@@ -36,7 +36,7 @@ const LoginPage = () => {
     } else {
       // 회원가입 처리
       try {
-        const { data } = await axios.post('https://moneyfulpublicpolicy.co.kr/register', {
+        const { data } = await authApi.post('/register', {
           id,
           password,
           nickname
