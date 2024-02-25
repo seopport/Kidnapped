@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const LoginPage = () => {
+  const [isLoginMode, setIsLoginMode] = useState(true);
+
   return (
     <StLayoutImage>
       <StLayoutContainer>
@@ -10,13 +12,14 @@ const LoginPage = () => {
         <StLoginBox>
           <StLoginForm>
             <StFormTitle>Kidnapped</StFormTitle>
-            <StFormSubTitle>로그인</StFormSubTitle>
+            <StFormSubTitle>{isLoginMode ? '로그인' : '회원가입'}</StFormSubTitle>
             <StLoginInput placeholder="아이디" />
             <StLoginInput placeholder="비밀번호" />
-            <StLoginButton>로그인</StLoginButton>
+            {!isLoginMode && <StLoginInput placeholder="닉네임 (2자 이상)" minLength={2} />}
+            <StLoginButton>{isLoginMode ? '로그인' : '회원가입'}</StLoginButton>
             <StToggleBox>
               <span>회원이 아니신가요?</span>
-              <span>회원가입</span>
+              <span onClick={() => setIsLoginMode((prev) => !prev)}>{isLoginMode ? '회원가입' : '로그인'}</span>
             </StToggleBox>
           </StLoginForm>
         </StLoginBox>
