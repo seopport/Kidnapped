@@ -26,9 +26,9 @@ const LoginPage = () => {
           id,
           password
         });
-        const { accessToken, nickname, userId } = data;
+        const { accessToken, nickname, avatar, userId } = data;
         if (data.success) {
-          dispatch(login({ accessToken, nickname, userId }));
+          dispatch(login({ accessToken, nickname, avatar, userId }));
           toast.success('로그인 성공!');
         }
       } catch (err) {
