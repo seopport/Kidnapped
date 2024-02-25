@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import colors from 'styles/theme';
-// import { IoIosArrowUp } from 'react-icons/io';
-// import { IoIosArrowDown } from 'react-icons/io';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { GoPencil } from 'react-icons/go';
 import { FaRegTrashAlt } from 'react-icons/fa';
@@ -10,35 +8,31 @@ import { FaRegStar } from 'react-icons/fa';
 import { FaStar } from 'react-icons/fa';
 import reviewApi from 'api/reviewApi';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
+import { addReview, deleteReview, modifyReview, setReview } from '../redux/modules/reviewSlice';
 
 const Review = () => {
-  const [gradeStar, setGradeStar] = useState(0);
-  const [isOptionMenuOpen, setIsOptionMenuOpen] = useState(false);
-  const [reviews, setReviews] = useState([]);
-  const [reviewContent, setReviewContent] = useState('');
+  const dispatch = useDispatch();
+  const reviews = useSelector((state) => state.reviewSlice.reviews);
+
   const textArea = useRef();
+  const [gradeStar, setGradeStar] = useState(0);
+  const [modifiedGradeStar, setModifiedGradeStar] = useState(0);
+  const [isOptionMenuOpen, setIsOptionMenuOpen] = useState(false);
+  const [reviewContent, setReviewContent] = useState('');
+  const [modifiedReviewContent, setModifiedReviewContent] = useState();
   const [isGradeInvalid, setIsGradeinvalid] = useState(false);
   const [isModifying, setIsModifying] = useState(false);
-  const [modifiedReviewContent, setModifiedReviewContent] = useState();
-
-  //#region
-  const year = new Date().getFullYear();
-  const month = new Date().getMonth() + 1;
-  const date = new Date().getDate();
-  const week = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
-  const day = week[new Date().getDay()];
-
-  const creationDate = [year, month, date].join('.') + ' ' + day;
-  //#endregion
+  const [reviewId, setReviewId] = useState('');
 
   useEffect(() => {
     const loadReviews = async () => {
-      const { data: reviewData } = await reviewApi.get();
-      setReviews(reviewData);
+      const { data: reviewData } = await reviewApi.get('?_sort=-dateForOrder');
+      dispatch(setReview(reviewData));
     };
 
     loadReviews();
-  }, []);
+  }, [dispatch]);
 
   //이건 Star라는 컴포넌트
   // 생성된 Star 컴포넌트가 FaStar 컴포넌트를 만들어낸다
@@ -72,6 +66,13 @@ const Review = () => {
     setReviewContent(e.target.value);
   };
 
+  const randomBrightColor = () => {
+    const colorR = Math.floor(Math.random() * 128 + 128).toString(16);
+    const colorG = Math.floor(Math.random() * 128 + 128).toString(16);
+    const colorB = Math.floor(Math.random() * 128 + 128).toString(16);
+    return `#${colorR + colorG + colorB}`;
+  };
+
   // 리뷰 등록 ----------------------------------
   const handleAddReviewButtonClick = async () => {
     if (!reviewContent.trim()) {
@@ -85,18 +86,36 @@ const Review = () => {
       return;
     }
 
+    //#region
+    const year = new Date().getFullYear();
+    const month = new Date().getMonth() + 1;
+    const date = new Date().getDate();
+    const week = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+    const day = week[new Date().getDay()];
+    const creationDate = [year, month, date].join('.') + ' ' + day;
+
+    const dateForOrder = new Date().toISOString();
+    //#endregion
+
     const newRivew = {
       id: crypto.randomUUID(),
       userId: '1', //스토어에서 받아온 아이디, 닉네임
       nickname: '오리',
       content: reviewContent,
       grade: gradeStar,
-      createdAt: creationDate
+      createdAt: creationDate,
+      dateForOrder
     };
+
+    console.log(newRivew);
 
     try {
       await reviewApi.post('', newRivew);
+      dispatch(addReview(newRivew));
+
       alert('리뷰가 등록되었습니다.');
+      setReviewContent('');
+      setGradeStar(0);
     } catch (error) {
       console.log(error);
     }
@@ -107,22 +126,19 @@ const Review = () => {
     if (window.confirm('리뷰를 삭제하시겠습니끼?')) {
       try {
         await reviewApi.delete(`/${id}`);
-        alert('리뷰가 삭제되었습니다.');
+        dispatch(deleteReview(id));
       } catch (error) {}
     } else {
     }
   };
 
-  const [reviewId, setReviewId] = useState('');
-  const [modifiedGradeStar, setModifiedGradeStar] = useState(0);
-
   // 리뷰 수정 클릭 ----------------------------------
   const handleModifyReviewButtonClick = async (userId, reviewId, content, grade) => {
     textArea.current.focus();
     setIsModifying(true);
+    setReviewId(reviewId);
     setReviewContent(content);
     setModifiedReviewContent(content);
-    setReviewId(reviewId);
     setGradeStar(grade);
     setModifiedGradeStar(grade);
   };
@@ -134,10 +150,12 @@ const Review = () => {
       return;
     }
     setModifiedReviewContent(reviewContent);
-    const newContent = { content: reviewContent, grade: +gradeStar };
+    const newContent = { content: reviewContent, grade: gradeStar };
 
     try {
       await reviewApi.patch(`/${reviewId}`, newContent);
+      dispatch(modifyReview({ reviewId, newContent }));
+
       alert('수정이 완료되었습니다.');
       setIsModifying(false);
       setReviewContent('');
@@ -157,11 +175,20 @@ const Review = () => {
     return;
   };
 
-  const randomBrightColor = () => {
-    const colorR = Math.floor(Math.random() * 128 + 128).toString(16);
-    const colorG = Math.floor(Math.random() * 128 + 128).toString(16);
-    const colorB = Math.floor(Math.random() * 128 + 128).toString(16);
-    return `#${colorR + colorG + colorB}`;
+  const handleOptionButtonClick = (e, id) => {
+    e.stopPropagation();
+    for (const review of reviews) {
+      console.log(review.id, id);
+      //그 리뷰만 열리게..
+      if (review.id === id) {
+        setIsOptionMenuOpen(true);
+      }
+    }
+    // reviews.map((item) => {
+    //   if (item.id === id) {
+    //     setIsOptionMenuOpen(true);
+    //   }
+    // });
   };
 
   return (
@@ -225,9 +252,9 @@ const Review = () => {
                   <StReviewCreationDate>{item.createdAt}</StReviewCreationDate>
                 </div>
 
-                {/* 점점점 메뉴 버튼 */}
-                {/* //리덕스에서 받아온 유저 아이디와 인자로받아온 userId가 같아야만 메뉴 출력 */}
-                <StHiOutlineDotsVertical onClick={() => setIsOptionMenuOpen(true)} />
+                {/* 점점점 메뉴 버튼!!!!!!!!!!!!!!!!!!!!!!!!! */}
+                {/* todo: 리덕스에서 받아온 유저 아이디와 인자로받아온 userId가 같아야만 메뉴 출력 */}
+                <StHiOutlineDotsVertical onClick={(e) => handleOptionButtonClick(e, item.id)} />
               </StReviewProfileWrap>
             </StReviewInfoWrap>
             <StOptionsMenuModal $isOptionMenuOpen={isOptionMenuOpen}>
@@ -252,10 +279,16 @@ const Review = () => {
           </StReviewContainer>
         );
       })}
-      <div style={{ margin: '0', height: '1px', backgroundColor: colors.subColor }}></div>
+      <StBottomLine $reviewLength={reviews.length} />
     </StReviewTapContainer>
   );
 };
+
+export const StBottomLine = styled.div`
+  display: ${(props) => (props.$reviewLength === 0 ? 'none' : '1px solid black')};
+  height: 1px;
+  background-color: ${colors.subColor};
+`;
 
 export const StStarIcon = styled(FaStar)`
   border: 1px solid ${colors.starColor};
@@ -324,7 +357,7 @@ export const StReviewContainer = styled.div`
   display: flex;
   justify-content: center;
   border-top: 1px solid ${colors.subColor};
-  border-bottom: ${(props) => (props.$reviewLength === 1 ? `1px solid ${colors.subColor}` : 'none')};
+  /* border-bottom: ${(props) => (props.$reviewLength === 1 ? `1px solid ${colors.subColor}` : 'none')}; */
   flex-direction: column;
   position: relative;
 `;
