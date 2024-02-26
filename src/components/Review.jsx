@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import colors from 'styles/theme';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
@@ -305,7 +305,7 @@ const Review = () => {
 };
 
 export const StBottomLine = styled.div`
-  display: ${(props) => (props.$reviewLength === 0 ? 'none' : '1px solid black')};
+  display: ${(props) => (props.$reviewLength === 0 ? 'none' : 'block')};
   height: 1px;
   background-color: ${colors.subColor};
 `;
