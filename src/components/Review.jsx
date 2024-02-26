@@ -196,6 +196,14 @@ const Review = () => {
     if (modalRef.current) setClickedReviewId(null);
   };
 
+  const handleCheckLogin = () => {
+    if (!userInfo.userId) {
+      alert('로그인 후 이용 가능합니다.');
+      textArea.current.style.outline = 'none';
+      return;
+    }
+  };
+
   return (
     <StReviewTapContainer>
       <StReviewFormContainer>
@@ -206,6 +214,8 @@ const Review = () => {
           placeholder="리뷰를 작성해주세요."
           maxLength={250}
           spellCheck={false}
+          onClick={handleCheckLogin}
+          readOnly={!userInfo.userId}
         />
         <StFormButtonWrap>
           <StGradeWrap>
