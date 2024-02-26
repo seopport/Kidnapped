@@ -6,13 +6,13 @@ import { FaBookmark } from 'react-icons/fa';
 import Review from './Review';
 
 const SideBar = ({ markers, setMarkers }) => {
-  const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState("")
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   // 키보드 enter 시 검색
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
+      event.preventDefault();
       handleSearch();
     }
   }
@@ -28,6 +28,7 @@ const SideBar = ({ markers, setMarkers }) => {
       return marker.roadAddress.includes(searchTerm);
     });
     setMarkers(filtered);
+    setSearchTerm("")
   }
 
   const handleBookmarkClick = () => {
