@@ -11,7 +11,7 @@ const Header = () => {
       <StHeaderTitle>너 납치된 거야</StHeaderTitle>
       <StLayoutBox>
         <StHeaderNickName>{isLogin && `환영합니다 ${nickName}님`}</StHeaderNickName>
-        <StHeaderButton onClick={() => {}}>{isLogin ? 'Login' : 'Logout'}</StHeaderButton>
+        <StHeaderButton onClick={() => { }}>{isLogin ? 'Login' : 'Logout'}</StHeaderButton>
       </StLayoutBox>
     </StHeader>
   );
