@@ -10,7 +10,6 @@ const reviewSlice = createSlice({
   reducers: {
     setReview: (state, action) => {
       //페이로드: 리뷰 데이터 전체
-      console.log(action.payload);
       return { ...state, reviews: action.payload };
     },
     addReview: (state, action) => {
@@ -33,7 +32,6 @@ const reviewSlice = createSlice({
 
     deleteReview: (state, action) => {
       //페이로드: 리뷰아이디
-      console.log(action.payload);
       const targetReviewId = action.payload;
       const newReviews = state.reviews.filter((item) => item.id !== targetReviewId);
       return { ...state, reviews: newReviews };

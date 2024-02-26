@@ -82,19 +82,25 @@ const Review = () => {
     }
 
     //#region
+    const setDate = (date) => {
+      return date < 10 ? '0' + date : date.toString();
+    };
+
     const year = new Date().getFullYear();
-    const month = new Date().getMonth() + 1;
-    const date = new Date().getDate();
+    const month = setDate(new Date().getMonth() + 1);
+    const date = setDate(new Date().getDate());
     const week = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
     const day = week[new Date().getDay()];
     const creationDate = [year, month, date].join('.') + ' ' + day;
 
     const dateForOrder = new Date().toISOString();
+
     //#endregion
 
     const newRivew = {
       id: crypto.randomUUID(),
-      userId: '1', //스토어에서 받아온 아이디, 닉네임
+      userId: '1', //스토어에서 받아온 유저 아이디, 카페 아이디, 닉네임,
+      cafeId: 'ddd',
       nickname: '오리',
       content: reviewContent,
       grade: gradeStar,
@@ -221,6 +227,13 @@ const Review = () => {
       </StReviewFormContainer>
 
       {/* 리뷰댓글 */}
+      {reviews?.length === 0 && (
+        <div style={{ fontSize: '14px', textAlign: 'center' }}>
+          작성된 리뷰가 없습니다.
+          <br />
+          <br /> 첫 번째 리뷰를 남겨보세요!
+        </div>
+      )}
       {reviews?.map((item, idx) => {
         const randomColor = randomBrightColor();
         return (

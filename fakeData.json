@@ -1,31 +1,3 @@
 {
-  "reviews": [
-    {
-      "id": "43173792-d69e-4daa-8a05-d523d597b14e",
-      "userId": "1",
-      "nickname": "오리",
-      "content": "f",
-      "grade": 2,
-      "createdAt": "2024.2.26 월요일",
-      "dateForOrder": "2024-02-25T16:29:18.115Z"
-    },
-    {
-      "id": "47a71f5b-3309-4d05-b345-7622894cd9cc",
-      "userId": "1",
-      "nickname": "오리",
-      "content": "h수정도해볼게요~",
-      "grade": 4,
-      "createdAt": "2024.2.26 월요일",
-      "dateForOrder": "2024-02-25T16:29:43.479Z"
-    },
-    {
-      "id": "de3817f8-d1ad-4ca6-897e-c016b8962766",
-      "userId": "1",
-      "nickname": "오리",
-      "content": "너납치된거야 ㅋ",
-      "grade": 4,
-      "createdAt": "2024.2.26 월요일",
-      "dateForOrder": "2024-02-25T16:32:17.352Z"
-    }
-  ]
+  "reviews": []
 }
