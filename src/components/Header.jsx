@@ -1,18 +1,18 @@
 import React from 'react'
 import styled from 'styled-components';
 import colors from 'styles/theme';
-import { StLayoutBox } from './Common/Layout';
+import { StLayoutBox } from './common/Layout';
 
 const Header = () => {
-    const isLogin = false
-    const nickName = "르탄이"
-    return <StHeader>
-        <StHeaderTitle>너 납치된 거야</StHeaderTitle>
-        <StLayoutBox >
-            <StHeaderNickName>{isLogin && `환영합니다 ${nickName}님`}</StHeaderNickName>
-            <StHeaderButton onClick={() => { }}>{isLogin ? "Login" : "Logout"}</StHeaderButton>
-        </StLayoutBox>
-    </StHeader >
+  const isLogin = false
+  const nickName = "르탄이"
+  return <StHeader>
+    <StHeaderTitle>너 납치된 거야</StHeaderTitle>
+    <StLayoutBox >
+      <StHeaderNickName>{isLogin && `환영합니다 ${nickName}님`}</StHeaderNickName>
+      <StHeaderButton onClick={() => { }}>{isLogin ? "Login" : "Logout"}</StHeaderButton>
+    </StLayoutBox>
+  </StHeader >
 }
 
 export default Header;
