@@ -4,22 +4,15 @@ import LoginPage from 'pages/LoginPage';
 import { useSelector } from 'react-redux';
 
 const Router = () => {
-  const isLogin = useSelector((state) => state.authSlice.isLogin);
+  //const isLogin = useSelector((state) => state.authSlice.isLogin);
 
   return (
     <BrowserRouter>
       <Routes>
-        {isLogin ? (
-          <>
-            <Route path="/home" element={<HomePage />} />
-          </>
-        ) : (
-          <>
-            <Route path="*" element={<Navigate replace to="/" />} />
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/login" element={<LoginPage />} />
-          </>
-        )}
+        <Route path="/home" element={<HomePage />} />
+        <Route path="*" element={<Navigate replace to="/" />} />
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   );
