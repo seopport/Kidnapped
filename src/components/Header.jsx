@@ -2,8 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import colors from 'styles/theme';
 import { StLayoutBox } from 'components/common/Layout';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const navigate = useNavigate();
   const isLogin = false;
   const nickName = '르탄이';
   return (

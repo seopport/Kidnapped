@@ -6,6 +6,7 @@ import { FaBookmark } from 'react-icons/fa';
 import Review from './Review';
 
 const SideBar = ({ markers, setMarkers }) => {
+  const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState("")
   const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -13,27 +14,66 @@ const SideBar = ({ markers, setMarkers }) => {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      handleSearch();
+      requestSearch();
+      setSearchTerm("")
     }
   }
 
-  // 지역 검색시 필터링 함수
-  const handleSearch = () => {
-    if (!searchTerm) {
-      alert("검색어를 입력하세요");
-      return;
-    }
-    const filtered = markers.filter((marker) => {
-      console.log(marker.roadAddress.includes(searchTerm))
-      return marker.roadAddress.includes(searchTerm);
-    });
-    setMarkers(filtered);
-    setSearchTerm("")
-  }
+  // // 지역 검색시 필터링 함수
+  // const handleSearch = () => {
+  //   if (!searchTerm) {
+  //     alert("검색어를 입력하세요");
+  //     return;
+  //   }
+  //   const filtered = markers.filter((marker) => {
+  //     console.log(marker.roadAddress.includes(searchTerm))
+  //     return marker.roadAddress.includes(searchTerm);
+  //   });
+  //   setMarkers(filtered);
+  //   setSearchTerm("")
+  // }
 
   const handleBookmarkClick = () => {
     setIsBookmarked(!isBookmarked);
   };
+
+  const requestSearch = () => {
+
+    const ps = new kakao.maps.services.Places();
+
+    ps.keywordSearch(`${searchTerm} 방탈출`, (data, status, _pagination) => {
+      if (status === kakao.maps.services.Status.OK) {
+        const bounds = new kakao.maps.LatLngBounds();
+        let markers = [];
+
+        for (var i = 0; i < data.length; i++) {
+          const id = data[i].id; // 장소 ID
+          const placeName = data[i].place_name; // 장소명
+          const categoryName = data[i].category_name; // 카테고리 이름
+          const phoneNumber = data[i].phone; // 전화번호
+          const jibunAddress = data[i].address_name; // 전체 지번 주소
+          const roadAddress = data[i].road_address_name; // 전체 도로명 주소
+          const placeUrl = data[i].place_url; // 장소 상세페이지 URL
+          const x = data[i].x; // X 좌표 혹은 경도(longitude)
+          const y = data[i].y; // Y 좌표 혹은 위도(latitude)
+
+          markers.push({
+            position: {
+              lat: data[i].y,
+              lng: data[i].x
+            },
+            placeName,
+            roadAddress,
+            phoneNumber,
+            placeUrl
+          });
+          bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+        }
+        setMarkers(markers);
+        setSearchTerm("")
+      }
+    });
+  }
 
   return (
     <StSideBar>
@@ -46,7 +86,7 @@ const SideBar = ({ markers, setMarkers }) => {
               onChange={(e) => setSearchTerm(e.target.value)}
               value={searchTerm}
               onKeyDown={handleKeyDown}></input>
-            <StSearchButton onClick={handleSearch}>
+            <StSearchButton onClick={requestSearch}>
               <IoSearch size={25} />
             </StSearchButton>
           </StSearchForm>
