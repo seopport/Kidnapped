@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Map, MapMarker, MapTypeControl, MarkerClusterer, ZoomControl } from 'react-kakao-maps-sdk';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 // import fakeData from 'data/fakeData.json';
 const { kakao } = window;
@@ -57,6 +58,9 @@ const Location = () => {
           bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
         }
         setMarkers(markers);
+
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정
+        // map.setBounds(bounds);
       }
     });
     if (navigator.geolocation) {
@@ -124,8 +128,10 @@ const Location = () => {
                   <StCloseButton onClick={handleCloseButtonClick}>x</StCloseButton>
                   <StPlaceName>{marker.placeName}</StPlaceName>
                   <StRoadAddress>{marker.roadAddress}</StRoadAddress>
-                  <StPhoneNumber>{marker.phoneNumber}</StPhoneNumber>
-                  <StPlaceUrl>{marker.placeUrl}</StPlaceUrl>
+                  <StPhoneNumber> {marker.phoneNumber}</StPhoneNumber>
+                  <StPlaceUrl>
+                    <StLink to={marker.placeUrl}>{marker.placeUrl}</StLink>
+                  </StPlaceUrl>
                 </CustomOverlay>
               )}
             </MapMarker>
@@ -147,7 +153,7 @@ const StMapSize = styled(Map)`
 
 const CustomOverlay = styled.div`
   background-color: white;
-  padding: 26px;
+  padding: 22px;
   border-radius: 9px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
@@ -157,10 +163,20 @@ const StPlaceName = styled.p`
 `;
 const StRoadAddress = styled.p`
   font-size: 11px;
+  margin-top: 9px;
+`;
+const StPhoneNumber = styled.p`
+  font-size: 12px;
   margin-top: 5px;
 `;
-const StPhoneNumber = styled.p``;
-const StPlaceUrl = styled.p``;
+const StPlaceUrl = styled.p`
+  font-size: 12px;
+  margin-top: 5px;
+`;
+const StLink = styled(Link)`
+  color: #175bb3;
+  text-decoration: underline;
+`;
 const StCloseButton = styled.button`
   position: absolute;
   top: 10px;
