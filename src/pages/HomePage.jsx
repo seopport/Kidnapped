@@ -2,6 +2,7 @@ import Header from 'components/Header';
 import SideBar from 'components/SideBar';
 import React from 'react';
 import styled from 'styled-components';
+import MapLoader from 'components/MapLoader';
 import colors from 'styles/theme';
 
 const HomePage = () => {
@@ -10,12 +11,12 @@ const HomePage = () => {
       <StContainer>
         <Header />
         <SideBar />
+        <MapLoader />
         <StMap />
       </StContainer>
     </div>
   );
 };
-
 export default HomePage;
 
 export const StContainer = styled.main`
@@ -34,4 +35,4 @@ export const StMap = styled.div`
   height: 100vh;
   background-color: lightgray;
   z-index: 1;
-`
+`;
