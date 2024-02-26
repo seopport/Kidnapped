@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import colors from 'styles/theme'
 import { IoSearch } from "react-icons/io5";
 import { FaBookmark } from "react-icons/fa";
+import Review from './Review';
+
 
 const SideBar = () => {
   return (
@@ -23,11 +25,12 @@ const SideBar = () => {
           <StMainCardItem></StMainCardItem>
         </StMainCardContainer>
       </StContainer>
+<Review />
     </StSideBar>
   )
 }
 
-export default SideBar
+export default SideBar;
 
 export const StSideBar = styled.div`
   position: absolute;
@@ -99,6 +102,3 @@ box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 border-radius: 10px;
 background-color: white;
 `
-
-
-
