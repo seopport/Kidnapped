@@ -20,21 +20,8 @@ const LoginPage = () => {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     if (isLoginMode) {
-      dispatch(__login({ id, password }));
       //로그인 처리
-      // try {
-      //   const { data } = await authApi.post('/login?expiresIn=30m', {
-      //     id,
-      //     password
-      //   });
-      //   const { accessToken, nickname, avatar, userId } = data;
-      //   if (data.success) {
-      //     dispatch(login({ accessToken, nickname, avatar, userId }));
-      //     toast.success('로그인 성공!');
-      //   }
-      // } catch (err) {
-      //   toast.error(err.response.data.message);
-      // }
+      dispatch(__login({ id, password }));
     } else {
       // 회원가입 처리
       try {
@@ -63,16 +50,35 @@ const LoginPage = () => {
           <StLoginForm onSubmit={onSubmitHandler}>
             <StFormTitle>Kidnapped</StFormTitle>
             <StFormSubTitle>{isLoginMode ? '로그인' : '회원가입'}</StFormSubTitle>
-            <StLoginInput name="id" value={id} onChange={onChangeHandler} placeholder="아이디" />
-            <StLoginInput name="password" value={password} onChange={onChangeHandler} placeholder="비밀번호" />
-            {!isLoginMode && (
-              <StLoginInput
-                name="nickname"
-                value={nickname}
-                onChange={onChangeHandler}
-                placeholder="닉네임 (2자 이상)"
-                minLength={2}
-              />
+            {isLoginMode ? (
+              <>
+                <StLoginInput name="id" value={id} onChange={onChangeHandler} placeholder="아이디" />
+                <StLoginInput name="password" value={password} onChange={onChangeHandler} placeholder="비밀번호" />
+              </>
+            ) : (
+              <>
+                <StLoginInput
+                  name="id"
+                  value={id}
+                  onChange={onChangeHandler}
+                  placeholder="아이디 (4자 이상)"
+                  minLength={4}
+                />
+                <StLoginInput
+                  name="nickname"
+                  value={nickname}
+                  onChange={onChangeHandler}
+                  placeholder="닉네임 (2자 이상)"
+                  minLength={2}
+                />
+                <StLoginInput
+                  name="password"
+                  value={password}
+                  onChange={onChangeHandler}
+                  placeholder="비밀번호 (4자 이상)"
+                  minLength={4}
+                />
+              </>
             )}
             <StLoginButton>{isLoginMode ? '로그인' : '회원가입'}</StLoginButton>
             <StToggleBox>
@@ -89,10 +95,12 @@ const LoginPage = () => {
 export default LoginPage;
 
 const StLayoutImage = styled.div`
-  background-image: url('/public/Loginimage.png');
+  background-image: url('./src/assets/Loginimage.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
 `;
 
 const StLayoutContainer = styled.div`
