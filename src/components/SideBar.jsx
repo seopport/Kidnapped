@@ -8,22 +8,24 @@ import { useSearchParams } from 'react-router-dom';
 
 const SideBar = ({ markers, setMarkers }) => {
   const { kakao } = window;
-  const [searchTerm, setSearchTerm] = useState("")
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4; // 한 페이지에 보여줄 아이템 수
 
   // 지역 검색 함수
   const handleSearch = () => {
     const ps = new kakao.maps.services.Places();
 
     if (!searchTerm) {
-      alert("검색어를 입력하세요")
+      alert('검색어를 입력하세요');
       return;
     }
 
-    const searchMarkers = markers.filter(marker => {
+    const searchMarkers = markers.filter((marker) => {
       return marker.roadAddress.includes(searchTerm) || marker.jibunAddress.includes(searchTerm);
-      console.log(marker.roadAddress)
+      console.log(marker.roadAddress);
       // 오류 수정중
-    })
+    });
 
     setMarkers(searchMarkers);
 
@@ -61,15 +63,27 @@ const SideBar = ({ markers, setMarkers }) => {
     //     setMarkers(markers);
     //   }
     // });
+  };
 
-  }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    // 페이지에 맞는 데이터를 가져오거나 필터링하는 로직 추가
+  };
 
+  const totalPages = Math.ceil(markers.length / itemsPerPage);
+  const visibleMarkers = markers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   return (
     <StSideBar>
       <StContainer>
         <StSearchWrapper>
           <StSearchForm onSubmit={(e) => e.preventDefault()}>
-            <input onSubmit='return false' type="text" placeholder="지역 검색" onChange={(e) => setSearchTerm(e.target.value)} value={searchTerm}></input>
+            <input
+              onSubmit="return false"
+              type="text"
+              placeholder="지역 검색"
+              onChange={(e) => setSearchTerm(e.target.value)}
+              value={searchTerm}
+            ></input>
             <StSearchButton onClick={handleSearch}>
               <IoSearch size={25} />
             </StSearchButton>
@@ -79,34 +93,64 @@ const SideBar = ({ markers, setMarkers }) => {
           </StBookmarkButton>
         </StSearchWrapper>
         <StMainCardWrapper>
-          {
-            markers.map((item) => {
-              return (
-                <StMainCardItem>
-                  <StMainCardInfoAndImage>
-                    <StMainCardInfo>
-                      <h1>{item.placeName}</h1>
-                      <p>{item.roadAddress}</p>
-                      <p>평점</p>
-                    </StMainCardInfo>
-                    <StImageWrapper>
-                      <img src='https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg' alt='방탈출 카페 사진'></img>
-                    </StImageWrapper>
-                  </StMainCardInfoAndImage>
-
-                </StMainCardItem>
-              )
-            })
-          }
+          {visibleMarkers.map((item) => {
+            return (
+              <StMainCardItem key={item.placeName}>
+                <StMainCardInfoAndImage>
+                  <StMainCardInfo>
+                    <h1>{item.placeName}</h1>
+                    <p>{item.roadAddress}</p>
+                    <p>평점</p>
+                  </StMainCardInfo>
+                  <StImageWrapper>
+                    <img
+                      src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
+                      alt="방탈출 카페 사진"
+                    ></img>
+                  </StImageWrapper>
+                </StMainCardInfoAndImage>
+              </StMainCardItem>
+            );
+          })}
         </StMainCardWrapper>
-        <Review />
+        {/* 페이지네이션 버튼 영역 */}
+        <StPagination>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <StPaginationButton
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              active={currentPage === index + 1}
+            >
+              {index + 1}
+            </StPaginationButton>
+          ))}
+        </StPagination>
+        {/* <Review /> 임시 주석처리  */}
       </StContainer>
     </StSideBar>
   );
 };
 
 export default SideBar;
+const StPagination = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
 
+const StPaginationButton = styled.button`
+  background: ${(props) => (props.active ? colors.mainColor : colors.subColor)};
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  margin: 0 5px;
+  border-radius: 5px;
+
+  &:hover {
+    background: ${colors.mainColor};
+  }
+`;
 export const StSideBar = styled.div`
   position: absolute;
   top: 68px;
@@ -167,8 +211,8 @@ export const StMainCardWrapper = styled.div`
   flex-direction: column;
   gap: 20px;
   overflow-y: auto;
-  max-height: calc(100vh - 68px - 47px);
-  
+  /* max-height: calc(100vh - 68px - 47px); */
+  height: 40rem;
 `;
 
 export const StMainCardItem = styled.div`
@@ -179,7 +223,6 @@ export const StMainCardItem = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   background-color: white;
-  
 `;
 
 export const StMainCardInfoAndImage = styled.div`
@@ -188,7 +231,7 @@ export const StMainCardInfoAndImage = styled.div`
   justify-content: space-between;
   padding: 20px 16px;
   gap: 20px;
-`
+`;
 
 export const StMainCardInfo = styled.div`
   width: 100%;
@@ -196,16 +239,16 @@ export const StMainCardInfo = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 20px;
-    & h1{
+  & h1 {
     font-weight: 700;
     font-size: 16px;
     color: ${colors.subColor};
-    }
-    & p {
+  }
+  & p {
     font-size: 12px;
-    color: ${colors.mainTextColor}
-    }
-`
+    color: ${colors.mainTextColor};
+  }
+`;
 export const StImageWrapper = styled.div`
   overflow: hidden;
   & img {
@@ -213,4 +256,4 @@ export const StImageWrapper = styled.div`
     height: 100%;
     object-fit: cover;
   }
-  `
+`;

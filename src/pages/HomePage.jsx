@@ -24,6 +24,5 @@ export const StContainer = styled.main`
   width: 100vw;
   height: 100vh;
   z-index: 2;
- 
+  overflow: hidden;
 `;
-
