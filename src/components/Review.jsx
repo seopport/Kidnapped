@@ -136,6 +136,12 @@ const Review = () => {
     }
   };
 
+  const modificationCompleted = () => {
+    setIsModifying(false);
+    setReviewContent('');
+    setGradeStar(0);
+  };
+
   // 리뷰 수정 클릭 ----------------------------------
   const handleModifyReviewButtonClick = async (userId, reviewId, content, grade) => {
     textArea.current.focus();
@@ -161,28 +167,21 @@ const Review = () => {
       dispatch(modifyReview({ reviewId, newContent }));
 
       alert('수정이 완료되었습니다.');
-      setIsModifying(false);
-      setReviewContent('');
-      setGradeStar(0);
+      modificationCompleted();
     } catch (error) {
       alert('오류가 발생했습니다. 잠시후 다시 시도해주세요.');
       console.log(error);
     }
   };
 
-  const completeModifying = () => {
-    setIsModifying(false);
-    setReviewContent('');
-  };
-
   // 리뷰 수정 취소
   const handleCancelButtonClick = async () => {
     if (reviewContent === modifiedReviewContent && gradeStar === modifiedGradeStar) {
-      completeModifying();
+      modificationCompleted();
       return;
     }
     if (window.confirm('수정을 취소하시겠습니까?')) {
-      completeModifying();
+      modificationCompleted();
     }
     return;
   };
