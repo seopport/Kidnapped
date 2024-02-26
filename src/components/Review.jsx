@@ -57,7 +57,7 @@ const Review = () => {
   // 생성된 Star 컴포넌트가 FaStar 컴포넌트를 만들어낸다
   //생성된 별 아이콘을 클릭했을때 handleStarIconClick가 실행되고 그 클릭된 별아이콘의 인덱스값으로 gradeStar가 set됨
   const EvaluateStar = ({ selected = false, handleStarIconClick }) => {
-    return <FaStar color={selected ? colors.starColor : 'grey'} onClick={handleStarIconClick} />;
+    return <FaStar size={16} color={selected ? colors.starColor : 'grey'} onClick={handleStarIconClick} />;
   };
 
   const handleStarIconClick = (idx) => {
@@ -109,12 +109,11 @@ const Review = () => {
       const colorB = Math.floor(Math.random() * 128 + 128).toString(16);
       return `#${colorR + colorG + colorB}`;
     };
-
     const profileAvatarColor = randomBrightColor();
 
     const newReview = {
       id: crypto.randomUUID(),
-      userId: userInfo.userId, //스토어에서 받아온 유저 아이디, 카페 아이디, 닉네임,
+      userId: userInfo.userId,
       cafeId: 'ddd',
       nickname: userInfo.nickname,
       content: reviewContent,
@@ -130,7 +129,6 @@ const Review = () => {
       await reviewApi.post('', newReview);
       dispatch(addReview(newReview));
 
-      alert('리뷰가 등록되었습니다.');
       setReviewContent('');
       setGradeStar(0);
     } catch (error) {
@@ -152,6 +150,7 @@ const Review = () => {
     }
     if (window.confirm('리뷰를 삭제하시겠습니끼?')) {
       try {
+        modificationCompleted();
         await reviewApi.delete(`/${reviewId}`);
         dispatch(deleteReview(reviewId));
       } catch (error) {
@@ -181,7 +180,7 @@ const Review = () => {
   // 리뷰 수정 완료
   const handleCompleteButtonClick = async () => {
     if (reviewContent === modifiedReviewContent && gradeStar === modifiedGradeStar) {
-      alert('수정 된 내용이 없습니다.');
+      alert('수정 사항이 없습니다.');
       return;
     }
     setModifiedReviewContent(reviewContent);
@@ -274,6 +273,8 @@ const Review = () => {
           <br /> 첫 번째 리뷰를 남겨보세요!
         </div>
       )}
+      {/* reviews.filter((item) => item.cafeId === reviews.cafeId) */}
+      {/* 아니면 get으로 가져올때 search쿼리로 그 카페 리뷰만 가져오기 */}
       {reviews?.map((item, idx) => {
         return (
           <StReviewContainer key={item.id} onClick={handleModalClose} $reviewLength={reviews.length}>
@@ -294,7 +295,6 @@ const Review = () => {
                   <StReviewCreationDate>{item.createdAt}</StReviewCreationDate>
                 </div>
 
-                {/* 점점점 메뉴 버튼!!!!!!!!!!!!!!!!!!!!!!!!! */}
                 {<StHiOutlineDotsVertical onClick={() => handleOptionButtonClick(item.id)} />}
               </StReviewProfileWrap>
             </StReviewInfoWrap>
@@ -318,7 +318,6 @@ const Review = () => {
               </StOptionsMenuModal>
             )}
 
-            {/* 리뷰 내용 */}
             <StReviewContent>{item.content} </StReviewContent>
           </StReviewContainer>
         );
@@ -364,6 +363,7 @@ export const StGradeWrap = styled.div`
   height: fit-content;
   padding: 2px;
   border-radius: 5px;
+  align-items: center;
 `;
 
 export const StReviewFormBottom = styled.div`
@@ -445,7 +445,7 @@ export const StHiOutlineDotsVertical = styled(HiOutlineDotsVertical)`
 export const StOptionsMenuModal = styled.ul`
   z-index: 999;
   width: 65px;
-  height: 65px;
+  height: 70px;
   font-size: 12px;
 
   display: flex;

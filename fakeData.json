@@ -122,15 +122,15 @@
       "profileAvatarColor": "#93f1d2"
     },
     {
-      "id": "08c4c7c6-5657-400e-80b7-d36d47216a23",
+      "id": "29b8200a-875b-4ef5-9d2a-f1f6b87a65ed",
       "userId": "nnnn",
       "cafeId": "ddd",
       "nickname": "찰흙인간",
-      "content": "완전 잼잇어요 대박",
-      "grade": 4,
+      "content": "수정 삭제 테스트",
+      "grade": 1,
       "createdAt": "2024.02.26 월요일",
-      "dateForOrder": "2024-02-26T08:48:00.444Z",
-      "profileAvatarColor": "#dca2dc"
+      "dateForOrder": "2024-02-26T12:51:06.020Z",
+      "profileAvatarColor": "#82b7f4"
     }
   ]
 }
