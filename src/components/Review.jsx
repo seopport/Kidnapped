@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import colors from 'styles/theme';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
@@ -38,7 +38,7 @@ const Review = () => {
   //이건 Star라는 컴포넌트
   // 생성된 Star 컴포넌트가 FaStar 컴포넌트를 만들어낸다
   //생성된 별 아이콘을 클릭했을때 handleStarIconClick가 실행되고 그 클릭된 별아이콘의 인덱스값으로 gradeStar가 set됨
-  const Star = ({ selected = false, handleStarIconClick }) => {
+  const EvaluateStar = ({ selected = false, handleStarIconClick }) => {
     return <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />;
   };
 
@@ -59,13 +59,6 @@ const Review = () => {
 
   const handleReviewContent = (e) => {
     setReviewContent(e.target.value);
-  };
-
-  const randomBrightColor = () => {
-    const colorR = Math.floor(Math.random() * 128 + 128).toString(16);
-    const colorG = Math.floor(Math.random() * 128 + 128).toString(16);
-    const colorB = Math.floor(Math.random() * 128 + 128).toString(16);
-    return `#${colorR + colorG + colorB}`;
   };
 
   // 리뷰 등록 ----------------------------------
@@ -97,6 +90,15 @@ const Review = () => {
 
     //#endregion
 
+    const randomBrightColor = () => {
+      const colorR = Math.floor(Math.random() * 128 + 128).toString(16);
+      const colorG = Math.floor(Math.random() * 128 + 128).toString(16);
+      const colorB = Math.floor(Math.random() * 128 + 128).toString(16);
+      return `#${colorR + colorG + colorB}`;
+    };
+
+    const profileAvatarColor = randomBrightColor();
+
     const newRivew = {
       id: crypto.randomUUID(),
       userId: '1', //스토어에서 받아온 유저 아이디, 카페 아이디, 닉네임,
@@ -105,7 +107,8 @@ const Review = () => {
       content: reviewContent,
       grade: gradeStar,
       createdAt: creationDate,
-      dateForOrder
+      dateForOrder,
+      profileAvatarColor
     };
 
     console.log(newRivew);
@@ -204,7 +207,11 @@ const Review = () => {
               {/* handleStarIconClick 함수 프롭스도 넘겨줌 */}
               {[1, 2, 3, 4, 5].map((idx) => {
                 return (
-                  <Star key={idx} selected={gradeStar >= idx} handleStarIconClick={() => handleStarIconClick(idx)} />
+                  <EvaluateStar
+                    key={idx}
+                    selected={gradeStar >= idx}
+                    handleStarIconClick={() => handleStarIconClick(idx)}
+                  />
                 );
               })}
               {/* <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />; */}
@@ -235,11 +242,13 @@ const Review = () => {
         </div>
       )}
       {reviews?.map((item, idx) => {
-        const randomColor = randomBrightColor();
         return (
           <StReviewContainer key={item.id} onClick={handleModalClose} $reviewLength={reviews.length}>
             <StReviewInfoWrap>
-              <StReviewWriterProfileImage $randomColor={randomColor}>{item.nickname[0]}</StReviewWriterProfileImage>
+              <StReviewWriterProfileImage style={{ backgroundColor: item.profileAvatarColor }}>
+                {item.nickname[0]}
+              </StReviewWriterProfileImage>
+
               <StReviewProfileWrap>
                 <div>
                   <div style={{ display: 'flex', marginBottom: '3px' }}>
@@ -377,8 +386,6 @@ export const StReviewWriterProfileImage = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  /* background-color: ${(props) => props.$randomColor}; //TOOD: 랜덤생성 */
-  background-color: #c4a6dd; //TOOD: 랜덤생성
   display: flex;
   line-height: 37px;
   justify-content: center;
@@ -386,6 +393,7 @@ export const StReviewWriterProfileImage = styled.div`
   color: #494949;
   font-size: 15px;
   border: 1px solid ${colors.mainTextColor};
+  background-color: ${(props) => (props.$randomColor ? props.$randomColor : 'none')};
 `;
 
 export const StReviewProfileWrap = styled.div`
