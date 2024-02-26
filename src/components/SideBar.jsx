@@ -8,6 +8,7 @@ import Review from './Review';
 const SideBar = ({ markers, setMarkers }) => {
   const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState("")
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   // 키보드 enter 시 검색
   const handleKeyDown = (event) => {
@@ -29,6 +30,10 @@ const SideBar = ({ markers, setMarkers }) => {
     setMarkers(filtered);
   }
 
+  const handleBookmarkClick = () => {
+    setIsBookmarked(!isBookmarked);
+  };
+
   return (
     <StSideBar>
       <StContainer>
@@ -44,8 +49,8 @@ const SideBar = ({ markers, setMarkers }) => {
               <IoSearch size={25} />
             </StSearchButton>
           </StSearchForm>
-          <StBookmarkButton>
-            <FaBookmark size={30} color={'white'} />
+          <StBookmarkButton onClick={handleBookmarkClick}>
+            <FaBookmark size={30} color={isBookmarked ? `${colors.starColor}` : "white"} />
           </StBookmarkButton>
         </StSearchWrapper>
         <StMainCardWrapper>
@@ -63,7 +68,6 @@ const SideBar = ({ markers, setMarkers }) => {
                       <img src='https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg' alt='방탈출 카페 사진'></img>
                     </StImageWrapper>
                   </StMainCardInfoAndImage>
-
                 </StMainCardItem>
               )
             })
@@ -131,6 +135,7 @@ export const StBookmarkButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 export const StMainCardWrapper = styled.div`
   display: flex;
@@ -138,7 +143,6 @@ export const StMainCardWrapper = styled.div`
   gap: 20px;
   overflow-y: auto;
   max-height: calc(100vh - 68px - 47px);
-  
 `;
 
 export const StMainCardItem = styled.div`
@@ -149,7 +153,7 @@ export const StMainCardItem = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   background-color: white;
-  
+  cursor: pointer;
 `;
 
 export const StMainCardInfoAndImage = styled.div`

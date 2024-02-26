@@ -30,6 +30,7 @@ export const StHeader = styled.header`
   height: 68px;
   background: ${colors.mainColor};
   z-index: 3;
+  overflow: hidden;
 `;
 export const StHeaderTitle = styled.h1`
   font-weight: 700;
@@ -54,7 +55,6 @@ export const StHeaderButton = styled.button`
   box-shadow: none;
   border-radius: 0;
   padding: 0;
-  overflow: visible;
   cursor: pointer;
   transition: 0.3s;
 
