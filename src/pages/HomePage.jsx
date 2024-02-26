@@ -2,6 +2,8 @@ import Header from 'components/Header';
 import SideBar from 'components/SideBar';
 import React from 'react';
 import styled from 'styled-components';
+import MapLoader from 'components/MapLoader';
+import colors from 'styles/theme';
 
 const HomePage = () => {
   return (
@@ -9,12 +11,11 @@ const HomePage = () => {
       <StContainer>
         <Header />
         <SideBar />
-        <StMap />
+        <MapLoader />      
       </StContainer>
     </div>
   );
 };
-
 export default HomePage;
 
 export const StContainer = styled.main`

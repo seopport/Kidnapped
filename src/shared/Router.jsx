@@ -12,7 +12,6 @@ const Router = () => {
         <Route path="/home" element={<HomePage />} />
         <Route path="*" element={<Navigate replace to="/" />} />
         <Route path="/" element={<LoginPage />} />
-        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   );
