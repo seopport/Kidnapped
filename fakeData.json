@@ -76,6 +76,28 @@
       "createdAt": "2024.02.26 월요일",
       "dateForOrder": "2024-02-26T04:41:13.923Z",
       "profileAvatarColor": "#c197c0"
+    },
+    {
+      "id": "9df9fac7-db7a-4804-b1fb-fd941e7bd576",
+      "userId": "1",
+      "cafeId": "ddd",
+      "nickname": "오리",
+      "content": "df",
+      "grade": 2,
+      "createdAt": "2024.02.26 월요일",
+      "dateForOrder": "2024-02-26T07:03:23.506Z",
+      "profileAvatarColor": "#f2ddc8"
+    },
+    {
+      "id": "16888ab1-5067-4f5d-b92b-233cfe1fee88",
+      "userId": "vvvv",
+      "cafeId": "ddd",
+      "nickname": "방구석호랑이",
+      "content": "dsf",
+      "grade": 3,
+      "createdAt": "2024.02.26 월요일",
+      "dateForOrder": "2024-02-26T07:45:06.043Z",
+      "profileAvatarColor": "#97eda1"
     }
   ]
 }

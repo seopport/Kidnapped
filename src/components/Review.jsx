@@ -14,6 +14,8 @@ import { addReview, deleteReview, modifyReview, setReview } from '../redux/modul
 const Review = () => {
   const dispatch = useDispatch();
   const reviews = useSelector((state) => state.reviewSlice.reviews);
+  const userInfo = useSelector((state) => state.authSlice);
+  console.log(userInfo);
 
   const textArea = useRef();
   const modalRef = useRef();
@@ -101,9 +103,9 @@ const Review = () => {
 
     const newRivew = {
       id: crypto.randomUUID(),
-      userId: '1', //스토어에서 받아온 유저 아이디, 카페 아이디, 닉네임,
+      userId: userInfo.userId, //스토어에서 받아온 유저 아이디, 카페 아이디, 닉네임,
       cafeId: 'ddd',
-      nickname: '오리',
+      nickname: userInfo.nickname,
       content: reviewContent,
       grade: gradeStar,
       createdAt: creationDate,
@@ -270,7 +272,9 @@ const Review = () => {
 
                 {/* 점점점 메뉴 버튼!!!!!!!!!!!!!!!!!!!!!!!!! */}
                 {/* todo: 리덕스에서 받아온 유저 아이디와 인자로받아온 userId가 같아야만 메뉴 출력 */}
-                <StHiOutlineDotsVertical onClick={() => handleOptionButtonClick(item.id)} />
+                {userInfo.userId === item.userId && (
+                  <StHiOutlineDotsVertical onClick={() => handleOptionButtonClick(item.id)} />
+                )}
               </StReviewProfileWrap>
             </StReviewInfoWrap>
 
