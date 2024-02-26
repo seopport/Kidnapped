@@ -13,7 +13,7 @@ const SideBar = ({ markers, setMarkers }) => {
     const ps = new kakao.maps.services.Places();
 
     if (!searchTerm) {
-      return
+      alert("검색어를 입력하세요")
     }
 
     ps.keywordSearch(searchTerm, (data, status, _pagination) => {
@@ -67,24 +67,27 @@ const SideBar = ({ markers, setMarkers }) => {
             <FaBookmark size={30} color={'white'} />
           </StBookmarkButton>
         </StSearchWrapper>
-        <StMainCardContainer>
+        <StMainCardWrapper>
           {
             markers.map((item) => {
               return (
                 <StMainCardItem>
-                  <StMainCardInfo>
-                    <h1>{item.placeName}</h1>
-                    <p>{item.roadAddress}</p>
-                    <p>평점</p>
-                  </StMainCardInfo>
-                  <StImageWrapper>
-                    <img src='https://s3.ap-northeast-2.amazonaws.com/univ-careet/FileData/Article/480/593da055-3b4e-49a6-92f9-49bd1375a4ab.png' alt='방탈출 카페 사진'></img>
-                  </StImageWrapper>
+                  <StMainCardInfoAndImage>
+                    <StMainCardInfo>
+                      <h1>{item.placeName}</h1>
+                      <p>{item.roadAddress}</p>
+                      <p>평점</p>
+                    </StMainCardInfo>
+                    <StImageWrapper>
+                      <img src='https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg' alt='방탈출 카페 사진'></img>
+                    </StImageWrapper>
+                  </StMainCardInfoAndImage>
+
                 </StMainCardItem>
               )
             })
           }
-        </StMainCardContainer>
+        </StMainCardWrapper>
         <Review />
       </StContainer>
     </StSideBar>
@@ -148,10 +151,13 @@ export const StBookmarkButton = styled.div`
   align-items: center;
   justify-content: center;
 `;
-export const StMainCardContainer = styled.div`
+export const StMainCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow-y: auto;
+  max-height: calc(100vh - 68px - 47px);
+  
 `;
 
 export const StMainCardItem = styled.div`
@@ -162,14 +168,32 @@ export const StMainCardItem = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   background-color: white;
-  gap: 20px;
+  
 `;
 
+export const StMainCardInfoAndImage = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px 16px;
+  gap: 20px;
+`
+
 export const StMainCardInfo = styled.div`
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-gap: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+    & h1{
+    font-weight: 700;
+    font-size: 16px;
+    color: ${colors.subColor};
+    }
+    & p {
+    font-size: 12px;
+    color: ${colors.mainTextColor}
+    }
 `
 export const StImageWrapper = styled.div`
   overflow: hidden;
@@ -178,5 +202,4 @@ export const StImageWrapper = styled.div`
     height: 100%;
     object-fit: cover;
   }
-  background-color: red;
-`;
+  `
