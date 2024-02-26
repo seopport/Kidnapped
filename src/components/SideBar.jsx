@@ -4,64 +4,29 @@ import colors from 'styles/theme';
 import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
 import Review from './Review';
-import { useSearchParams } from 'react-router-dom';
 
 const SideBar = ({ markers, setMarkers }) => {
   const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState("")
 
-  // 지역 검색 함수
-  const handleSearch = () => {
-    const ps = new kakao.maps.services.Places();
+  // 키보드 enter 시 검색
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  }
 
+  // 지역 검색시 필터링 함수
+  const handleSearch = () => {
     if (!searchTerm) {
-      alert("검색어를 입력하세요")
+      alert("검색어를 입력하세요");
       return;
     }
-
-    const searchMarkers = markers.filter(marker => {
-      return marker.roadAddress.includes(searchTerm) || marker.jibunAddress.includes(searchTerm);
-      console.log(marker.roadAddress)
-      // 오류 수정중
-    })
-
-    setMarkers(searchMarkers);
-
-    // ps.keywordSearch(searchTerm, (data, status, _pagination) => {
-    //   if (status === kakao.maps.services.Status.OK) {
-    //     // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-    //     // LatLngBounds 객체에 좌표를 추가
-    //     const bounds = new kakao.maps.LatLngBounds();
-    //     let markers = [];
-
-    //     for (var i = 0; i < data.length; i++) {
-    //       const id = data[i].id; // 장소 ID
-    //       const placeName = data[i].place_name; // 장소명
-    //       const categoryName = data[i].category_name; // 카테고리 이름
-    //       const phoneNumber = data[i].phone; // 전화번호
-    //       const jibunAddress = data[i].address_name; // 전체 지번 주소
-    //       const roadAddress = data[i].road_address_name; // 전체 도로명 주소
-    //       const placeUrl = data[i].place_url; // 장소 상세페이지 URL
-    //       const x = data[i].x; // X 좌표 혹은 경도(longitude)
-    //       const y = data[i].y; // Y 좌표 혹은 위도(latitude)
-
-    //       markers.push({
-    //         position: {
-    //           lat: data[i].y,
-    //           lng: data[i].x
-    //         },
-    //         placeName,
-    //         roadAddress,
-    //         phoneNumber,
-    //         placeUrl
-    //       });
-    //       // @ts-ignore
-    //       bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-    //     }
-    //     setMarkers(markers);
-    //   }
-    // });
-
+    const filtered = markers.filter((marker) => {
+      console.log(marker.roadAddress.includes(searchTerm))
+      return marker.roadAddress.includes(searchTerm);
+    });
+    setMarkers(filtered);
   }
 
   return (
@@ -69,7 +34,12 @@ const SideBar = ({ markers, setMarkers }) => {
       <StContainer>
         <StSearchWrapper>
           <StSearchForm onSubmit={(e) => e.preventDefault()}>
-            <input onSubmit='return false' type="text" placeholder="지역 검색" onChange={(e) => setSearchTerm(e.target.value)} value={searchTerm}></input>
+            <input onSubmit='return false'
+              type="text"
+              placeholder="지역 검색"
+              onChange={(e) => setSearchTerm(e.target.value)}
+              value={searchTerm}
+              onKeyDown={handleKeyDown}></input>
             <StSearchButton onClick={handleSearch}>
               <IoSearch size={25} />
             </StSearchButton>
@@ -87,7 +57,7 @@ const SideBar = ({ markers, setMarkers }) => {
                     <StMainCardInfo>
                       <h1>{item.placeName}</h1>
                       <p>{item.roadAddress}</p>
-                      <p>평점</p>
+                      <p>{item.phoneNumber}</p>
                     </StMainCardInfo>
                     <StImageWrapper>
                       <img src='https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg' alt='방탈출 카페 사진'></img>
