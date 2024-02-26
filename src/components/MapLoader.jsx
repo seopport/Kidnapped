@@ -13,7 +13,7 @@ const Location = () => {
 
   const [state, setState] = useState({
     center: {
-      lat: 37.5824,
+      lat: 36.5824,
       lng: 127.0017
     },
     errMsg: null,
@@ -57,9 +57,6 @@ const Location = () => {
           bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
         }
         setMarkers(markers);
-
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정
-        map.setBounds(bounds);
       }
     });
     if (navigator.geolocation) {
@@ -106,7 +103,7 @@ const Location = () => {
       <StMapSize // 지도를 표시할 Container
         id="map"
         center={state.center} // 지도의 중심좌표
-        level={7} // 지도의 확대 레벨
+        level={12} // 지도의 확대 레벨
         onCreate={setMap}
       >
         {/* 지도에 컨트롤 올리기 */}
