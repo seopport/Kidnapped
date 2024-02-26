@@ -170,11 +170,19 @@ const Review = () => {
     }
   };
 
+  const completeModifying = () => {
+    setIsModifying(false);
+    setReviewContent('');
+  };
+
   // 리뷰 수정 취소
   const handleCancelButtonClick = async () => {
+    if (reviewContent === modifiedReviewContent && gradeStar === modifiedGradeStar) {
+      completeModifying();
+      return;
+    }
     if (window.confirm('수정을 취소하시겠습니까?')) {
-      setReviewContent('');
-      setIsModifying(false);
+      completeModifying();
     }
     return;
   };
