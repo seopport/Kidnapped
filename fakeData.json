@@ -104,22 +104,11 @@
       "userId": "nnnn",
       "cafeId": "ddd",
       "nickname": "찰흙인간",
-      "content": "dsfsdfsdfsdff",
+      "content": "수정완료",
       "grade": 5,
       "createdAt": "2024.02.26 월요일",
       "dateForOrder": "2024-02-26T08:24:02.036Z",
       "profileAvatarColor": "#9fa9eb"
-    },
-    {
-      "id": "2691fbe2-0c38-4fbc-b4a2-dc234e731c40",
-      "userId": "nnnn",
-      "cafeId": "ddd",
-      "nickname": "찰흙인간",
-      "content": "dsfsd",
-      "grade": 2,
-      "createdAt": "2024.02.26 월요일",
-      "dateForOrder": "2024-02-26T08:24:48.597Z",
-      "profileAvatarColor": "#9ef2f8"
     },
     {
       "id": "6e7dfda6-1152-4f8f-823b-dee8ece2bd23",

@@ -123,17 +123,31 @@ const Review = () => {
       setReviewContent('');
       setGradeStar(0);
     } catch (error) {
+      alert('오류가 발생했습니다. 잠시후 다시 시도해주세요.');
+
       console.log(error);
     }
   };
 
+  const validateAccess = (userId) => {
+    if (userId === userInfo.userId) return true;
+  };
+
   // 리뷰 삭제 ----------------------------------
-  const handleDeleteReviewButtonClick = async (id) => {
+  const handleDeleteReviewButtonClick = async (reviewId, userId) => {
+    if (!validateAccess(userId)) {
+      alert('권한이 없습니다.');
+      return;
+    }
     if (window.confirm('리뷰를 삭제하시겠습니끼?')) {
       try {
-        await reviewApi.delete(`/${id}`);
-        dispatch(deleteReview(id));
-      } catch (error) {}
+        await reviewApi.delete(`/${reviewId}`);
+        dispatch(deleteReview(reviewId));
+      } catch (error) {
+        alert('오류가 발생했습니다. 잠시후 다시 시도해주세요.');
+
+        console.log(error);
+      }
     } else {
     }
   };
@@ -146,6 +160,10 @@ const Review = () => {
 
   // 리뷰 수정 클릭 ----------------------------------
   const handleModifyReviewButtonClick = async (userId, reviewId, content, grade) => {
+    if (!validateAccess(userId)) {
+      alert('권한이 없습니다.');
+      return;
+    }
     textArea.current.focus();
     setIsModifying(true);
     setReviewId(reviewId);
@@ -282,9 +300,7 @@ const Review = () => {
 
                 {/* 점점점 메뉴 버튼!!!!!!!!!!!!!!!!!!!!!!!!! */}
                 {/* todo: 리덕스에서 받아온 유저 아이디와 인자로받아온 userId가 같아야만 메뉴 출력 */}
-                {userInfo.userId === item.userId && (
-                  <StHiOutlineDotsVertical onClick={() => handleOptionButtonClick(item.id)} />
-                )}
+                {<StHiOutlineDotsVertical onClick={() => handleOptionButtonClick(item.id)} />}
               </StReviewProfileWrap>
             </StReviewInfoWrap>
 
@@ -301,7 +317,10 @@ const Review = () => {
                 </li>
 
                 {/* 삭제 */}
-                <li onClick={() => handleDeleteReviewButtonClick(item.id)} style={{ display: 'flex', padding: '10px' }}>
+                <li
+                  onClick={() => handleDeleteReviewButtonClick(item.id, item.userId)}
+                  style={{ display: 'flex', padding: '10px' }}
+                >
                   <FaRegTrashAlt style={{ marginRight: '3px' }} />
                   삭제
                 </li>
