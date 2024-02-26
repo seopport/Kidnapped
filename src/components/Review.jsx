@@ -4,7 +4,6 @@ import colors from 'styles/theme';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { GoPencil } from 'react-icons/go';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { FaRegStar } from 'react-icons/fa';
 import { FaStar } from 'react-icons/fa';
 import reviewApi from 'api/reviewApi';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
@@ -15,7 +14,6 @@ const Review = () => {
   const dispatch = useDispatch();
   const reviews = useSelector((state) => state.reviewSlice.reviews);
   const userInfo = useSelector((state) => state.authSlice);
-  console.log(userInfo);
 
   const textArea = useRef();
   const modalRef = useRef();
@@ -37,11 +35,29 @@ const Review = () => {
     loadReviews();
   }, [dispatch]);
 
+  const modificationCompleted = () => {
+    setIsModifying(false);
+    setReviewContent('');
+    setGradeStar(0);
+  };
+
+  const handleCheckLogin = () => {
+    if (!userInfo.userId) {
+      alert('로그인 후 이용 가능합니다.');
+      textArea.current.style.outline = 'none';
+      return;
+    }
+  };
+
+  const setDate = (date) => {
+    return date < 10 ? '0' + date : date.toString();
+  };
+
   //이건 Star라는 컴포넌트
   // 생성된 Star 컴포넌트가 FaStar 컴포넌트를 만들어낸다
   //생성된 별 아이콘을 클릭했을때 handleStarIconClick가 실행되고 그 클릭된 별아이콘의 인덱스값으로 gradeStar가 set됨
   const EvaluateStar = ({ selected = false, handleStarIconClick }) => {
-    return <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />;
+    return <FaStar color={selected ? colors.starColor : 'grey'} onClick={handleStarIconClick} />;
   };
 
   const handleStarIconClick = (idx) => {
@@ -55,7 +71,7 @@ const Review = () => {
       starArray[i] = true;
     }
     // 별 5개 생성
-    const stars = starArray.map((value, idx) => <FaStar key={idx} color={value ? 'gold' : 'grey'} />);
+    const stars = starArray.map((value, idx) => <FaStar key={idx} color={value ? colors.starColor : 'grey'} />);
     return stars;
   };
 
@@ -77,10 +93,6 @@ const Review = () => {
     }
 
     //#region
-    const setDate = (date) => {
-      return date < 10 ? '0' + date : date.toString();
-    };
-
     const year = new Date().getFullYear();
     const month = setDate(new Date().getMonth() + 1);
     const date = setDate(new Date().getDate());
@@ -89,7 +101,6 @@ const Review = () => {
     const creationDate = [year, month, date].join('.') + ' ' + day;
 
     const dateForOrder = new Date().toISOString();
-
     //#endregion
 
     const randomBrightColor = () => {
@@ -101,7 +112,7 @@ const Review = () => {
 
     const profileAvatarColor = randomBrightColor();
 
-    const newRivew = {
+    const newReview = {
       id: crypto.randomUUID(),
       userId: userInfo.userId, //스토어에서 받아온 유저 아이디, 카페 아이디, 닉네임,
       cafeId: 'ddd',
@@ -113,11 +124,11 @@ const Review = () => {
       profileAvatarColor
     };
 
-    console.log(newRivew);
+    console.log(newReview);
 
     try {
-      await reviewApi.post('', newRivew);
-      dispatch(addReview(newRivew));
+      await reviewApi.post('', newReview);
+      dispatch(addReview(newReview));
 
       alert('리뷰가 등록되었습니다.');
       setReviewContent('');
@@ -150,12 +161,6 @@ const Review = () => {
       }
     } else {
     }
-  };
-
-  const modificationCompleted = () => {
-    setIsModifying(false);
-    setReviewContent('');
-    setGradeStar(0);
   };
 
   // 리뷰 수정 클릭 ----------------------------------
@@ -214,14 +219,6 @@ const Review = () => {
     if (modalRef.current) setClickedReviewId(null);
   };
 
-  const handleCheckLogin = () => {
-    if (!userInfo.userId) {
-      alert('로그인 후 이용 가능합니다.');
-      textArea.current.style.outline = 'none';
-      return;
-    }
-  };
-
   return (
     <StReviewTapContainer>
       <StReviewFormContainer>
@@ -251,7 +248,6 @@ const Review = () => {
                   />
                 );
               })}
-              {/* <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />; */}
             </StStarContainer>
             {isGradeInvalid && !isModifying && <AiOutlineExclamationCircle color={'red'} />}
           </StGradeWrap>
@@ -299,7 +295,6 @@ const Review = () => {
                 </div>
 
                 {/* 점점점 메뉴 버튼!!!!!!!!!!!!!!!!!!!!!!!!! */}
-                {/* todo: 리덕스에서 받아온 유저 아이디와 인자로받아온 userId가 같아야만 메뉴 출력 */}
                 {<StHiOutlineDotsVertical onClick={() => handleOptionButtonClick(item.id)} />}
               </StReviewProfileWrap>
             </StReviewInfoWrap>
@@ -308,22 +303,18 @@ const Review = () => {
             {clickedReviewId === item.id && (
               <StOptionsMenuModal ref={modalRef}>
                 {/* 수정 */}
-                <li
+                <StListItem
                   onClick={() => handleModifyReviewButtonClick(item.userId, item.id, item.content, item.grade)}
-                  style={{ display: 'flex', padding: '10px' }}
                 >
                   <GoPencil style={{ marginRight: '3px' }} />
                   수정
-                </li>
+                </StListItem>
 
                 {/* 삭제 */}
-                <li
-                  onClick={() => handleDeleteReviewButtonClick(item.id, item.userId)}
-                  style={{ display: 'flex', padding: '10px' }}
-                >
+                <StListItem onClick={() => handleDeleteReviewButtonClick(item.id, item.userId)}>
                   <FaRegTrashAlt style={{ marginRight: '3px' }} />
                   삭제
-                </li>
+                </StListItem>
               </StOptionsMenuModal>
             )}
 
@@ -336,16 +327,6 @@ const Review = () => {
     </StReviewTapContainer>
   );
 };
-
-export const StBottomLine = styled.div`
-  display: ${(props) => (props.$reviewLength === 0 ? 'none' : 'block')};
-  height: 1px;
-  background-color: ${colors.subColor};
-`;
-
-export const StStarIcon = styled(FaStar)`
-  border: 1px solid ${colors.starColor};
-`;
 
 export const StReviewTapContainer = styled.div`
   width: 335px;
@@ -400,7 +381,7 @@ export const StReviewFormBottom = styled.div`
   margin-top: 3px;
 
   &:hover {
-    background-color: #f54f26;
+    background-color: ${colors.buttonHoverColor};
   }
 `;
 
@@ -413,6 +394,12 @@ export const StReviewContainer = styled.div`
   /* border-bottom: ${(props) => (props.$reviewLength === 1 ? `1px solid ${colors.subColor}` : 'none')}; */
   flex-direction: column;
   position: relative;
+`;
+
+export const StReviewContent = styled.div`
+  line-height: 23px;
+  font-size: 14px;
+  padding: 0 5px;
 `;
 
 export const StReviewInfoWrap = styled.div`
@@ -461,7 +448,6 @@ export const StOptionsMenuModal = styled.ul`
   height: 65px;
   font-size: 12px;
 
-  /* display: ${(props) => (props.$isOptionMenuOpen ? 'flex' : 'none')}; */
   display: flex;
   flex-direction: column;
 
@@ -475,6 +461,11 @@ export const StOptionsMenuModal = styled.ul`
   border-radius: 10px;
   cursor: pointer;
   position: absolute;
+`;
+
+export const StListItem = styled.li`
+  display: flex;
+  padding: 10px;
 `;
 
 export const StGradeModal = styled.ul`
@@ -506,14 +497,18 @@ export const StReviewCreationDate = styled.span`
   color: ${colors.mainTextColor};
 `;
 
-export const StReviewContent = styled.div`
-  line-height: 23px;
-  font-size: 14px;
-  padding: 0 5px;
-`;
-
 export const StStarContainer = styled.div`
   display: flex;
+`;
+
+export const StStarIcon = styled(FaStar)`
+  border: 1px solid ${colors.starColor};
+`;
+
+export const StBottomLine = styled.div`
+  display: ${(props) => (props.$reviewLength === 0 ? 'none' : 'block')};
+  height: 1px;
+  background-color: ${colors.subColor};
 `;
 
 export default Review;
