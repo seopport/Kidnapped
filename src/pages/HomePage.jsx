@@ -2,12 +2,14 @@ import Header from 'components/Header';
 import SideBar from 'components/SideBar';
 import React from 'react';
 import styled from 'styled-components';
+import colors from 'styles/theme';
 
 const HomePage = () => {
   return <div>
     <StContainer>
       <Header />
-      <SideBar />
+      <SideBar>
+      </SideBar>
       <StMap />
     </StContainer>
   </div>
