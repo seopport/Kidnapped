@@ -11,8 +11,7 @@ const HomePage = () => {
       <StContainer>
         <Header />
         <SideBar />
-        <MapLoader />
-        <StMap />
+        <MapLoader />      
       </StContainer>
     </div>
   );
