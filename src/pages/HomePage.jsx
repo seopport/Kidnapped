@@ -3,6 +3,7 @@ import SideBar from 'components/SideBar';
 import React from 'react';
 import styled from 'styled-components';
 import MapLoader from 'components/MapLoader';
+import colors from 'styles/theme';
 
 const HomePage = () => {
   return (
@@ -11,6 +12,7 @@ const HomePage = () => {
         <Header />
         <SideBar />
         <MapLoader />
+        <StMap />
       </StContainer>
     </div>
   );
