@@ -1,7 +1,8 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import HomePage from 'pages/HomePage';
 import LoginPage from 'pages/LoginPage';
-import { useSelector } from 'react-redux';
+import Detail from 'components/Detail';
+import { useState } from 'react';
 
 const Router = () => {
   //const isLogin = useSelector((state) => state.authSlice.isLogin);
@@ -9,9 +10,9 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="*" element={<Navigate replace to="/" />} />
-        <Route path="/" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   );

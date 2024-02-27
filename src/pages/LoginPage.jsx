@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import useForm from 'hooks/useForm';
 import { authApi } from 'api';
+import backgroundimg from 'assets/backgroungimg.png';
+import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -20,21 +22,8 @@ const LoginPage = () => {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     if (isLoginMode) {
-      dispatch(__login({ id, password }));
       //로그인 처리
-      // try {
-      //   const { data } = await authApi.post('/login?expiresIn=30m', {
-      //     id,
-      //     password
-      //   });
-      //   const { accessToken, nickname, avatar, userId } = data;
-      //   if (data.success) {
-      //     dispatch(login({ accessToken, nickname, avatar, userId }));
-      //     toast.success('로그인 성공!');
-      //   }
-      // } catch (err) {
-      //   toast.error(err.response.data.message);
-      // }
+      dispatch(__login({ id, password }));
     } else {
       // 회원가입 처리
       try {
@@ -57,22 +46,44 @@ const LoginPage = () => {
   return (
     <StLayoutImage>
       <StLayoutContainer>
-        <StHomeLink>Home</StHomeLink>
+        <StHomeLink>
+          <Link to="/home">Home</Link>
+        </StHomeLink>
         <StLoginPageTitle>"너 납치된 거야"</StLoginPageTitle>
         <StLoginBox>
           <StLoginForm onSubmit={onSubmitHandler}>
             <StFormTitle>Kidnapped</StFormTitle>
             <StFormSubTitle>{isLoginMode ? '로그인' : '회원가입'}</StFormSubTitle>
-            <StLoginInput name="id" value={id} onChange={onChangeHandler} placeholder="아이디" />
-            <StLoginInput name="password" value={password} onChange={onChangeHandler} placeholder="비밀번호" />
-            {!isLoginMode && (
-              <StLoginInput
-                name="nickname"
-                value={nickname}
-                onChange={onChangeHandler}
-                placeholder="닉네임 (2자 이상)"
-                minLength={2}
-              />
+            {isLoginMode ? (
+              <>
+                <StLoginInput name="id" value={id} onChange={onChangeHandler} placeholder="아이디" />
+                <StLoginInput name="password" value={password} onChange={onChangeHandler} placeholder="비밀번호" />
+              </>
+            ) : (
+              <>
+                <StLoginInput
+                  name="id"
+                  value={id}
+                  onChange={onChangeHandler}
+                  placeholder="아이디 (4자 이상)"
+                  minLength={4}
+                />
+
+                <StLoginInput
+                  name="password"
+                  value={password}
+                  onChange={onChangeHandler}
+                  placeholder="비밀번호 (4자 이상)"
+                  minLength={4}
+                />
+                <StLoginInput
+                  name="nickname"
+                  value={nickname}
+                  onChange={onChangeHandler}
+                  placeholder="닉네임 (2자 이상)"
+                  minLength={2}
+                />
+              </>
             )}
             <StLoginButton>{isLoginMode ? '로그인' : '회원가입'}</StLoginButton>
             <StToggleBox>
@@ -89,10 +100,13 @@ const LoginPage = () => {
 export default LoginPage;
 
 const StLayoutImage = styled.div`
-  background-image: url('/public/Loginimage.png');
+  background-image: url(${backgroundimg});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
 `;
 
 const StLayoutContainer = styled.div`
@@ -100,7 +114,7 @@ const StLayoutContainer = styled.div`
 `;
 
 const StLoginBox = styled.div`
-  border: 1px solid green;
+  background-color: white;
   border-radius: 30px;
   width: 600px;
   height: 650px;
@@ -108,14 +122,19 @@ const StLoginBox = styled.div`
   padding: 30px;
 `;
 
-const StHomeLink = styled.a`
+const StHomeLink = styled.span`
   font-size: 25px;
+  color: white;
+  &:hover {
+    border-bottom: 5px solid #8b8b8b;
+  }
 `;
 
 const StLoginPageTitle = styled.h1`
   font-size: 28px;
   font-weight: bolder;
   margin-top: 55px;
+  color: white;
 `;
 
 const StLoginForm = styled.form`
@@ -160,7 +179,7 @@ const StLoginButton = styled.button`
 const StToggleBox = styled.div`
   margin-top: 15px;
   & span:first-child {
-    color: gray;
+    color: #8b8b8b;
     margin-right: 10px;
   }
   & span:last-child {

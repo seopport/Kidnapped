@@ -1,7 +1,13 @@
 import axios from 'axios';
 
-const instace = axios.create({
+const instance = axios.create({
   baseURL: process.env.REACT_APP_SERVER_REVIEWS_URL
 });
 
-export default instace;
+const getReviews = async () => {
+  const response = await instance.get(``);
+  console.log(response);
+  return response;
+};
+
+export { instance, getReviews };
