@@ -121,7 +121,7 @@ const StLoginBox = styled.div`
   padding: 30px;
 `;
 
-const StHomeLink = styled.a`
+const StHomeLink = styled.span`
   font-size: 25px;
   color: white;
   &:hover {
