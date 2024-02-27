@@ -12,27 +12,27 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [selectedId, setSelectedId] = useState(null)
+  const [selectedId, setSelectedId] = useState(null);
 
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
-    setSelectedId(id)
-  }
+    setSelectedId(id);
+  };
 
   // 키보드 enter 시 검색
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       requestSearch();
-      setSearchTerm("")
-      
-  // 지역 검색 함수
-  const handleSearch = () => {
-    if (!searchTerm) {
-      alert('검색어를 입력하세요');
-      return;
+      setSearchTerm('');
     }
-  }
+    // 지역 검색 함수
+    const handleSearch = () => {
+      if (!searchTerm) {
+        alert('검색어를 입력하세요');
+        return;
+      }
+    };
 
     const searchMarkers = markers.filter((marker) => {
       return marker.roadAddress.includes(searchTerm) || marker.jibunAddress.includes(searchTerm);
@@ -89,33 +89,36 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
         }
         setMarkers(markers);
         setSelectedId(null);
-        setSearchTerm("")
+        setSearchTerm('');
       }
-    }
-    );
-  }
+    });
+  };
 
   return (
     <StSideBar>
       <StContainer>
         <StSearchWrapper>
           <StSearchForm onSubmit={(e) => e.preventDefault()}>
-            <input onSubmit='return false'
+            <input
+              onSubmit="return false"
               type="text"
               placeholder="지역 검색"
               onChange={(e) => setSearchTerm(e.target.value)}
               value={searchTerm}
-              onKeyDown={handleKeyDown}></input>
+              onKeyDown={handleKeyDown}
+            ></input>
             <StSearchButton onClick={requestSearch}>
               <IoSearch size={25} color={colors.subColor} />
             </StSearchButton>
           </StSearchForm>
           <StBookmarkButton onClick={handleBookmarkClick}>
-            <FaBookmark size={30} color={isBookmarked ? `${colors.starColor}` : "white"} />
+            <FaBookmark size={30} color={isBookmarked ? `${colors.starColor}` : 'white'} />
           </StBookmarkButton>
         </StSearchWrapper>
         <StMainCardWrapper>
-          {selectedId ? (<Detail markers={markers} selectedId={selectedId} />) : (
+          {selectedId ? (
+            <Detail markers={markers} selectedId={selectedId} />
+          ) : (
             markers.map((item) => {
               return (
                 <StMainCardItem onClick={() => handleCardItemClick(item.id)}>
@@ -126,14 +129,16 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
                       <p>{item.phoneNumber}</p>
                     </StMainCardInfo>
                     <StImageWrapper>
-                      <img src='https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg' alt='방탈출 카페 사진'></img>
+                      <img
+                        src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
+                        alt="방탈출 카페 사진"
+                      ></img>
                     </StImageWrapper>
                   </StMainCardInfoAndImage>
                 </StMainCardItem>
-              )
+              );
             })
-          )
-          }
+          )}
         </StMainCardWrapper>
         <StButtonBox>
           {buttonsNumber.map((buttonNumber) => (
@@ -259,10 +264,10 @@ const StMainCardInfo = styled.div`
     color: ${colors.mainTextColor};
   }
 `;
-export const StImageWrapper = styled.div`
-    color: ${colors.mainTextColor}
-    }
-`
+// export const StImageWrapper = styled.div`
+//     color: ${colors.mainTextColor}
+//     }
+// `
 const StImageWrapper = styled.div`
   overflow: hidden;
   & img {
