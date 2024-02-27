@@ -106,34 +106,40 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
           {selectedId ? (<Detail markers={markers} selectedId={selectedId} />) : (
             markers.map((item) => {
               return (
-                <StMainCardItem onClick={() => handleCardItemClick(item.id)}>
-                  <StMainCardInfoAndImage>
-                    <StMainCardInfo>
-                      <h1>{item.placeName}</h1>
-                      <p>{item.roadAddress}</p>
-                      <p>{item.phoneNumber}</p>
-                    </StMainCardInfo>
-                    <StImageWrapper>
-                      <img src='https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg' alt='방탈출 카페 사진'></img>
-                    </StImageWrapper>
-                  </StMainCardInfoAndImage>
-                </StMainCardItem>
+                <>
+                  <StMainCardItem onClick={() => handleCardItemClick(item.id)}>
+                    <StMainCardInfoAndImage>
+                      <StMainCardInfo>
+                        <h1>{item.placeName}</h1>
+                        <p>{item.roadAddress}</p>
+                        <p>{item.phoneNumber}</p>
+                      </StMainCardInfo>
+                      <StImageWrapper>
+                        <img src='https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg' alt='방탈출 카페 사진'></img>
+                      </StImageWrapper>
+                    </StMainCardInfoAndImage>
+                  </StMainCardItem>
+                </>
+
               )
-            })
+            }
+            )
           )
           }
         </StMainCardWrapper>
-        <StButtonBox>
-          {buttonsNumber.map((buttonNumber) => (
-            <StPageButton
-              index={buttonNumber}
-              onClick={() => handlePageChange(buttonNumber)}
-              $currentPage={currentPage}
-            >
-              {buttonNumber}
-            </StPageButton>
-          ))}
-        </StButtonBox>
+        {!selectedId && (
+          <StButtonBox>
+            {buttonsNumber.map((buttonNumber) => (
+              <StPageButton
+                index={buttonNumber}
+                onClick={() => handlePageChange(buttonNumber)}
+                $currentPage={currentPage}
+              >
+                {buttonNumber}
+              </StPageButton>
+            ))}
+          </StButtonBox>
+        )}
         {/* <Review /> 임시 주석처리  */}
       </StContainer>
     </StSideBar>
