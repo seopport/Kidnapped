@@ -28,7 +28,8 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
     }
   };
 
-  const buttonsNumber = [1, 2, 3];
+  const [buttonsNumber, setButtonsNumber] = useState([1, 2, 3]);
+  // const buttonsNumber = [1, 2, 3];
 
   // 페이지 번호 클릭 핸들러
   const handlePageChange = (pageNumber) => {
@@ -78,6 +79,11 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
         setMarkers(markers);
         setSelectedId(null);
         setSearchTerm('');
+
+        // 검색 결과에 따라 버튼 개수 변경
+        const total = pagination.last;
+        const buttonNumber = Array.from({ length: total }, (_, index) => index + 1)
+        setButtonsNumber(buttonNumber)
       }
     });
   };
