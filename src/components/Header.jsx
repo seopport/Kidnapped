@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import colors from 'styles/theme';
-import { StLayoutBox } from 'components/Layout';
+import { StLayoutBox } from 'components/common/Layout';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
