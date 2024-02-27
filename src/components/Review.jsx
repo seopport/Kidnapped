@@ -9,8 +9,9 @@ import { instance, getReviews } from 'api/reviewApi';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 import { addReview, deleteReview, modifyReview, setReview } from '../redux/modules/reviewSlice';
+import { useNavigate } from 'react-router-dom';
 
-const Review = () => {
+const Review = ({ selectedId }) => {
   const dispatch = useDispatch();
   const reviews = useSelector((state) => state.reviewSlice.reviews);
   const userInfo = useSelector((state) => state.authSlice);
@@ -40,12 +41,17 @@ const Review = () => {
     setReviewContent('');
     setGradeStar(0);
   };
+  const navigate = useNavigate();
 
   const handleCheckLogin = () => {
     if (!userInfo.userId) {
-      alert('로그인 후 이용 가능합니다.');
-      textArea.current.style.outline = 'none';
-      return;
+      if (window.confirm(`로그인 후 이용 가능합니다. \n로그인 페이지로 이동하시겠습니까?`)) {
+        navigate('/login');
+        return;
+      } else {
+        textArea.current.style.outline = 'none';
+        return;
+      }
     }
   };
 
@@ -118,7 +124,7 @@ const Review = () => {
     const newReview = {
       id: crypto.randomUUID(),
       userId: userInfo.userId,
-      cafeId: 'ddd',
+      cafeId: selectedId,
       nickname: userInfo.nickname,
       content: reviewContent,
       grade: gradeStar,
@@ -275,53 +281,55 @@ const Review = () => {
       )}
       {/* reviews.filter((item) => item.cafeId === reviews.cafeId) */}
       {/* 아니면 get으로 가져올때 search쿼리로 그 카페 리뷰만 가져오기 */}
-      {reviews?.map((item, idx) => {
-        return (
-          <StReviewContainer key={item.id} onClick={handleModalClose} $reviewLength={reviews.length}>
-            <StReviewInfoWrap>
-              <StReviewWriterProfileImage style={{ backgroundColor: item.profileAvatarColor }}>
-                {item.nickname[0]}
-              </StReviewWriterProfileImage>
+      {reviews
+        ?.filter((item) => item.cafeId === selectedId)
+        .map((item, idx) => {
+          return (
+            <StReviewContainer key={item.id} onClick={handleModalClose} $reviewLength={reviews.length}>
+              <StReviewInfoWrap>
+                <StReviewWriterProfileImage style={{ backgroundColor: item.profileAvatarColor }}>
+                  {item.nickname[0]}
+                </StReviewWriterProfileImage>
 
-              <StReviewProfileWrap>
-                <div>
-                  <div style={{ display: 'flex', marginBottom: '3px' }}>
-                    <StReviewWriterNicnkname>{item.nickname}</StReviewWriterNicnkname>
-                    <StReviewGrade key={item.id}>
-                      {/* 별점 */}
-                      <MakeStar grade={item.grade} />
-                    </StReviewGrade>
+                <StReviewProfileWrap>
+                  <div>
+                    <div style={{ display: 'flex', marginBottom: '3px' }}>
+                      <StReviewWriterNicnkname>{item.nickname}</StReviewWriterNicnkname>
+                      <StReviewGrade key={item.id}>
+                        {/* 별점 */}
+                        <MakeStar grade={item.grade} />
+                      </StReviewGrade>
+                    </div>
+                    <StReviewCreationDate>{item.createdAt}</StReviewCreationDate>
                   </div>
-                  <StReviewCreationDate>{item.createdAt}</StReviewCreationDate>
-                </div>
 
-                {<StHiOutlineDotsVertical onClick={() => handleOptionButtonClick(item.id)} />}
-              </StReviewProfileWrap>
-            </StReviewInfoWrap>
+                  {<StHiOutlineDotsVertical onClick={() => handleOptionButtonClick(item.id)} />}
+                </StReviewProfileWrap>
+              </StReviewInfoWrap>
 
-            {/* 모달!!!!!!!!!!!!!--------- */}
-            {clickedReviewId === item.id && (
-              <StOptionsMenuModal ref={modalRef}>
-                {/* 수정 */}
-                <StListItem
-                  onClick={() => handleModifyReviewButtonClick(item.userId, item.id, item.content, item.grade)}
-                >
-                  <GoPencil style={{ marginRight: '3px' }} />
-                  수정
-                </StListItem>
+              {/* 모달!!!!!!!!!!!!!--------- */}
+              {clickedReviewId === item.id && (
+                <StOptionsMenuModal ref={modalRef}>
+                  {/* 수정 */}
+                  <StListItem
+                    onClick={() => handleModifyReviewButtonClick(item.userId, item.id, item.content, item.grade)}
+                  >
+                    <GoPencil style={{ marginRight: '3px' }} />
+                    수정
+                  </StListItem>
 
-                {/* 삭제 */}
-                <StListItem onClick={() => handleDeleteReviewButtonClick(item.id, item.userId)}>
-                  <FaRegTrashAlt style={{ marginRight: '3px' }} />
-                  삭제
-                </StListItem>
-              </StOptionsMenuModal>
-            )}
+                  {/* 삭제 */}
+                  <StListItem onClick={() => handleDeleteReviewButtonClick(item.id, item.userId)}>
+                    <FaRegTrashAlt style={{ marginRight: '3px' }} />
+                    삭제
+                  </StListItem>
+                </StOptionsMenuModal>
+              )}
 
-            <StReviewContent>{item.content} </StReviewContent>
-          </StReviewContainer>
-        );
-      })}
+              <StReviewContent>{item.content} </StReviewContent>
+            </StReviewContainer>
+          );
+        })}
       <StBottomLine $reviewLength={reviews.length} />
     </StReviewTapContainer>
   );
