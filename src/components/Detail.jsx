@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Detail = ({ markers, setMarkers }) => {
+const Detail = ({ markers, selectedId }) => {
+    const selectedMarker = markers.find(marker => marker.id === selectedId)
     return (
-        <div>{markers.id}</div>
+        <div>{selectedMarker.id}</div>
     )
 }
-
 export default Detail

@@ -50,7 +50,8 @@ const Location = ({ markers, setMarkers }) => {
             placeName,
             roadAddress,
             phoneNumber,
-            placeUrl
+            placeUrl,
+            id
           });
           // @ts-ignore
           bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));

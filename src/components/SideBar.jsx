@@ -4,12 +4,17 @@ import colors from 'styles/theme';
 import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
 import Review from './Review';
-import { useNavigate } from 'react-router-dom';
+import Detail from './Detail';
 
 const SideBar = ({ markers, setMarkers }) => {
   const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState("")
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [selectedId, setSelectedId] = useState(null)
+
+  const handleCardItemClick = (id) => {
+    setSelectedId(id)
+  }
 
   // 키보드 enter 시 검색
   const handleKeyDown = (event) => {
@@ -20,16 +25,11 @@ const SideBar = ({ markers, setMarkers }) => {
     }
   }
 
-  const handleDetial = (id) => {
-
-  }
-
   const handleBookmarkClick = () => {
     setIsBookmarked(!isBookmarked);
   };
 
   const requestSearch = () => {
-
     const ps = new kakao.maps.services.Places();
 
     ps.keywordSearch(`${searchTerm} 방탈출`, (data, status, _pagination) => {
@@ -63,7 +63,8 @@ const SideBar = ({ markers, setMarkers }) => {
         setMarkers(markers);
         setSearchTerm("")
       }
-    });
+    }
+    );
   }
 
   return (
@@ -86,15 +87,16 @@ const SideBar = ({ markers, setMarkers }) => {
           </StBookmarkButton>
         </StSearchWrapper>
         <StMainCardWrapper>
-          {
+          {selectedId ? (<Detail markers={markers} selectedId={selectedId} />) : (
             markers.map((item) => {
               return (
-                <StMainCardItem onClick={handleDetial(item.id)}>
+                <StMainCardItem onClick={() => handleCardItemClick(item.id)}>
                   <StMainCardInfoAndImage>
                     <StMainCardInfo>
                       <h1>{item.placeName}</h1>
                       <p>{item.roadAddress}</p>
                       <p>{item.phoneNumber}</p>
+                      <p>{item.id}</p>
                     </StMainCardInfo>
                     <StImageWrapper>
                       <img src='https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg' alt='방탈출 카페 사진'></img>
@@ -103,6 +105,7 @@ const SideBar = ({ markers, setMarkers }) => {
                 </StMainCardItem>
               )
             })
+          )
           }
         </StMainCardWrapper>
         <Review />
