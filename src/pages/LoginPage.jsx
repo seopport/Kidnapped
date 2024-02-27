@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import useForm from 'hooks/useForm';
 import { authApi } from 'api';
 import backgroundimg from 'assets/backgroungimg.png';
+import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -45,7 +46,9 @@ const LoginPage = () => {
   return (
     <StLayoutImage>
       <StLayoutContainer>
-        <StHomeLink>Home</StHomeLink>
+        <StHomeLink>
+          <Link to="/home">Home</Link>
+        </StHomeLink>
         <StLoginPageTitle>"너 납치된 거야"</StLoginPageTitle>
         <StLoginBox>
           <StLoginForm onSubmit={onSubmitHandler}>
@@ -121,6 +124,9 @@ const StLoginBox = styled.div`
 const StHomeLink = styled.a`
   font-size: 25px;
   color: white;
+  &:hover {
+    border-bottom: 5px solid #8b8b8b;
+  }
 `;
 
 const StLoginPageTitle = styled.h1`
@@ -172,7 +178,7 @@ const StLoginButton = styled.button`
 const StToggleBox = styled.div`
   margin-top: 15px;
   & span:first-child {
-    color: gray;
+    color: #8b8b8b;
     margin-right: 10px;
   }
   & span:last-child {
