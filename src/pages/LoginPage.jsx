@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import useForm from 'hooks/useForm';
 import { authApi } from 'api';
+import backgroundimg from 'assets/backgroungimg.png';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -64,19 +65,20 @@ const LoginPage = () => {
                   placeholder="아이디 (4자 이상)"
                   minLength={4}
                 />
-                <StLoginInput
-                  name="nickname"
-                  value={nickname}
-                  onChange={onChangeHandler}
-                  placeholder="닉네임 (2자 이상)"
-                  minLength={2}
-                />
+
                 <StLoginInput
                   name="password"
                   value={password}
                   onChange={onChangeHandler}
                   placeholder="비밀번호 (4자 이상)"
                   minLength={4}
+                />
+                <StLoginInput
+                  name="nickname"
+                  value={nickname}
+                  onChange={onChangeHandler}
+                  placeholder="닉네임 (2자 이상)"
+                  minLength={2}
                 />
               </>
             )}
@@ -95,7 +97,7 @@ const LoginPage = () => {
 export default LoginPage;
 
 const StLayoutImage = styled.div`
-  background-image: url('./src/assets/Loginimage.png');
+  background-image: url(${backgroundimg});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -108,7 +110,7 @@ const StLayoutContainer = styled.div`
 `;
 
 const StLoginBox = styled.div`
-  border: 1px solid green;
+  background-color: white;
   border-radius: 30px;
   width: 600px;
   height: 650px;
@@ -118,12 +120,14 @@ const StLoginBox = styled.div`
 
 const StHomeLink = styled.a`
   font-size: 25px;
+  color: white;
 `;
 
 const StLoginPageTitle = styled.h1`
   font-size: 28px;
   font-weight: bolder;
   margin-top: 55px;
+  color: white;
 `;
 
 const StLoginForm = styled.form`
