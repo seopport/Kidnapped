@@ -131,12 +131,46 @@
       "createdAt": "2024.02.26 월요일",
       "dateForOrder": "2024-02-26T12:51:06.020Z",
       "profileAvatarColor": "#82b7f4"
+    },
+    {
+      "id": "0085b230-b31c-4c23-a04b-5766950bc76a",
+      "userId": "seoyeon",
+      "cafeId": "ddd",
+      "nickname": "서연이ㄷㄷ",
+      "content": "ㅇㅇ",
+      "grade": 4,
+      "createdAt": "2024.02.27 화요일",
+      "dateForOrder": "2024-02-27T14:00:52.051Z",
+      "profileAvatarColor": "#bf9c9b"
     }
   ],
   "scraps": [
     {
       "userId": "ffff",
-      "scrapLists": ["dddd"]
+      "scrapLists": [
+        "dddd"
+      ],
+      "id": "37ef"
+    },
+    {
+      "id": "3724",
+      "userId": "seoyeon",
+      "scrapLists": [
+        "377197835"
+      ]
+    },
+    {
+      "id": "7058",
+      "scrapLists": [
+        "377197835"
+      ]
+    },
+    {
+      "id": "675a",
+      "userId": "seoyeon",
+      "scrapLists": [
+        "377197835"
+      ]
     }
   ]
 }

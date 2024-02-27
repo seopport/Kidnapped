@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useDebugValue, useState } from 'react';
 import Review from './Review';
 import { FaBookmark } from 'react-icons/fa';
 import colors from 'styles/theme';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { scrapApi } from 'api/scrapApi';
+import { addScrap } from '../redux/modules/scrapSlice';
+import axios from 'axios';
 
 const Detail = ({ markers, selectedId }) => {
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const dispatch = useDispatch();
+  const scraps = useSelector((state) => state.scrapSlice.scraps)
   const { userId } = useSelector((state) => state.authSlice);
+
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
   const handleBookmarkClick = () => {
     setIsBookmarked(!isBookmarked);
     console.log(userId)
@@ -15,15 +21,18 @@ const Detail = ({ markers, selectedId }) => {
   };
 
   const addScrapList = async () => {
+    const scrapList = {
+      userId: userId,
+      scrapLists: [selectedId]
+    }
     try {
-      const response = await scrapApi.post(`${userId}`);
-      console.log(response);
-      return response;
+      await axios.post('http://localhost:4000/scraps ', scrapList);
+      dispatch(addScrap(scrapList))
+      console.log(scrapList);
     } catch (error) {
       console.log("error", error)
     }
   };
-
 
   const selectedMarker = markers.find((marker) => marker.id === selectedId);
   return (
