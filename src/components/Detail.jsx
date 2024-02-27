@@ -14,6 +14,8 @@ const Detail = ({ markers, selectedId }) => {
 
   const [isBookmarked, setIsBookmarked] = useState(false);
 
+  // 스크랩 토글 ---------------------------------
+
   const handleBookmarkClick = () => {
     setIsBookmarked(prevIsBookmarked => {
       console.log(!prevIsBookmarked);
@@ -29,6 +31,7 @@ const Detail = ({ markers, selectedId }) => {
     }
   }, [isBookmarked]);
 
+  // 스크랩 추가 ----------------------------------
   const addScrapList = async () => {
     const newScrapList = {
       userId: userId,
@@ -43,6 +46,7 @@ const Detail = ({ markers, selectedId }) => {
     }
   };
 
+  // 스크랩 삭제 ------------------------------------ TODO: 오류 수정해야 함
   const deletedScrapList = async () => {
     try {
       await axios.delete(`http://localhost:4000/scraps/${selectedId}`)
