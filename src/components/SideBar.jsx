@@ -12,9 +12,9 @@ const SideBar = ({ markers, setMarkers }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedId, setSelectedId] = useState(null)
 
+  // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
     setSelectedId(id)
-    console.log(id)
   }
 
   // 키보드 enter 시 검색
@@ -99,7 +99,6 @@ const SideBar = ({ markers, setMarkers }) => {
                       <h1>{item.placeName}</h1>
                       <p>{item.roadAddress}</p>
                       <p>{item.phoneNumber}</p>
-                      <p>{item.id}</p>
                     </StMainCardInfo>
                     <StImageWrapper>
                       <img src='https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg' alt='방탈출 카페 사진'></img>
