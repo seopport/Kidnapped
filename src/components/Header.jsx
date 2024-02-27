@@ -2,13 +2,21 @@ import React from 'react';
 import styled from 'styled-components';
 import colors from 'styles/theme';
 import { StLayoutBox } from 'components/common/Layout';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const navigate = useNavigate();
   const isLogin = false;
   const nickName = '르탄이';
+
+  const handleTitleClick = () => {
+    navigate('/home', { replace: true });
+    window.location.reload();
+  };
+
   return (
     <StHeader>
-      <StHeaderTitle>너 납치된 거야</StHeaderTitle>
+      <StHeaderTitle onClick={handleTitleClick} >너 납치된 거야</StHeaderTitle>
       <StLayoutBox>
         <StHeaderNickName>{isLogin && `환영합니다 ${nickName}님`}</StHeaderNickName>
         <StHeaderButton onClick={() => { }}>{isLogin ? 'Login' : 'Logout'}</StHeaderButton>
@@ -30,12 +38,14 @@ export const StHeader = styled.header`
   height: 68px;
   background: ${colors.mainColor};
   z-index: 3;
+  overflow: hidden;
 `;
 export const StHeaderTitle = styled.h1`
   font-weight: 700;
   font-size: 32px;
   line-height: 39px;
   color: #ffffff;
+  cursor: pointer;
 `;
 export const StHeaderNickName = styled.h3`
   font-weight: 400;
@@ -54,7 +64,6 @@ export const StHeaderButton = styled.button`
   box-shadow: none;
   border-radius: 0;
   padding: 0;
-  overflow: visible;
   cursor: pointer;
   transition: 0.3s;
 
