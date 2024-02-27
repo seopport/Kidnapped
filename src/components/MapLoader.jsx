@@ -1,19 +1,18 @@
 import styled from 'styled-components';
 import { Map, MapMarker, MapTypeControl, MarkerClusterer, ZoomControl } from 'react-kakao-maps-sdk';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
-// import fakeData from 'data/fakeData.json';
 const { kakao } = window;
 
-const Location = () => {
+const Location = ({ markers, setMarkers, setMapPagination }) => {
   const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
   const [positions, setPositions] = useState([]);
-  const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
 
   const [state, setState] = useState({
     center: {
-      lat: 37.5824,
+      lat: 36.5824,
       lng: 127.0017
     },
     errMsg: null,
@@ -25,7 +24,7 @@ const Location = () => {
     // 장소 검색 객체를 생성
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch('방탈출', (data, status, _pagination) => {
+    ps.keywordSearch('방탈출', (data, status, pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가
@@ -43,6 +42,8 @@ const Location = () => {
           const x = data[i].x; // X 좌표 혹은 경도(longitude)
           const y = data[i].y; // Y 좌표 혹은 위도(latitude)
 
+          setMapPagination(pagination);
+
           markers.push({
             position: {
               lat: data[i].y,
@@ -51,15 +52,13 @@ const Location = () => {
             placeName,
             roadAddress,
             phoneNumber,
-            placeUrl
+            placeUrl,
+            id
           });
           // @ts-ignore
           bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
         }
         setMarkers(markers);
-
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정
-        map.setBounds(bounds);
       }
     });
     if (navigator.geolocation) {
@@ -106,7 +105,7 @@ const Location = () => {
       <StMapSize // 지도를 표시할 Container
         id="map"
         center={state.center} // 지도의 중심좌표
-        level={7} // 지도의 확대 레벨
+        level={12} // 지도의 확대 레벨
         onCreate={setMap}
       >
         {/* 지도에 컨트롤 올리기 */}
@@ -127,8 +126,10 @@ const Location = () => {
                   <StCloseButton onClick={handleCloseButtonClick}>x</StCloseButton>
                   <StPlaceName>{marker.placeName}</StPlaceName>
                   <StRoadAddress>{marker.roadAddress}</StRoadAddress>
-                  <StPhoneNumber>{marker.phoneNumber}</StPhoneNumber>
-                  <StPlaceUrl>{marker.placeUrl}</StPlaceUrl>
+                  <StPhoneNumber> {marker.phoneNumber}</StPhoneNumber>
+                  <StPlaceUrl>
+                    <StLink to={marker.placeUrl}>{marker.placeUrl}</StLink>
+                  </StPlaceUrl>
                 </CustomOverlay>
               )}
             </MapMarker>
@@ -150,7 +151,7 @@ const StMapSize = styled(Map)`
 
 const CustomOverlay = styled.div`
   background-color: white;
-  padding: 26px;
+  padding: 22px;
   border-radius: 9px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
@@ -160,10 +161,20 @@ const StPlaceName = styled.p`
 `;
 const StRoadAddress = styled.p`
   font-size: 11px;
+  margin-top: 9px;
+`;
+const StPhoneNumber = styled.p`
+  font-size: 12px;
   margin-top: 5px;
 `;
-const StPhoneNumber = styled.p``;
-const StPlaceUrl = styled.p``;
+const StPlaceUrl = styled.p`
+  font-size: 12px;
+  margin-top: 5px;
+`;
+const StLink = styled(Link)`
+  color: #175bb3;
+  text-decoration: underline;
+`;
 const StCloseButton = styled.button`
   position: absolute;
   top: 10px;
