@@ -9,8 +9,6 @@ import { useSearchParams } from 'react-router-dom';
 const SideBar = ({ markers, setMarkers }) => {
   const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4; // 한 페이지에 보여줄 아이템 수
 
   // 지역 검색 함수
   const handleSearch = () => {
@@ -65,13 +63,7 @@ const SideBar = ({ markers, setMarkers }) => {
     // });
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    // 페이지에 맞는 데이터를 가져오거나 필터링하는 로직 추가
-  };
-
-  const totalPages = Math.ceil(markers.length / itemsPerPage);
-  const visibleMarkers = markers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const buttonsNumber = [1, 2, 3, 4, 5];
   return (
     <StSideBar>
       <StContainer>
@@ -93,9 +85,9 @@ const SideBar = ({ markers, setMarkers }) => {
           </StBookmarkButton>
         </StSearchWrapper>
         <StMainCardWrapper>
-          {visibleMarkers.map((item) => {
+          {markers.map((item) => {
             return (
-              <StMainCardItem key={item.placeName}>
+              <StMainCardItem>
                 <StMainCardInfoAndImage>
                   <StMainCardInfo>
                     <h1>{item.placeName}</h1>
@@ -113,18 +105,11 @@ const SideBar = ({ markers, setMarkers }) => {
             );
           })}
         </StMainCardWrapper>
-        {/* 페이지네이션 버튼 영역 */}
-        <StPagination>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <StPaginationButton
-              key={index + 1}
-              onClick={() => handlePageChange(index + 1)}
-              active={currentPage === index + 1}
-            >
-              {index + 1}
-            </StPaginationButton>
+        <StButtonBox>
+          {buttonsNumber.map((buttonNumber) => (
+            <StPageButton>{buttonNumber}</StPageButton>
           ))}
-        </StPagination>
+        </StButtonBox>
         {/* <Review /> 임시 주석처리  */}
       </StContainer>
     </StSideBar>
@@ -132,25 +117,7 @@ const SideBar = ({ markers, setMarkers }) => {
 };
 
 export default SideBar;
-const StPagination = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-`;
 
-const StPaginationButton = styled.button`
-  background: ${(props) => (props.active ? colors.mainColor : colors.subColor)};
-  color: white;
-  border: none;
-  cursor: pointer;
-  padding: 5px 10px;
-  margin: 0 5px;
-  border-radius: 5px;
-
-  &:hover {
-    background: ${colors.mainColor};
-  }
-`;
 export const StSideBar = styled.div`
   position: absolute;
   top: 68px;
@@ -255,5 +222,25 @@ export const StImageWrapper = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+`;
+export const StButtonBox = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+export const StPageButton = styled.button`
+  background: ${colors.mainColor};
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 16px;
+
+  &:hover {
+    background: ${colors.starColor};
   }
 `;
