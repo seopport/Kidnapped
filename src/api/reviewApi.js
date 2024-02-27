@@ -17,9 +17,13 @@ const addReview = async (newReview) => {
 };
 
 // 리뷰 수정하기
-const modifyReview2 = async ({ reviewId, newContent }) => {
+const modifyReview = async ({ reviewId, newContent }) => {
   console.log(reviewId, newContent);
   await instance.patch(`/${reviewId}`, newContent);
 };
 
-export { instance, getReviews, addReview, modifyReview2 };
+const deleteReview = async (reviewId) => {
+  await instance.delete(`/${reviewId}`);
+};
+
+export { instance, getReviews, addReview, modifyReview, deleteReview };

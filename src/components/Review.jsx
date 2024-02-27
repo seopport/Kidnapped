@@ -5,10 +5,10 @@ import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { GoPencil } from 'react-icons/go';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { FaStar } from 'react-icons/fa';
-import { instance, getReviews, addReview, modifyReview } from 'api/reviewApi';
+import { instance, getReviews, addReview, modifyReview, deleteReview } from 'api/reviewApi';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteReview, setReview } from '../redux/modules/reviewSlice';
+// import { setReview } from '../redux/modules/reviewSlice';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
@@ -30,14 +30,14 @@ const Review = ({ selectedId }) => {
   const [reviewId, setReviewId] = useState('');
   const [clickedReviewId, setClickedReviewId] = useState(null);
 
-  useEffect(() => {
-    // const loadReviews = async () => {
-    //   const { data: reviewData } = await instance.get('?_sort=-dateForOrder');
-    dispatch(setReview(reviews));
-    // };
+  // useEffect(() => {
+  //   // const loadReviews = async () => {
+  //   //   const { data: reviewData } = await instance.get('?_sort=-dateForOrder');
+  //   dispatch(setReview(reviews));
+  //   // };
 
-    // loadReviews();
-  }, [dispatch]);
+  //   // loadReviews();
+  // }, [dispatch]);
 
   // 리액트 쿼리 관련 코드
   const queryClient = useQueryClient();
@@ -52,6 +52,13 @@ const Review = ({ selectedId }) => {
     onSuccess: () => {
       queryClient.invalidateQueries('reviews');
       console.log('수정 성공');
+    }
+  });
+
+  const deleteMutation = useMutation(deleteReview, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('reviews');
+      console.log('삭제 성공');
     }
   });
 
@@ -187,8 +194,9 @@ const Review = ({ selectedId }) => {
     if (window.confirm('리뷰를 삭제하시겠습니끼?')) {
       try {
         modificationCompleted();
-        await instance.delete(`/${reviewId}`);
-        dispatch(deleteReview(reviewId));
+        deleteMutation.mutate(reviewId);
+        // await instance.delete(`/${reviewId}`);
+        // dispatch(deleteReview(reviewId));
       } catch (error) {
         alert('오류가 발생했습니다. 잠시후 다시 시도해주세요.');
 
