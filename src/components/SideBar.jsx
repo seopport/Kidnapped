@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import colors from 'styles/theme';
 import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
@@ -7,13 +7,11 @@ import Review from './Review';
 import { useSearchParams } from 'react-router-dom';
 
 const SideBar = ({ markers, setMarkers, mapPagination }) => {
-  const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   // 지역 검색 함수
   const handleSearch = () => {
-    const ps = new kakao.maps.services.Places();
-
     if (!searchTerm) {
       alert('검색어를 입력하세요');
       return;
@@ -31,8 +29,8 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
 
   // 페이지 번호 클릭 핸들러
   const handlePageChange = (pageNumber) => {
-    // window.gotoPage(2);
     mapPagination.gotoPage(pageNumber);
+    setCurrentPage(pageNumber);
   };
 
   return (
@@ -78,7 +76,13 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
         </StMainCardWrapper>
         <StButtonBox>
           {buttonsNumber.map((buttonNumber) => (
-            <StPageButton onClick={() => handlePageChange(buttonNumber)}>{buttonNumber}</StPageButton>
+            <StPageButton
+              index={buttonNumber}
+              onClick={() => handlePageChange(buttonNumber)}
+              $currentPage={currentPage}
+            >
+              {buttonNumber}
+            </StPageButton>
           ))}
         </StButtonBox>
         {/* <Review /> 임시 주석처리  */}
@@ -100,7 +104,6 @@ export const StSideBar = styled.div`
 `;
 
 export const StContainer = styled.div`
-  display: felx;
   padding: 20px 16px;
   height: calc(100% - 40px);
 `;
@@ -210,6 +213,17 @@ export const StPageButton = styled.button`
   padding: 10px 15px;
   border-radius: 5px;
   font-size: 16px;
+
+  ${(props) => {
+    if (props.$currentPage === props.index) {
+      return css`
+        background: ${colors.starColor};
+      `;
+    }
+    return css`
+      background: ${colors.mainColor};
+    `;
+  }}
 
   &:hover {
     background: ${colors.starColor};

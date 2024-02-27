@@ -42,13 +42,6 @@ const Location = ({ markers, setMarkers, setMapPagination }) => {
           const x = data[i].x; // X 좌표 혹은 경도(longitude)
           const y = data[i].y; // Y 좌표 혹은 위도(latitude)
 
-          // 속성 값으로 다음 페이지가 있는지 확인하고
-          const onClickNextPageButton = () => {
-            if (pagination.hasNextPage) {
-              // 있으면 다음 페이지를 검색한다.
-              pagination.nextPage();
-            }
-          };
           setMapPagination(pagination);
 
           markers.push({
@@ -65,9 +58,6 @@ const Location = ({ markers, setMarkers, setMapPagination }) => {
           bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
         }
         setMarkers(markers);
-
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정
-        // map.setBounds(bounds);
       }
     });
     if (navigator.geolocation) {
