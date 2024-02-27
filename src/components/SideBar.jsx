@@ -4,6 +4,7 @@ import colors from 'styles/theme';
 import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
 import Review from './Review';
+import { useNavigate } from 'react-router-dom';
 
 const SideBar = ({ markers, setMarkers }) => {
   const { kakao } = window;
@@ -19,19 +20,9 @@ const SideBar = ({ markers, setMarkers }) => {
     }
   }
 
-  // // 지역 검색시 필터링 함수
-  // const handleSearch = () => {
-  //   if (!searchTerm) {
-  //     alert("검색어를 입력하세요");
-  //     return;
-  //   }
-  //   const filtered = markers.filter((marker) => {
-  //     console.log(marker.roadAddress.includes(searchTerm))
-  //     return marker.roadAddress.includes(searchTerm);
-  //   });
-  //   setMarkers(filtered);
-  //   setSearchTerm("")
-  // }
+  const handleDetial = (id) => {
+
+  }
 
   const handleBookmarkClick = () => {
     setIsBookmarked(!isBookmarked);
@@ -98,7 +89,7 @@ const SideBar = ({ markers, setMarkers }) => {
           {
             markers.map((item) => {
               return (
-                <StMainCardItem>
+                <StMainCardItem onClick={handleDetial(item.id)}>
                   <StMainCardInfoAndImage>
                     <StMainCardInfo>
                       <h1>{item.placeName}</h1>
