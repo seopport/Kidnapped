@@ -5,10 +5,9 @@ import { Link } from 'react-router-dom';
 
 const { kakao } = window;
 
-const Location = ({ markers, setMarkers, setMapPagination }) => {
+const Location = ({ markers, setMarkers, setMapPagination, map, setMap }) => {
   const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
   const [positions, setPositions] = useState([]);
-  const [map, setMap] = useState();
 
   const [state, setState] = useState({
     center: {
@@ -18,6 +17,7 @@ const Location = ({ markers, setMarkers, setMapPagination }) => {
     errMsg: null,
     isLoading: true
   });
+
   useEffect(() => {
     if (!map) return;
     if (navigator.geolocation) {
@@ -89,7 +89,7 @@ const Location = ({ markers, setMarkers, setMapPagination }) => {
         }
       );
     } else {
-      //HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정
+      //HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
       setState((prev) => ({
         ...prev,
         errMsg: 'geolocation을 사용할수 없어요.',
