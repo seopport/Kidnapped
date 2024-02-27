@@ -25,23 +25,9 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
       event.preventDefault();
       requestSearch();
       setSearchTerm("")
-      
-  // 지역 검색 함수
-  const handleSearch = () => {
-    if (!searchTerm) {
-      alert('검색어를 입력하세요');
-      return;
     }
   }
 
-    const searchMarkers = markers.filter((marker) => {
-      return marker.roadAddress.includes(searchTerm) || marker.jibunAddress.includes(searchTerm);
-      console.log(marker.roadAddress);
-      // 오류 수정중
-    });
-
-    setMarkers(searchMarkers);
-  };
   const buttonsNumber = [1, 2, 3];
 
   // 페이지 번호 클릭 핸들러
@@ -259,10 +245,7 @@ const StMainCardInfo = styled.div`
     color: ${colors.mainTextColor};
   }
 `;
-export const StImageWrapper = styled.div`
-    color: ${colors.mainTextColor}
-    }
-`
+
 const StImageWrapper = styled.div`
   overflow: hidden;
   & img {
