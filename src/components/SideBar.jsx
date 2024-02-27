@@ -6,7 +6,7 @@ import { FaBookmark } from 'react-icons/fa';
 import Review from './Review';
 import Detail from './Detail';
 
-const SideBar = ({ markers, setMarkers, mapPagination }) => {
+const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
   const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,7 +44,7 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
   const requestSearch = () => {
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch(`${searchTerm} 방탈출`, (data, status, _pagination) => {
+    ps.keywordSearch(`${searchTerm} 방탈출`, (data, status, pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         const bounds = new kakao.maps.LatLngBounds();
         let markers = [];
@@ -59,6 +59,8 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
           const placeUrl = data[i].place_url; // 장소 상세페이지 URL
           const x = data[i].x; // X 좌표 혹은 경도(longitude)
           const y = data[i].y; // Y 좌표 혹은 위도(latitude)
+
+          setMapPagination(pagination);
 
           markers.push({
             position: {
