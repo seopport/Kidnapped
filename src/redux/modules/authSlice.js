@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { authApi } from 'api';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const initialState = {
