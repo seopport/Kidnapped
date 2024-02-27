@@ -11,9 +11,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addReview, deleteReview, modifyReview, setReview } from '../redux/modules/reviewSlice';
 
 const Review = () => {
+  console.log('Revies Compo');
   const dispatch = useDispatch();
   const reviews = useSelector((state) => state.reviewSlice.reviews);
   const userInfo = useSelector((state) => state.authSlice);
+
+  console.log('reviews : ', reviews);
+  console.log('userInfo : ', userInfo);
 
   const textArea = useRef();
   const modalRef = useRef();
