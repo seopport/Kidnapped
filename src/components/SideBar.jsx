@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import colors from 'styles/theme';
 import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
 import Review from './Review';
 import Detail from './Detail';
 
-const SideBar = ({ markers, setMarkers }) => {
+const SideBar = ({ markers, setMarkers, mapPagination }) => {
   const { kakao } = window;
-  const [searchTerm, setSearchTerm] = useState("")
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedId, setSelectedId] = useState(null)
 
@@ -23,8 +25,30 @@ const SideBar = ({ markers, setMarkers }) => {
       event.preventDefault();
       requestSearch();
       setSearchTerm("")
+      
+  // 지역 검색 함수
+  const handleSearch = () => {
+    if (!searchTerm) {
+      alert('검색어를 입력하세요');
+      return;
     }
   }
+
+    const searchMarkers = markers.filter((marker) => {
+      return marker.roadAddress.includes(searchTerm) || marker.jibunAddress.includes(searchTerm);
+      console.log(marker.roadAddress);
+      // 오류 수정중
+    });
+
+    setMarkers(searchMarkers);
+  };
+  const buttonsNumber = [1, 2, 3];
+
+  // 페이지 번호 클릭 핸들러
+  const handlePageChange = (pageNumber) => {
+    mapPagination.gotoPage(pageNumber);
+    setCurrentPage(pageNumber);
+  };
 
   const handleBookmarkClick = () => {
     setIsBookmarked(!isBookmarked);
@@ -111,7 +135,18 @@ const SideBar = ({ markers, setMarkers }) => {
           )
           }
         </StMainCardWrapper>
-        <Review />
+        <StButtonBox>
+          {buttonsNumber.map((buttonNumber) => (
+            <StPageButton
+              index={buttonNumber}
+              onClick={() => handlePageChange(buttonNumber)}
+              $currentPage={currentPage}
+            >
+              {buttonNumber}
+            </StPageButton>
+          ))}
+        </StButtonBox>
+        {/* <Review /> 임시 주석처리  */}
       </StContainer>
     </StSideBar>
   );
@@ -130,7 +165,6 @@ const StSideBar = styled.div`
 `;
 
 const StContainer = styled.div`
-  display: felx;
   padding: 20px 16px;
   height: calc(100% - 40px);
 `;
@@ -185,6 +219,8 @@ const StMainCardWrapper = styled.div`
   flex-direction: column;
   gap: 20px;
   overflow-y: auto;
+  /* max-height: calc(100vh - 68px - 47px); */
+  height: 40rem;
   max-height: calc(100vh - 68px - 47px);
 `;
 
@@ -205,7 +241,7 @@ const StMainCardInfoAndImage = styled.div`
   justify-content: space-between;
   padding: 20px 16px;
   gap: 20px;
-`
+`;
 
 const StMainCardInfo = styled.div`
   width: 100%;
@@ -213,13 +249,17 @@ const StMainCardInfo = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 20px;
-    & h1{
+  & h1 {
     font-weight: 700;
     font-size: 16px;
     color: ${colors.subColor};
-    }
-    & p {
+  }
+  & p {
     font-size: 12px;
+    color: ${colors.mainTextColor};
+  }
+`;
+export const StImageWrapper = styled.div`
     color: ${colors.mainTextColor}
     }
 `
@@ -230,4 +270,35 @@ const StImageWrapper = styled.div`
     height: 100%;
     object-fit: cover;
   }
-  `
+`;
+export const StButtonBox = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+export const StPageButton = styled.button`
+  background: ${colors.mainColor};
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 16px;
+
+  ${(props) => {
+    if (props.$currentPage === props.index) {
+      return css`
+        background: ${colors.starColor};
+      `;
+    }
+    return css`
+      background: ${colors.mainColor};
+    `;
+  }}
+
+  &:hover {
+    background: ${colors.starColor};
+  }
+`;
