@@ -297,3 +297,4 @@ export const StPageButton = styled.button`
     background: ${colors.starColor};
   }
 `;
+
