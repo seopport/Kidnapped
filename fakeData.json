@@ -1,15 +1,48 @@
 {
   "reviews": [
     {
-      "id": "892626af-a026-4129-98a6-9b91c649ea9e",
+      "id": "e9816a49-2df1-42d1-a457-4b2cddfcfc35",
       "userId": "bbbb",
       "cafeId": "377197835",
       "nickname": "bbbb",
-      "content": "리뷰 남겨볼게요",
-      "grade": 3,
+      "content": "sdfsdㅇㄴㅁ",
+      "grade": 4,
       "createdAt": "2024.02.27 화요일",
-      "dateForOrder": "2024-02-27T06:59:48.647Z",
-      "profileAvatarColor": "#fdb7a2"
+      "dateForOrder": "2024-02-27T11:50:30.683Z",
+      "profileAvatarColor": "#fdf785"
+    },
+    {
+      "id": "b6d31c2a-097b-458b-89a1-47d33d9d7ef4",
+      "userId": "bbbb",
+      "cafeId": "377197835",
+      "nickname": "bbbb",
+      "content": "dfs",
+      "grade": 4,
+      "createdAt": "2024.02.27 화요일",
+      "dateForOrder": "2024-02-27T11:50:37.067Z",
+      "profileAvatarColor": "#f48fa1"
+    },
+    {
+      "id": "fae0915a-0571-46d0-96f0-ce681e1b906f",
+      "userId": "bbbb",
+      "cafeId": "377197835",
+      "nickname": "bbbb",
+      "content": "dsf",
+      "grade": 2,
+      "createdAt": "2024.02.27 화요일",
+      "dateForOrder": "2024-02-27T11:50:41.056Z",
+      "profileAvatarColor": "#86f8d1"
+    },
+    {
+      "id": "00be946d-7c84-4fcf-9c2c-81037198da5e",
+      "userId": "bbbb",
+      "cafeId": "377197835",
+      "nickname": "bbbb",
+      "content": "dsf",
+      "grade": 5,
+      "createdAt": "2024.02.27 화요일",
+      "dateForOrder": "2024-02-27T11:52:14.293Z",
+      "profileAvatarColor": "#e3bea7"
     }
   ]
 }

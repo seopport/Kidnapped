@@ -5,16 +5,19 @@ import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { GoPencil } from 'react-icons/go';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { FaStar } from 'react-icons/fa';
-import { instance, getReviews } from 'api/reviewApi';
+import { instance, getReviews, addReview, modifyReview2 } from 'api/reviewApi';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
-import { addReview, deleteReview, modifyReview, setReview } from '../redux/modules/reviewSlice';
+import { deleteReview, setReview, modifyReview } from '../redux/modules/reviewSlice';
 import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 const Review = ({ selectedId }) => {
   const dispatch = useDispatch();
-  const reviews = useSelector((state) => state.reviewSlice.reviews);
+  const navigate = useNavigate();
+  // const reviews = useSelector((state) => state.reviewSlice.reviews);
   const userInfo = useSelector((state) => state.authSlice);
+  const { isLoading, isError, data: reviews } = useQuery('reviews', getReviews);
 
   const textArea = useRef();
   const modalRef = useRef();
@@ -28,20 +31,46 @@ const Review = ({ selectedId }) => {
   const [clickedReviewId, setClickedReviewId] = useState(null);
 
   useEffect(() => {
-    const loadReviews = async () => {
-      const { data: reviewData } = await instance.get('?_sort=-dateForOrder');
-      dispatch(setReview(reviewData));
-    };
+    // const loadReviews = async () => {
+    //   const { data: reviewData } = await instance.get('?_sort=-dateForOrder');
+    dispatch(setReview(reviews));
+    // };
 
-    loadReviews();
+    // loadReviews();
   }, [dispatch]);
+
+  // 리액트 쿼리 관련 코드
+  const queryClient = useQueryClient();
+  const mutation = useMutation(addReview, {
+    onSuccess: () => {
+      //무엇을 불러왔던 것을 초기화할것인가 => useQuery에 이름으로 부여한 쿼리 키
+      queryClient.invalidateQueries('reviews');
+    }
+  });
+
+  const updateMutation = useMutation(modifyReview, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('reviews');
+      console.log('수정 성공');
+    }
+  });
+
+  if (isLoading) {
+    // 로딩중 짤 추가
+    console.log('로딩중');
+    return <div style={{ fontSize: '100px' }}>로딩중</div>;
+  }
+
+  if (isError) {
+    alert('오류가 발생하였습니다. 잠시 후 다시 시도해주세요.');
+    return;
+  }
 
   const modificationCompleted = () => {
     setIsModifying(false);
     setReviewContent('');
     setGradeStar(0);
   };
-  const navigate = useNavigate();
 
   const handleCheckLogin = () => {
     if (!userInfo.userId) {
@@ -136,8 +165,9 @@ const Review = ({ selectedId }) => {
     console.log(newReview);
 
     try {
-      await instance.post('', newReview);
-      dispatch(addReview(newReview));
+      // await instance.post('', newReview);
+      // dispatch(addReview(newReview));
+      mutation.mutate(newReview);
 
       setReviewContent('');
       setGradeStar(0);
@@ -195,6 +225,7 @@ const Review = ({ selectedId }) => {
     try {
       await instance.patch(`/${reviewId}`, newContent);
       dispatch(modifyReview({ reviewId, newContent }));
+      // updateMutation.mutate(reviewId, 'newContent');
 
       alert('수정이 완료되었습니다.');
       modificationCompleted();
