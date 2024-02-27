@@ -6,7 +6,7 @@ import { FaBookmark } from 'react-icons/fa';
 import Review from './Review';
 import { useSearchParams } from 'react-router-dom';
 
-const SideBar = ({ markers, setMarkers }) => {
+const SideBar = ({ markers, setMarkers, mapPagination }) => {
   const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -26,44 +26,15 @@ const SideBar = ({ markers, setMarkers }) => {
     });
 
     setMarkers(searchMarkers);
+  };
+  const buttonsNumber = [1, 2, 3];
 
-    // ps.keywordSearch(searchTerm, (data, status, _pagination) => {
-    //   if (status === kakao.maps.services.Status.OK) {
-    //     // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-    //     // LatLngBounds 객체에 좌표를 추가
-    //     const bounds = new kakao.maps.LatLngBounds();
-    //     let markers = [];
-
-    //     for (var i = 0; i < data.length; i++) {
-    //       const id = data[i].id; // 장소 ID
-    //       const placeName = data[i].place_name; // 장소명
-    //       const categoryName = data[i].category_name; // 카테고리 이름
-    //       const phoneNumber = data[i].phone; // 전화번호
-    //       const jibunAddress = data[i].address_name; // 전체 지번 주소
-    //       const roadAddress = data[i].road_address_name; // 전체 도로명 주소
-    //       const placeUrl = data[i].place_url; // 장소 상세페이지 URL
-    //       const x = data[i].x; // X 좌표 혹은 경도(longitude)
-    //       const y = data[i].y; // Y 좌표 혹은 위도(latitude)
-
-    //       markers.push({
-    //         position: {
-    //           lat: data[i].y,
-    //           lng: data[i].x
-    //         },
-    //         placeName,
-    //         roadAddress,
-    //         phoneNumber,
-    //         placeUrl
-    //       });
-    //       // @ts-ignore
-    //       bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-    //     }
-    //     setMarkers(markers);
-    //   }
-    // });
+  // 페이지 번호 클릭 핸들러
+  const handlePageChange = (pageNumber) => {
+    // window.gotoPage(2);
+    mapPagination.gotoPage(pageNumber);
   };
 
-  const buttonsNumber = [1, 2, 3, 4, 5];
   return (
     <StSideBar>
       <StContainer>
@@ -107,7 +78,7 @@ const SideBar = ({ markers, setMarkers }) => {
         </StMainCardWrapper>
         <StButtonBox>
           {buttonsNumber.map((buttonNumber) => (
-            <StPageButton>{buttonNumber}</StPageButton>
+            <StPageButton onClick={() => handlePageChange(buttonNumber)}>{buttonNumber}</StPageButton>
           ))}
         </StButtonBox>
         {/* <Review /> 임시 주석처리  */}

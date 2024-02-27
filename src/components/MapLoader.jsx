@@ -3,10 +3,9 @@ import { Map, MapMarker, MapTypeControl, MarkerClusterer, ZoomControl } from 're
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-// import fakeData from 'data/fakeData.json';
 const { kakao } = window;
 
-const Location = ({ markers, setMarkers }) => {
+const Location = ({ markers, setMarkers, setMapPagination }) => {
   const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
   const [positions, setPositions] = useState([]);
   const [map, setMap] = useState();
@@ -25,7 +24,7 @@ const Location = ({ markers, setMarkers }) => {
     // 장소 검색 객체를 생성
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch('방탈출', (data, status, _pagination) => {
+    ps.keywordSearch('방탈출', (data, status, pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가
@@ -42,6 +41,15 @@ const Location = ({ markers, setMarkers }) => {
           const placeUrl = data[i].place_url; // 장소 상세페이지 URL
           const x = data[i].x; // X 좌표 혹은 경도(longitude)
           const y = data[i].y; // Y 좌표 혹은 위도(latitude)
+
+          // 속성 값으로 다음 페이지가 있는지 확인하고
+          const onClickNextPageButton = () => {
+            if (pagination.hasNextPage) {
+              // 있으면 다음 페이지를 검색한다.
+              pagination.nextPage();
+            }
+          };
+          setMapPagination(pagination);
 
           markers.push({
             position: {
