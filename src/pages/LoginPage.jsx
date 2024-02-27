@@ -104,8 +104,8 @@ const StLayoutImage = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 `;
 
 const StLayoutContainer = styled.div`
