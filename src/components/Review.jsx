@@ -4,7 +4,6 @@ import colors from 'styles/theme';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { GoPencil } from 'react-icons/go';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { FaRegStar } from 'react-icons/fa';
 import { FaStar } from 'react-icons/fa';
 import reviewApi from 'api/reviewApi';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
@@ -14,6 +13,7 @@ import { addReview, deleteReview, modifyReview, setReview } from '../redux/modul
 const Review = () => {
   const dispatch = useDispatch();
   const reviews = useSelector((state) => state.reviewSlice.reviews);
+  const userInfo = useSelector((state) => state.authSlice);
 
   const textArea = useRef();
   const modalRef = useRef();
@@ -35,11 +35,29 @@ const Review = () => {
     loadReviews();
   }, [dispatch]);
 
+  const modificationCompleted = () => {
+    setIsModifying(false);
+    setReviewContent('');
+    setGradeStar(0);
+  };
+
+  const handleCheckLogin = () => {
+    if (!userInfo.userId) {
+      alert('로그인 후 이용 가능합니다.');
+      textArea.current.style.outline = 'none';
+      return;
+    }
+  };
+
+  const setDate = (date) => {
+    return date < 10 ? '0' + date : date.toString();
+  };
+
   //이건 Star라는 컴포넌트
   // 생성된 Star 컴포넌트가 FaStar 컴포넌트를 만들어낸다
   //생성된 별 아이콘을 클릭했을때 handleStarIconClick가 실행되고 그 클릭된 별아이콘의 인덱스값으로 gradeStar가 set됨
   const EvaluateStar = ({ selected = false, handleStarIconClick }) => {
-    return <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />;
+    return <FaStar size={16} color={selected ? colors.starColor : 'grey'} onClick={handleStarIconClick} />;
   };
 
   const handleStarIconClick = (idx) => {
@@ -53,7 +71,7 @@ const Review = () => {
       starArray[i] = true;
     }
     // 별 5개 생성
-    const stars = starArray.map((value, idx) => <FaStar key={idx} color={value ? 'gold' : 'grey'} />);
+    const stars = starArray.map((value, idx) => <FaStar key={idx} color={value ? colors.starColor : 'grey'} />);
     return stars;
   };
 
@@ -75,10 +93,6 @@ const Review = () => {
     }
 
     //#region
-    const setDate = (date) => {
-      return date < 10 ? '0' + date : date.toString();
-    };
-
     const year = new Date().getFullYear();
     const month = setDate(new Date().getMonth() + 1);
     const date = setDate(new Date().getDate());
@@ -87,7 +101,6 @@ const Review = () => {
     const creationDate = [year, month, date].join('.') + ' ' + day;
 
     const dateForOrder = new Date().toISOString();
-
     //#endregion
 
     const randomBrightColor = () => {
@@ -96,14 +109,13 @@ const Review = () => {
       const colorB = Math.floor(Math.random() * 128 + 128).toString(16);
       return `#${colorR + colorG + colorB}`;
     };
-
     const profileAvatarColor = randomBrightColor();
 
-    const newRivew = {
+    const newReview = {
       id: crypto.randomUUID(),
-      userId: '1', //스토어에서 받아온 유저 아이디, 카페 아이디, 닉네임,
+      userId: userInfo.userId,
       cafeId: 'ddd',
-      nickname: '오리',
+      nickname: userInfo.nickname,
       content: reviewContent,
       grade: gradeStar,
       createdAt: creationDate,
@@ -111,39 +123,51 @@ const Review = () => {
       profileAvatarColor
     };
 
-    console.log(newRivew);
+    console.log(newReview);
 
     try {
-      await reviewApi.post('', newRivew);
-      dispatch(addReview(newRivew));
+      await reviewApi.post('', newReview);
+      dispatch(addReview(newReview));
 
-      alert('리뷰가 등록되었습니다.');
       setReviewContent('');
       setGradeStar(0);
     } catch (error) {
+      alert('오류가 발생했습니다. 잠시후 다시 시도해주세요.');
+
       console.log(error);
     }
   };
 
+  const validateAccess = (userId) => {
+    if (userId === userInfo.userId) return true;
+  };
+
   // 리뷰 삭제 ----------------------------------
-  const handleDeleteReviewButtonClick = async (id) => {
+  const handleDeleteReviewButtonClick = async (reviewId, userId) => {
+    if (!validateAccess(userId)) {
+      alert('권한이 없습니다.');
+      return;
+    }
     if (window.confirm('리뷰를 삭제하시겠습니끼?')) {
       try {
-        await reviewApi.delete(`/${id}`);
-        dispatch(deleteReview(id));
-      } catch (error) {}
+        modificationCompleted();
+        await reviewApi.delete(`/${reviewId}`);
+        dispatch(deleteReview(reviewId));
+      } catch (error) {
+        alert('오류가 발생했습니다. 잠시후 다시 시도해주세요.');
+
+        console.log(error);
+      }
     } else {
     }
   };
 
-  const modificationCompleted = () => {
-    setIsModifying(false);
-    setReviewContent('');
-    setGradeStar(0);
-  };
-
   // 리뷰 수정 클릭 ----------------------------------
   const handleModifyReviewButtonClick = async (userId, reviewId, content, grade) => {
+    if (!validateAccess(userId)) {
+      alert('권한이 없습니다.');
+      return;
+    }
     textArea.current.focus();
     setIsModifying(true);
     setReviewId(reviewId);
@@ -156,7 +180,7 @@ const Review = () => {
   // 리뷰 수정 완료
   const handleCompleteButtonClick = async () => {
     if (reviewContent === modifiedReviewContent && gradeStar === modifiedGradeStar) {
-      alert('수정 된 내용이 없습니다.');
+      alert('수정 사항이 없습니다.');
       return;
     }
     setModifiedReviewContent(reviewContent);
@@ -204,6 +228,8 @@ const Review = () => {
           placeholder="리뷰를 작성해주세요."
           maxLength={250}
           spellCheck={false}
+          onClick={handleCheckLogin}
+          readOnly={!userInfo.userId}
         />
         <StFormButtonWrap>
           <StGradeWrap>
@@ -221,7 +247,6 @@ const Review = () => {
                   />
                 );
               })}
-              {/* <FaStar color={selected ? 'gold' : 'grey'} onClick={handleStarIconClick} />; */}
             </StStarContainer>
             {isGradeInvalid && !isModifying && <AiOutlineExclamationCircle color={'red'} />}
           </StGradeWrap>
@@ -248,6 +273,8 @@ const Review = () => {
           <br /> 첫 번째 리뷰를 남겨보세요!
         </div>
       )}
+      {/* reviews.filter((item) => item.cafeId === reviews.cafeId) */}
+      {/* 아니면 get으로 가져올때 search쿼리로 그 카페 리뷰만 가져오기 */}
       {reviews?.map((item, idx) => {
         return (
           <StReviewContainer key={item.id} onClick={handleModalClose} $reviewLength={reviews.length}>
@@ -268,9 +295,7 @@ const Review = () => {
                   <StReviewCreationDate>{item.createdAt}</StReviewCreationDate>
                 </div>
 
-                {/* 점점점 메뉴 버튼!!!!!!!!!!!!!!!!!!!!!!!!! */}
-                {/* todo: 리덕스에서 받아온 유저 아이디와 인자로받아온 userId가 같아야만 메뉴 출력 */}
-                <StHiOutlineDotsVertical onClick={() => handleOptionButtonClick(item.id)} />
+                {<StHiOutlineDotsVertical onClick={() => handleOptionButtonClick(item.id)} />}
               </StReviewProfileWrap>
             </StReviewInfoWrap>
 
@@ -278,23 +303,21 @@ const Review = () => {
             {clickedReviewId === item.id && (
               <StOptionsMenuModal ref={modalRef}>
                 {/* 수정 */}
-                <li
+                <StListItem
                   onClick={() => handleModifyReviewButtonClick(item.userId, item.id, item.content, item.grade)}
-                  style={{ display: 'flex', padding: '10px' }}
                 >
                   <GoPencil style={{ marginRight: '3px' }} />
                   수정
-                </li>
+                </StListItem>
 
                 {/* 삭제 */}
-                <li onClick={() => handleDeleteReviewButtonClick(item.id)} style={{ display: 'flex', padding: '10px' }}>
+                <StListItem onClick={() => handleDeleteReviewButtonClick(item.id, item.userId)}>
                   <FaRegTrashAlt style={{ marginRight: '3px' }} />
                   삭제
-                </li>
+                </StListItem>
               </StOptionsMenuModal>
             )}
 
-            {/* 리뷰 내용 */}
             <StReviewContent>{item.content} </StReviewContent>
           </StReviewContainer>
         );
@@ -303,16 +326,6 @@ const Review = () => {
     </StReviewTapContainer>
   );
 };
-
-export const StBottomLine = styled.div`
-  display: ${(props) => (props.$reviewLength === 0 ? 'none' : 'block')};
-  height: 1px;
-  background-color: ${colors.subColor};
-`;
-
-export const StStarIcon = styled(FaStar)`
-  border: 1px solid ${colors.starColor};
-`;
 
 export const StReviewTapContainer = styled.div`
   width: 335px;
@@ -350,6 +363,7 @@ export const StGradeWrap = styled.div`
   height: fit-content;
   padding: 2px;
   border-radius: 5px;
+  align-items: center;
 `;
 
 export const StReviewFormBottom = styled.div`
@@ -367,7 +381,7 @@ export const StReviewFormBottom = styled.div`
   margin-top: 3px;
 
   &:hover {
-    background-color: #f54f26;
+    background-color: ${colors.buttonHoverColor};
   }
 `;
 
@@ -380,6 +394,12 @@ export const StReviewContainer = styled.div`
   /* border-bottom: ${(props) => (props.$reviewLength === 1 ? `1px solid ${colors.subColor}` : 'none')}; */
   flex-direction: column;
   position: relative;
+`;
+
+export const StReviewContent = styled.div`
+  line-height: 23px;
+  font-size: 14px;
+  padding: 0 5px;
 `;
 
 export const StReviewInfoWrap = styled.div`
@@ -425,10 +445,9 @@ export const StHiOutlineDotsVertical = styled(HiOutlineDotsVertical)`
 export const StOptionsMenuModal = styled.ul`
   z-index: 999;
   width: 65px;
-  height: 65px;
+  height: 70px;
   font-size: 12px;
 
-  /* display: ${(props) => (props.$isOptionMenuOpen ? 'flex' : 'none')}; */
   display: flex;
   flex-direction: column;
 
@@ -442,6 +461,11 @@ export const StOptionsMenuModal = styled.ul`
   border-radius: 10px;
   cursor: pointer;
   position: absolute;
+`;
+
+export const StListItem = styled.li`
+  display: flex;
+  padding: 10px;
 `;
 
 export const StGradeModal = styled.ul`
@@ -473,14 +497,18 @@ export const StReviewCreationDate = styled.span`
   color: ${colors.mainTextColor};
 `;
 
-export const StReviewContent = styled.div`
-  line-height: 23px;
-  font-size: 14px;
-  padding: 0 5px;
-`;
-
 export const StStarContainer = styled.div`
   display: flex;
+`;
+
+export const StStarIcon = styled(FaStar)`
+  border: 1px solid ${colors.starColor};
+`;
+
+export const StBottomLine = styled.div`
+  display: ${(props) => (props.$reviewLength === 0 ? 'none' : 'block')};
+  height: 1px;
+  background-color: ${colors.subColor};
 `;
 
 export default Review;
