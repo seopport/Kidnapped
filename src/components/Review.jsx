@@ -224,6 +224,8 @@ const Review = ({ selectedId }) => {
     if (modalRef.current) setClickedReviewId(null);
   };
 
+  const filteredReviews = reviews?.filter((item) => item.cafeId === selectedId);
+
   return (
     <StReviewTapContainer>
       <StReviewFormContainer>
@@ -272,7 +274,7 @@ const Review = ({ selectedId }) => {
       </StReviewFormContainer>
 
       {/* 리뷰댓글 */}
-      {reviews?.length === 0 && (
+      {filteredReviews?.length === 0 && (
         <div style={{ fontSize: '14px', textAlign: 'center' }}>
           작성된 리뷰가 없습니다.
           <br />
@@ -281,56 +283,54 @@ const Review = ({ selectedId }) => {
       )}
       {/* reviews.filter((item) => item.cafeId === reviews.cafeId) */}
       {/* 아니면 get으로 가져올때 search쿼리로 그 카페 리뷰만 가져오기 */}
-      {reviews
-        ?.filter((item) => item.cafeId === selectedId)
-        .map((item, idx) => {
-          return (
-            <StReviewContainer key={item.id} onClick={handleModalClose} $reviewLength={reviews.length}>
-              <StReviewInfoWrap>
-                <StReviewWriterProfileImage style={{ backgroundColor: item.profileAvatarColor }}>
-                  {item.nickname[0]}
-                </StReviewWriterProfileImage>
+      {filteredReviews.map((item, idx) => {
+        return (
+          <StReviewContainer key={item.id} onClick={handleModalClose} $reviewLength={reviews.length}>
+            <StReviewInfoWrap>
+              <StReviewWriterProfileImage style={{ backgroundColor: item.profileAvatarColor }}>
+                {item.nickname[0]}
+              </StReviewWriterProfileImage>
 
-                <StReviewProfileWrap>
-                  <div>
-                    <div style={{ display: 'flex', marginBottom: '3px' }}>
-                      <StReviewWriterNicnkname>{item.nickname}</StReviewWriterNicnkname>
-                      <StReviewGrade key={item.id}>
-                        {/* 별점 */}
-                        <MakeStar grade={item.grade} />
-                      </StReviewGrade>
-                    </div>
-                    <StReviewCreationDate>{item.createdAt}</StReviewCreationDate>
+              <StReviewProfileWrap>
+                <div>
+                  <div style={{ display: 'flex', marginBottom: '3px' }}>
+                    <StReviewWriterNicnkname>{item.nickname}</StReviewWriterNicnkname>
+                    <StReviewGrade key={item.id}>
+                      {/* 별점 */}
+                      <MakeStar grade={item.grade} />
+                    </StReviewGrade>
                   </div>
+                  <StReviewCreationDate>{item.createdAt}</StReviewCreationDate>
+                </div>
 
-                  {<StHiOutlineDotsVertical onClick={() => handleOptionButtonClick(item.id)} />}
-                </StReviewProfileWrap>
-              </StReviewInfoWrap>
+                {<StHiOutlineDotsVertical onClick={() => handleOptionButtonClick(item.id)} />}
+              </StReviewProfileWrap>
+            </StReviewInfoWrap>
 
-              {/* 모달!!!!!!!!!!!!!--------- */}
-              {clickedReviewId === item.id && (
-                <StOptionsMenuModal ref={modalRef}>
-                  {/* 수정 */}
-                  <StListItem
-                    onClick={() => handleModifyReviewButtonClick(item.userId, item.id, item.content, item.grade)}
-                  >
-                    <GoPencil style={{ marginRight: '3px' }} />
-                    수정
-                  </StListItem>
+            {/* 모달!!!!!!!!!!!!!--------- */}
+            {clickedReviewId === item.id && (
+              <StOptionsMenuModal ref={modalRef}>
+                {/* 수정 */}
+                <StListItem
+                  onClick={() => handleModifyReviewButtonClick(item.userId, item.id, item.content, item.grade)}
+                >
+                  <GoPencil style={{ marginRight: '3px' }} />
+                  수정
+                </StListItem>
 
-                  {/* 삭제 */}
-                  <StListItem onClick={() => handleDeleteReviewButtonClick(item.id, item.userId)}>
-                    <FaRegTrashAlt style={{ marginRight: '3px' }} />
-                    삭제
-                  </StListItem>
-                </StOptionsMenuModal>
-              )}
+                {/* 삭제 */}
+                <StListItem onClick={() => handleDeleteReviewButtonClick(item.id, item.userId)}>
+                  <FaRegTrashAlt style={{ marginRight: '3px' }} />
+                  삭제
+                </StListItem>
+              </StOptionsMenuModal>
+            )}
 
-              <StReviewContent>{item.content} </StReviewContent>
-            </StReviewContainer>
-          );
-        })}
-      <StBottomLine $reviewLength={reviews.length} />
+            <StReviewContent>{item.content} </StReviewContent>
+          </StReviewContainer>
+        );
+      })}
+      <StBottomLine $reviewLength={filteredReviews.length} />
     </StReviewTapContainer>
   );
 };
