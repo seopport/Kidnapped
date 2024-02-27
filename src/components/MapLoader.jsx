@@ -101,6 +101,12 @@ const Location = ({ markers, setMarkers, setMapPagination }) => {
 
   const handleMarkerClick = (index) => {
     setSelectedMarkerIndex(index);
+
+    // 사용자가 클릭한 마커의 위치로 지도의 중심 좌표를 이동
+    const selectedMarker = markers[index];
+    if (selectedMarker && map) {
+      map.setCenter(new kakao.maps.LatLng(selectedMarker.position.lat, selectedMarker.position.lng));
+    }
   };
   const handleCloseButtonClick = () => {
     setSelectedMarkerIndex(null);
