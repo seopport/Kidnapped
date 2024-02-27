@@ -82,7 +82,7 @@ const SideBar = ({ markers, setMarkers }) => {
               value={searchTerm}
               onKeyDown={handleKeyDown}></input>
             <StSearchButton onClick={requestSearch}>
-              <IoSearch size={25} />
+              <IoSearch size={25} color={colors.subColor} />
             </StSearchButton>
           </StSearchForm>
           <StBookmarkButton onClick={handleBookmarkClick}>
@@ -118,7 +118,7 @@ const SideBar = ({ markers, setMarkers }) => {
 
 export default SideBar;
 
-export const StSideBar = styled.div`
+const StSideBar = styled.div`
   position: absolute;
   top: 68px;
   left: 0;
@@ -128,13 +128,13 @@ export const StSideBar = styled.div`
   z-index: 2;
 `;
 
-export const StContainer = styled.div`
+const StContainer = styled.div`
   display: felx;
   padding: 20px 16px;
   height: calc(100% - 40px);
 `;
 
-export const StSearchWrapper = styled.div`
+const StSearchWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -143,7 +143,7 @@ export const StSearchWrapper = styled.div`
   margin-bottom: 20px;
   flex: 1;
 `;
-export const StSearchForm = styled.form`
+const StSearchForm = styled.form`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -161,20 +161,25 @@ export const StSearchForm = styled.form`
     outline: none;
     background-color: transparent;
   }
+
+  & ::placeholder {
+    font-size: 20px;
+    color: ${colors.mainTextColor};
+  }
 `;
 
-export const StSearchButton = styled.button`
+const StSearchButton = styled.button`
   background: transparent;
   border: none;
   cursor: pointer;
 `;
-export const StBookmarkButton = styled.div`
+const StBookmarkButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
 `;
-export const StMainCardWrapper = styled.div`
+const StMainCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -182,7 +187,7 @@ export const StMainCardWrapper = styled.div`
   max-height: calc(100vh - 68px - 47px);
 `;
 
-export const StMainCardItem = styled.div`
+const StMainCardItem = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -193,7 +198,7 @@ export const StMainCardItem = styled.div`
   cursor: pointer;
 `;
 
-export const StMainCardInfoAndImage = styled.div`
+const StMainCardInfoAndImage = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -201,7 +206,7 @@ export const StMainCardInfoAndImage = styled.div`
   gap: 20px;
 `
 
-export const StMainCardInfo = styled.div`
+const StMainCardInfo = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -217,7 +222,7 @@ export const StMainCardInfo = styled.div`
     color: ${colors.mainTextColor}
     }
 `
-export const StImageWrapper = styled.div`
+const StImageWrapper = styled.div`
   overflow: hidden;
   & img {
     width: 100%;
