@@ -3,23 +3,36 @@ import styled from 'styled-components';
 import colors from 'styles/theme';
 import { StLayoutBox } from 'components/common/Layout';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../redux/modules/authSlice';
 
 const Header = () => {
   const navigate = useNavigate();
-  const isLogin = false;
-  const nickName = '르탄이';
+  const dispatch = useDispatch();
+  // const isLogin = false;
+  // const nickname = '르탄이';
+  const { isLogin, nickname } = useSelector((state) => state.authSlice);
 
   const handleTitleClick = () => {
     navigate('/home', { replace: true });
     window.location.reload();
   };
 
+  const handleLoginLogoutClick = () => {
+    if (isLogin === true) {
+      dispatch(logout());
+      navigate('/');
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
     <StHeader>
-      <StHeaderTitle onClick={handleTitleClick} >너 납치된 거야</StHeaderTitle>
+      <StHeaderTitle onClick={handleTitleClick}>너 납치된 거야</StHeaderTitle>
       <StLayoutBox>
-        <StHeaderNickName>{isLogin && `환영합니다 ${nickName}님`}</StHeaderNickName>
-        <StHeaderButton onClick={() => { }}>{isLogin ? 'Login' : 'Logout'}</StHeaderButton>
+        <StHeaderNickName>{isLogin && `환영합니다 ${nickname}님`}</StHeaderNickName>
+        <StHeaderButton onClick={handleLoginLogoutClick}>{isLogin ? 'Logout' : 'Login'}</StHeaderButton>
       </StLayoutBox>
     </StHeader>
   );

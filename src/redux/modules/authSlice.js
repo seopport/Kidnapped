@@ -18,6 +18,7 @@ export const __login = createAsyncThunk('login', async ({ id, password }, thunkA
     const { accessToken, nickname, avatar, userId } = data;
     if (data.success) {
       toast.success('로그인 성공!');
+      window.location.href = '/';
       return { accessToken, nickname, avatar, userId };
     }
   } catch (err) {

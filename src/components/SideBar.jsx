@@ -12,21 +12,21 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [selectedId, setSelectedId] = useState(null)
+  const [selectedId, setSelectedId] = useState(null);
 
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
-    setSelectedId(id)
-  }
+    setSelectedId(id);
+  };
 
   // 키보드 enter 시 검색
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       requestSearch();
-      setSearchTerm("")
+      setSearchTerm('');
     }
-  }
+  };
 
   const buttonsNumber = [1, 2, 3];
 
@@ -77,33 +77,36 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
         }
         setMarkers(markers);
         setSelectedId(null);
-        setSearchTerm("")
+        setSearchTerm('');
       }
-    }
-    );
-  }
+    });
+  };
 
   return (
     <StSideBar>
       <StContainer>
         <StSearchWrapper>
           <StSearchForm onSubmit={(e) => e.preventDefault()}>
-            <input onSubmit='return false'
+            <input
+              onSubmit="return false"
               type="text"
               placeholder="지역 검색"
               onChange={(e) => setSearchTerm(e.target.value)}
               value={searchTerm}
-              onKeyDown={handleKeyDown}></input>
+              onKeyDown={handleKeyDown}
+            ></input>
             <StSearchButton onClick={requestSearch}>
               <IoSearch size={25} color={colors.subColor} />
             </StSearchButton>
           </StSearchForm>
           <StBookmarkButton onClick={handleBookmarkClick}>
-            <FaBookmark size={30} color={isBookmarked ? `${colors.starColor}` : "white"} />
+            <FaBookmark size={30} color={isBookmarked ? `${colors.starColor}` : 'white'} />
           </StBookmarkButton>
         </StSearchWrapper>
         <StMainCardWrapper>
-          {selectedId ? (<Detail markers={markers} selectedId={selectedId} />) : (
+          {selectedId ? (
+            <Detail markers={markers} selectedId={selectedId} />
+          ) : (
             markers.map((item) => {
               return (
                 <>
@@ -262,6 +265,7 @@ const StImageWrapper = styled.div`
     object-fit: cover;
   }
 `;
+
 export const StButtonBox = styled.div`
   display: flex;
   gap: 10px;
