@@ -5,8 +5,10 @@ import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
 import Review from './Review';
 import Detail from './Detail';
+import { useSelector } from 'react-redux';
 
 const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
+  const { userId } = useSelector((state) => state.authSlice);
   const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,6 +19,7 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
     setSelectedId(id);
+    console.log(userId)
   };
 
   // 키보드 enter 시 검색
@@ -129,7 +132,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
                     </StMainCardInfoAndImage>
                   </StMainCardItem>
                 </>
-
               )
             }
             )

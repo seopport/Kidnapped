@@ -132,5 +132,11 @@
       "dateForOrder": "2024-02-26T12:51:06.020Z",
       "profileAvatarColor": "#82b7f4"
     }
+  ],
+  "scraps": [
+    {
+      "userId": "ffff",
+      "scrapLists": ["dddd"]
+    }
   ]
 }
