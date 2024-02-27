@@ -5,7 +5,7 @@ import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { GoPencil } from 'react-icons/go';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { FaStar } from 'react-icons/fa';
-import reviewApi from 'api/reviewApi';
+import { instance, getReviews } from 'api/reviewApi';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 import { addReview, deleteReview, modifyReview, setReview } from '../redux/modules/reviewSlice';
@@ -28,7 +28,7 @@ const Review = () => {
 
   useEffect(() => {
     const loadReviews = async () => {
-      const { data: reviewData } = await reviewApi.get('?_sort=-dateForOrder');
+      const { data: reviewData } = await instance.get('?_sort=-dateForOrder');
       dispatch(setReview(reviewData));
     };
 
@@ -51,6 +51,10 @@ const Review = () => {
 
   const setDate = (date) => {
     return date < 10 ? '0' + date : date.toString();
+  };
+
+  const validateAccess = (userId) => {
+    if (userId === userInfo.userId) return true;
   };
 
   //이건 Star라는 컴포넌트
@@ -126,7 +130,7 @@ const Review = () => {
     console.log(newReview);
 
     try {
-      await reviewApi.post('', newReview);
+      await instance.post('', newReview);
       dispatch(addReview(newReview));
 
       setReviewContent('');
@@ -138,10 +142,6 @@ const Review = () => {
     }
   };
 
-  const validateAccess = (userId) => {
-    if (userId === userInfo.userId) return true;
-  };
-
   // 리뷰 삭제 ----------------------------------
   const handleDeleteReviewButtonClick = async (reviewId, userId) => {
     if (!validateAccess(userId)) {
@@ -151,7 +151,7 @@ const Review = () => {
     if (window.confirm('리뷰를 삭제하시겠습니끼?')) {
       try {
         modificationCompleted();
-        await reviewApi.delete(`/${reviewId}`);
+        await instance.delete(`/${reviewId}`);
         dispatch(deleteReview(reviewId));
       } catch (error) {
         alert('오류가 발생했습니다. 잠시후 다시 시도해주세요.');
@@ -187,7 +187,7 @@ const Review = () => {
     const newContent = { content: reviewContent, grade: gradeStar };
 
     try {
-      await reviewApi.patch(`/${reviewId}`, newContent);
+      await instance.patch(`/${reviewId}`, newContent);
       dispatch(modifyReview({ reviewId, newContent }));
 
       alert('수정이 완료되었습니다.');
