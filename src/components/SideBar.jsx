@@ -30,6 +30,7 @@ const SideBar = ({ markers, setMarkers }) => {
     setIsBookmarked(!isBookmarked);
   };
 
+  // 검색 함수
   const requestSearch = () => {
     const ps = new kakao.maps.services.Places();
 
