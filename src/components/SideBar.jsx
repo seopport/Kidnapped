@@ -5,6 +5,8 @@ import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
 import Review from './Review';
 import Detail from './Detail';
+import left from 'assets/left.png';
+import right from 'assets/right.png';
 
 const SideBar = ({ markers, setMarkers, mapPagination }) => {
   const { kakao } = window;
@@ -12,6 +14,11 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [toggle, setToggle] = useState(true);
+
+  const toggleHandler = () => {
+    setToggle(!toggle);
+  };
 
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
@@ -80,7 +87,7 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
   };
 
   return (
-    <StSideBar>
+    <StSideBar toggle={toggle}>
       <StContainer>
         <StSearchWrapper>
           <StSearchForm onSubmit={(e) => e.preventDefault()}>
@@ -138,6 +145,7 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
         </StButtonBox>
         {/* <Review /> 임시 주석처리  */}
       </StContainer>
+      <StToggleButton onClick={toggleHandler} toggle={toggle} />
     </StSideBar>
   );
 };
@@ -152,11 +160,58 @@ const StSideBar = styled.div`
   height: 100vh;
   background-color: ${colors.subColor};
   z-index: 2;
+  transition-duration: 600ms;
+  // 토글 슬라이드 애니메이션
+
+  ${(props) => {
+    if (props.toggle) {
+      return css`
+        transform: translateX(0%);
+      `;
+    } else {
+      return css`
+        transform: translateX(-100%);
+      `;
+    }
+  }}
 `;
 
 const StContainer = styled.div`
+  position: relative;
   padding: 20px 16px;
   height: calc(100% - 40px);
+`;
+
+const StToggleButton = styled.button`
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 24px;
+  height: 80px;
+  transform: translateY(-50%);
+  z-index: 10;
+  overflow: hidden;
+  display: inline-block;
+  font-size: 1px;
+  line-height: 1px;
+
+  ${(props) => {
+    if (props.toggle) {
+      return css`
+        background-image: url(${left});
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+      `;
+    } else {
+      return css`
+        background-image: url(${right});
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+      `;
+    }
+  }}
 `;
 
 const StSearchWrapper = styled.div`

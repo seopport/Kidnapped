@@ -8,6 +8,7 @@ import colors from 'styles/theme';
 const HomePage = () => {
   const [markers, setMarkers] = useState([]);
   const [mapPagination, setMapPagination] = useState(null);
+
   return (
     <div>
       <StContainer>

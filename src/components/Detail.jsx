@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import Review from './Review';
+import { MdLocationOn } from 'react-icons/md';
+import { MdLocalPhone } from 'react-icons/md';
+import { RiGlobalLine } from 'react-icons/ri';
+import styled from 'styled-components';
 
 const Detail = ({ markers, selectedId }) => {
   const selectedMarker = markers.find((marker) => marker.id === selectedId);
@@ -18,9 +22,18 @@ const Detail = ({ markers, selectedId }) => {
       <button onClick={() => toggleMenuHandler(false)}>리뷰</button>
       {toggleMenu ? (
         <>
-          <div>{selectedMarker.roadAddress}</div>
-          <div>{selectedMarker.phoneNumber}</div>
-          <div>{selectedMarker.placeUrl}</div>
+          <div>
+            <MdLocationOn />
+            {selectedMarker.roadAddress}
+          </div>
+          <div>
+            <MdLocalPhone />
+            {selectedMarker.phoneNumber}
+          </div>
+          <div>
+            <RiGlobalLine />
+            {selectedMarker.placeUrl}
+          </div>
         </>
       ) : (
         <Review />
