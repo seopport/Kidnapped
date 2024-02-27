@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { authApi } from 'api';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const initialState = {
@@ -19,6 +18,7 @@ export const __login = createAsyncThunk('login', async ({ id, password }, thunkA
     const { accessToken, nickname, avatar, userId } = data;
     if (data.success) {
       toast.success('로그인 성공!');
+      window.location.href = '/';
       return { accessToken, nickname, avatar, userId };
     }
   } catch (err) {
