@@ -5,10 +5,9 @@ import { useState, useEffect } from 'react';
 // import fakeData from 'data/fakeData.json';
 const { kakao } = window;
 
-const Location = () => {
+const Location = ({ markers, setMarkers }) => {
   const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
   const [positions, setPositions] = useState([]);
-  const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
 
   const [state, setState] = useState({
@@ -51,7 +50,8 @@ const Location = () => {
             placeName,
             roadAddress,
             phoneNumber,
-            placeUrl
+            placeUrl,
+            id
           });
           // @ts-ignore
           bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
