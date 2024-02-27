@@ -5,10 +5,10 @@ import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { GoPencil } from 'react-icons/go';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { FaStar } from 'react-icons/fa';
-import { instance, getReviews, addReview, modifyReview2 } from 'api/reviewApi';
+import { instance, getReviews, addReview, modifyReview } from 'api/reviewApi';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteReview, setReview, modifyReview } from '../redux/modules/reviewSlice';
+import { deleteReview, setReview } from '../redux/modules/reviewSlice';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
@@ -221,11 +221,12 @@ const Review = ({ selectedId }) => {
     }
     setModifiedReviewContent(reviewContent);
     const newContent = { content: reviewContent, grade: gradeStar };
+    console.log(newContent);
 
     try {
-      await instance.patch(`/${reviewId}`, newContent);
-      dispatch(modifyReview({ reviewId, newContent }));
-      // updateMutation.mutate(reviewId, 'newContent');
+      // await instance.patch(`/${reviewId}`, newContent);
+      // dispatch(modifyReview({ reviewId, newContent }));
+      updateMutation.mutate({ reviewId, newContent });
 
       alert('수정이 완료되었습니다.');
       modificationCompleted();

@@ -17,7 +17,7 @@ const addReview = async (newReview) => {
 };
 
 // 리뷰 수정하기
-const modifyReview2 = async (reviewId, newContent) => {
+const modifyReview2 = async ({ reviewId, newContent }) => {
   console.log(reviewId, newContent);
   await instance.patch(`/${reviewId}`, newContent);
 };
