@@ -20,49 +20,7 @@ const Location = ({ markers, setMarkers, setMapPagination }) => {
   });
   useEffect(() => {
     if (!map) return;
-
-    // 장소 검색 객체를 생성
-    const ps = new kakao.maps.services.Places();
-
-    ps.keywordSearch('방탈출', (data, status, pagination) => {
-      if (status === kakao.maps.services.Status.OK) {
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-        // LatLngBounds 객체에 좌표를 추가
-        const bounds = new kakao.maps.LatLngBounds();
-        let markers = [];
-
-        for (var i = 0; i < data.length; i++) {
-          const id = data[i].id; // 장소 ID
-          const placeName = data[i].place_name; // 장소명
-          const categoryName = data[i].category_name; // 카테고리 이름
-          const phoneNumber = data[i].phone; // 전화번호
-          const jibunAddress = data[i].address_name; // 전체 지번 주소
-          const roadAddress = data[i].road_address_name; // 전체 도로명 주소
-          const placeUrl = data[i].place_url; // 장소 상세페이지 URL
-          const x = data[i].x; // X 좌표 혹은 경도(longitude)
-          const y = data[i].y; // Y 좌표 혹은 위도(latitude)
-
-          setMapPagination(pagination);
-
-          markers.push({
-            position: {
-              lat: data[i].y,
-              lng: data[i].x
-            },
-            placeName,
-            roadAddress,
-            phoneNumber,
-            placeUrl,
-            id
-          });
-          // @ts-ignore
-          bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-        }
-        setMarkers(markers);
-      }
-    });
     if (navigator.geolocation) {
-      // GeoLocation을 이용해서 접속 위치를 얻어온다.
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setState((prev) => ({
@@ -73,6 +31,54 @@ const Location = ({ markers, setMarkers, setMapPagination }) => {
             },
             isLoading: false
           }));
+          // 장소 검색 객체를 생성
+          const ps = new kakao.maps.services.Places();
+
+          ps.keywordSearch(
+            '방탈출',
+            (data, status, pagination) => {
+              if (status === kakao.maps.services.Status.OK) {
+                // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+                // LatLngBounds 객체에 좌표를 추가
+                const bounds = new kakao.maps.LatLngBounds();
+                let markers = [];
+
+                for (var i = 0; i < data.length; i++) {
+                  const id = data[i].id; // 장소 ID
+                  const placeName = data[i].place_name; // 장소명
+                  const categoryName = data[i].category_name; // 카테고리 이름
+                  const phoneNumber = data[i].phone; // 전화번호
+                  const jibunAddress = data[i].address_name; // 전체 지번 주소
+                  const roadAddress = data[i].road_address_name; // 전체 도로명 주소
+                  const placeUrl = data[i].place_url; // 장소 상세페이지 URL
+                  const x = data[i].x; // X 좌표 혹은 경도(longitude)
+                  const y = data[i].y; // Y 좌표 혹은 위도(latitude)
+
+                  setMapPagination(pagination);
+
+                  markers.push({
+                    position: {
+                      lat: data[i].y,
+                      lng: data[i].x
+                    },
+                    placeName,
+                    roadAddress,
+                    phoneNumber,
+                    placeUrl,
+                    id
+                  });
+                  // @ts-ignore
+                  bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+                }
+                console.log(markers);
+                setMarkers(markers);
+              }
+            },
+            {
+              location: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
+              radius: 10000 // 10km 반경 내의 장소 검색
+            }
+          );
         },
         (err) => {
           setState((prev) => ({
