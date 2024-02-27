@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import colors from 'styles/theme';
-import { StLayoutBox } from 'components/common/Layout';
+import { StLayoutBox } from 'components/Layout';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
@@ -16,10 +16,10 @@ const Header = () => {
 
   return (
     <StHeader>
-      <StHeaderTitle onClick={handleTitleClick} >너 납치된 거야</StHeaderTitle>
+      <StHeaderTitle onClick={handleTitleClick}>너 납치된 거야</StHeaderTitle>
       <StLayoutBox>
         <StHeaderNickName>{isLogin && `환영합니다 ${nickName}님`}</StHeaderNickName>
-        <StHeaderButton onClick={() => { }}>{isLogin ? 'Login' : 'Logout'}</StHeaderButton>
+        <StHeaderButton onClick={() => {}}>{isLogin ? 'Login' : 'Logout'}</StHeaderButton>
       </StLayoutBox>
     </StHeader>
   );
