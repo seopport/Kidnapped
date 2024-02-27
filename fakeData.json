@@ -1,0 +1,81 @@
+{
+  "reviews": [
+    {
+      "id": "6afe8594-f131-4116-8f05-ab1c4d018a7a",
+      "userId": "1",
+      "cafeId": "ddd",
+      "nickname": "오리",
+      "content": "dsf",
+      "grade": 3,
+      "createdAt": "2024.02.26 월요일",
+      "dateForOrder": "2024-02-26T04:30:16.638Z",
+      "profileAvatarColor": "#d8b38d"
+    },
+    {
+      "id": "c3715115-f58e-41b8-95c2-0a8d04a8407e",
+      "userId": "1",
+      "cafeId": "ddd",
+      "nickname": "오리",
+      "content": "dsfdsf",
+      "grade": 4,
+      "createdAt": "2024.02.26 월요일",
+      "dateForOrder": "2024-02-26T04:31:10.971Z",
+      "profileAvatarColor": "#e5cab8"
+    },
+    {
+      "id": "d1c5e23d-e2fe-4e96-979f-f6212ac6cee6",
+      "userId": "1",
+      "cafeId": "ddd",
+      "nickname": "오리",
+      "content": "dfsd",
+      "grade": 5,
+      "createdAt": "2024.02.26 월요일",
+      "dateForOrder": "2024-02-26T04:31:34.778Z",
+      "profileAvatarColor": "#e5e2f6"
+    },
+    {
+      "id": "481ea759-e594-4ba8-9b08-b8df59bf2e9f",
+      "userId": "1",
+      "cafeId": "ddd",
+      "nickname": "오리",
+      "content": "ㅇㄹㅇㄴㄹ",
+      "grade": 3,
+      "createdAt": "2024.02.26 월요일",
+      "dateForOrder": "2024-02-26T04:38:18.428Z",
+      "profileAvatarColor": "#b1e1e5"
+    },
+    {
+      "id": "d83d5c4d-75a0-46ee-9573-f46c11110ba7",
+      "userId": "1",
+      "cafeId": "ddd",
+      "nickname": "오리",
+      "content": "ㄴㅇㄹ",
+      "grade": 4,
+      "createdAt": "2024.02.26 월요일",
+      "dateForOrder": "2024-02-26T04:38:21.366Z",
+      "profileAvatarColor": "#dfe693"
+    },
+    {
+      "id": "7a61b3ac-99ac-4641-bb73-093be5192a29",
+      "userId": "1",
+      "cafeId": "ddd",
+      "nickname": "오리",
+      "content": "ㅇㄴㄹㄴㅇ",
+      "grade": 4,
+      "createdAt": "2024.02.26 월요일",
+      "dateForOrder": "2024-02-26T04:39:02.682Z",
+      "profileAvatarColor": "#c0b396"
+    },
+    {
+      "id": "bc9b6db9-2b48-4652-9eb5-eb15c1e862b1",
+      "userId": "1",
+      "cafeId": "ddd",
+      "nickname": "오리",
+      "content": "ㅇㅎㅎㄱ",
+      "grade": 5,
+      "createdAt": "2024.02.26 월요일",
+      "dateForOrder": "2024-02-26T04:41:13.923Z",
+      "profileAvatarColor": "#c197c0"
+    }
+  ]
+}
