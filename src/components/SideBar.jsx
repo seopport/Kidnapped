@@ -14,6 +14,7 @@ const SideBar = ({ markers, setMarkers }) => {
 
   const handleCardItemClick = (id) => {
     setSelectedId(id)
+    console.log(id)
   }
 
   // 키보드 enter 시 검색
@@ -53,6 +54,7 @@ const SideBar = ({ markers, setMarkers }) => {
               lat: data[i].y,
               lng: data[i].x
             },
+            id,
             placeName,
             roadAddress,
             phoneNumber,
@@ -61,6 +63,7 @@ const SideBar = ({ markers, setMarkers }) => {
           bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
         }
         setMarkers(markers);
+        setSelectedId(null);
         setSearchTerm("")
       }
     }
