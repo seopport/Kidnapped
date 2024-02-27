@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import colors from 'styles/theme';
 import { StLayoutBox } from 'components/common/Layout';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Header = () => {
   const navigate = useNavigate();
   const isLogin = false;
   const nickName = '르탄이';
+  // const { isLogin, nickname } = useSelector((state) => state.authSlice);
 
   const handleTitleClick = () => {
     navigate('/home', { replace: true });
@@ -16,10 +18,10 @@ const Header = () => {
 
   return (
     <StHeader>
-      <StHeaderTitle onClick={handleTitleClick} >너 납치된 거야</StHeaderTitle>
+      <StHeaderTitle onClick={handleTitleClick}>너 납치된 거야</StHeaderTitle>
       <StLayoutBox>
         <StHeaderNickName>{isLogin && `환영합니다 ${nickName}님`}</StHeaderNickName>
-        <StHeaderButton onClick={() => { }}>{isLogin ? 'Login' : 'Logout'}</StHeaderButton>
+        <StHeaderButton onClick={() => {}}>{isLogin ? 'Logout' : 'Login'}</StHeaderButton>
       </StLayoutBox>
     </StHeader>
   );
