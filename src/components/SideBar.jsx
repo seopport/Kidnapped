@@ -10,6 +10,8 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import CalculateGrade from './common/CalculateGrade';
 
+
+
 const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) => {
   const { userId } = useSelector((state) => state.authSlice);
   const { kakao } = window;
@@ -18,6 +20,14 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [userScrapList, setUserScrapList] = useState([]);
+  const [buttonsNumber, setButtonsNumber] = useState([1, 2, 3]);
+  useEffect(() => {
+    if (markers.length > 0) {
+      const total = markers.length / 15 + 1;
+      const buttonNumber = Array.from({ length: total }, (_, index) => index + 1);
+      setButtonsNumber(buttonNumber);
+    }
+  }, [markers]);
 
   // 현재 사용자가 스크랩한 방탈출 카페 아이디를 가져오는 함수
   const getScrapList = async () => {
@@ -65,9 +75,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
       setSearchTerm('');
     }
   };
-
-  const [buttonsNumber, setButtonsNumber] = useState([1, 2, 3]);
-  // const buttonsNumber = [1, 2, 3];
 
   // 페이지 번호 클릭 핸들러
   const handlePageChange = (pageNumber) => {
@@ -128,6 +135,7 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
         const total = pagination.last;
         const buttonNumber = Array.from({ length: total }, (_, index) => index + 1);
         setButtonsNumber(buttonNumber);
+        console.log(buttonNumber);
       }
     });
   };

@@ -76,28 +76,6 @@
       "createdAt": "2024.02.28 수요일",
       "dateForOrder": "2024-02-28T09:38:45.180Z",
       "profileAvatarColor": "#96e7e6"
-    },
-    {
-      "id": "c03fe0a9-6502-438a-a932-3066914985cd",
-      "userId": "vvvv",
-      "cafeId": "2138418097",
-      "nickname": "방구석호랑이",
-      "content": "cxv",
-      "grade": 5,
-      "createdAt": "2024.02.28 수요일",
-      "dateForOrder": "2024-02-28T09:40:13.018Z",
-      "profileAvatarColor": "#ee8cc0"
-    },
-    {
-      "id": "0a2f314a-9d6e-4e36-98f3-c75b99e60e9d",
-      "userId": "vvvv",
-      "cafeId": "2138418097",
-      "nickname": "방구석호랑이",
-      "content": "fgd",
-      "grade": 4,
-      "createdAt": "2024.02.28 수요일",
-      "dateForOrder": "2024-02-28T09:42:14.013Z",
-      "profileAvatarColor": "#9592f7"
     }
   ],
   "users": [
@@ -120,6 +98,18 @@
     {
       "id": "2aee",
       "userId": "seoyeon"
+    },
+    {
+      "userId": null,
+      "id": "UIka-ZU"
+    },
+    {
+      "userId": null,
+      "id": "CxrWho8"
+    },
+    {
+      "userId": null,
+      "id": "LPAoo05"
     }
   ],
   "scraps": [
@@ -147,6 +137,21 @@
       "id": "efdb",
       "userId": "seoyeon",
       "scrapId": "377197835"
+    },
+    {
+      "userId": null,
+      "scrapId": "1609773844",
+      "id": "pM6LAba"
+    },
+    {
+      "userId": null,
+      "scrapId": "471523041",
+      "id": "Mq5RCca"
+    },
+    {
+      "userId": null,
+      "scrapId": "1767938917",
+      "id": "-fT5gax"
     }
   ]
 }
