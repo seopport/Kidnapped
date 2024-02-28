@@ -7,6 +7,7 @@ import useForm from 'hooks/useForm';
 import { authApi } from 'api';
 import backgroundimg from 'assets/backgroungimg.png';
 import { Link } from 'react-router-dom';
+import '../assets/font.css';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -118,6 +119,8 @@ const StLayoutImage = styled.div`
 `;
 
 const StLayoutContainer = styled.div`
+  font-family: 'SUITE-Regular';
+  letter-spacing: 1px;
   padding: 45px;
 `;
 
@@ -128,6 +131,7 @@ const StLoginBox = styled.div`
   height: 650px;
   margin-top: 15px;
   padding: 30px;
+  box-shadow: 2px 1px 9.6px rgba(0, 0, 0, 0.73);
 `;
 
 const StHomeLink = styled.span`
