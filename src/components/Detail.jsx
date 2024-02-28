@@ -17,18 +17,9 @@ const Detail = ({ markers, selectedId }) => {
   const { userId } = useSelector((state) => state.authSlice);
 
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [serverScrapId, SetServerScrapId] = useState(null); // 스크랩 서버에서 받은 고유 아이디
-  const [serverUserId, SetServerUserId] = useState(null); // 유저 서버에서 받은 고유 아이디
-  const [toggleMenu, setToggleMenu] = useState('info');
-
-  // 스크랩 토글 ---------------------------------
-  const handleBookmarkClick = () => {
-    setIsBookmarked((prevIsBookmarked) => {
-      console.log(!prevIsBookmarked);
-      return !prevIsBookmarked;
-    });
-  };
   const [serverScrapId, setServerScrapId] = useState(null); // 스크랩 서버에서 받은 고유 아이디
+  const [serverUserId, setServerUserId] = useState(null); // 유저 서버에서 받은 고유 아이디
+  const [toggleMenu, setToggleMenu] = useState('info');
 
   // 스크랩 토글 유지
   useEffect(() => {
