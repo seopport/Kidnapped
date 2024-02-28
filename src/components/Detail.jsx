@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addUser, deleteUser } from '../redux/modules/userSlice';
 import axios from 'axios';
 import { addScrap, deleteScrap } from '../redux/modules/scrapSlice';
+import { Link } from 'react-router-dom';
 
 const Detail = ({ markers, selectedId }) => {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ const Detail = ({ markers, selectedId }) => {
 
   // 스크랩 토글 ---------------------------------
   const handleBookmarkClick = () => {
-    setIsBookmarked(prevIsBookmarked => {
+    setIsBookmarked((prevIsBookmarked) => {
       console.log(!prevIsBookmarked);
       return !prevIsBookmarked;
     });
@@ -29,9 +30,10 @@ const Detail = ({ markers, selectedId }) => {
 
   useEffect(() => {
     if (isBookmarked) {
-      addScrapAndUser()
+      addScrapAndUser();
     } else {
-      if (serverScrapId) { // serverId가 존재할 때만 삭제 요청 보내기
+      if (serverScrapId) {
+        // serverId가 존재할 때만 삭제 요청 보내기
         deleteScrapAndUser();
       }
     }
@@ -42,45 +44,44 @@ const Detail = ({ markers, selectedId }) => {
     try {
       // 유저 추가
       const userResponse = await axios.post('http://localhost:4000/users', { userId });
-      dispatch(addUser({ userId }))
+      dispatch(addUser({ userId }));
 
       // 서버에서 생성된 고유한 유저 ID 가져오기
       const serverUserId = userResponse.data.id;
-      SetServerUserId(serverUserId)
-      console.log(serverUserId)
+      SetServerUserId(serverUserId);
+      console.log(serverUserId);
 
       // 스크랩 추가
       const newScrap = {
         userId: userId,
         scrapId: selectedId
-      }
+      };
       const scrapResponse = await axios.post('http://localhost:4000/scraps', newScrap);
-      dispatch(addScrap(newScrap))
+      dispatch(addScrap(newScrap));
 
       // 서버에서 생성된 고유한 스크랩 ID 가져오기
       const serverScrapId = scrapResponse.data.id;
       SetServerScrapId(serverScrapId);
-      console.log(serverScrapId)
-
+      console.log(serverScrapId);
     } catch (error) {
-      alert("오류가 발생했습니다")
-      console.log(error)
+      alert('오류가 발생했습니다');
+      console.log(error);
     }
-  }
+  };
 
   // 유저 삭제 스크랩 삭제----------------------------------
   const deleteScrapAndUser = async () => {
     // 유저 삭제
     try {
       await axios.delete(`http://localhost:4000/users/${serverUserId}`);
-      dispatch(deleteUser(userId))
+      dispatch(deleteUser(userId));
       // 스크랩 삭제
       await axios.delete(`http://localhost:4000/scraps/${serverScrapId}`);
       dispatch(deleteScrap());
     } catch (error) {
-      console.log("error", error)
+      console.log('error', error);
     }
-  }
+  };
 
   const selectedMarker = markers.find((marker) => marker.id === selectedId);
 
@@ -92,30 +93,90 @@ const Detail = ({ markers, selectedId }) => {
 
   return (
     <>
-      <FaBookmark onClick={handleBookmarkClick} color={isBookmarked ? `${colors.starColor}` : "white"}></FaBookmark>
-      {selectedMarker && <div>{selectedMarker.id}</div>}
-      {selectedMarker.placeName}
-      <button onClick={() => toggleMenuHandler(true)}>정보</button>
-      <button onClick={() => toggleMenuHandler(false)}>리뷰</button>
-      {toggleMenu ? (
+      <FaBookmark onClick={handleBookmarkClick} color={isBookmarked ? `${colors.starColor}` : 'white'}></FaBookmark>
+      <StInfoContainer>
+        <StImageBox>
+          <img src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg" alt="방탈출 카페 사진" />
+        </StImageBox>
+        {/* {selectedMarker && <div>{selectedMarker.id}</div>} */}
+        <StPlaceName> {selectedMarker.placeName}</StPlaceName>
+        <ButtonBox>
+          <button onClick={() => toggleMenuHandler(true)}>정보</button>
+          <button onClick={() => toggleMenuHandler(false)}>리뷰</button>
+        </ButtonBox>
         <>
-          <div>
-            <MdLocationOn />
-            {selectedMarker.roadAddress}
-          </div>
-          <div>
-            <MdLocalPhone />
-            {selectedMarker.phoneNumber}
-          </div>
-          <div>
-            <RiGlobalLine />
-            {selectedMarker.placeUrl}
-          </div>
+          {toggleMenu ? (
+            <>
+              <StDetailInfoBox>
+                <MdLocationOn />
+                {selectedMarker.roadAddress}
+              </StDetailInfoBox>
+              <StDetailInfoBox>
+                <MdLocalPhone />
+                {selectedMarker.phoneNumber}
+              </StDetailInfoBox>
+              <StDetailInfoBox>
+                <RiGlobalLine />
+                <StLink to={selectedMarker.placeUrl}> {selectedMarker.placeUrl}</StLink>
+              </StDetailInfoBox>
+            </>
+          ) : (
+            <Review />
+          )}
         </>
-      ) : (
-        <Review />
-      )}
+      </StInfoContainer>
     </>
   );
 };
 export default Detail;
+
+const StInfoContainer = styled.div`
+  align-items: center;
+  background-color: white;
+  height: 100%;
+  padding-top: 10px;
+`;
+
+const StImageBox = styled.div`
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  & img {
+    border-radius: 10px;
+    width: 97%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+const StPlaceName = styled.h1`
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+`;
+
+const ButtonBox = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+
+  & button {
+    background-color: white;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    color: #4f4f4f;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+`;
+const StDetailInfoBox = styled.div`
+  margin-top: 15px;
+  margin-left: 30px;
+  color: #8b8b8b;
+`;
+const StLink = styled(Link)`
+  color: #175bb3;
+`;

@@ -67,16 +67,6 @@
       "profileAvatarColor": "#fc8ba6"
     },
     {
-      "id": "2228b2ab-82eb-4b00-953f-bfd09c02ba6a",
-      "userId": "num2",
-      "cafeId": "ddd",
-      "nickname": "박민영남친",
-      "content": "내남편을 죽여줘 너무 재미있는 드라마",
-      "grade": 5,
-      "createdAt": "2024.02.28 수요일",
-      "dateForOrder": "2024-02-28T05:22:45.017Z",
-      "profileAvatarColor": "#d7b3ba"
-
       "id": "0085b230-b31c-4c23-a04b-5766950bc76a",
       "userId": "seoyeon",
       "cafeId": "ddd",
@@ -108,6 +98,18 @@
     {
       "id": "2aee",
       "userId": "seoyeon"
+    },
+    {
+      "userId": null,
+      "id": "UIka-ZU"
+    },
+    {
+      "userId": null,
+      "id": "CxrWho8"
+    },
+    {
+      "userId": null,
+      "id": "LPAoo05"
     }
   ],
   "scraps": [
@@ -135,6 +137,21 @@
       "id": "efdb",
       "userId": "seoyeon",
       "scrapId": "377197835"
+    },
+    {
+      "userId": null,
+      "scrapId": "1609773844",
+      "id": "pM6LAba"
+    },
+    {
+      "userId": null,
+      "scrapId": "471523041",
+      "id": "Mq5RCca"
+    },
+    {
+      "userId": null,
+      "scrapId": "1767938917",
+      "id": "-fT5gax"
     }
   ]
 }
