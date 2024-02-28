@@ -150,11 +150,7 @@
       "userId": "ddd"
     },
     {
-      "id": "9e63",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "9999",
+      "id": "f740",
       "userId": "seoyeon"
     }
   ],
@@ -163,6 +159,11 @@
       "id": "1",
       "scrapId": "124356",
       "userId": "ddd"
+    },
+    {
+      "id": "4809",
+      "userId": "seoyeon",
+      "scrapId": "377197835"
     }
   ]
 }
