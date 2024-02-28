@@ -150,15 +150,11 @@
       "userId": "ddd"
     },
     {
-      "id": "9726",
+      "id": "9e63",
       "userId": "seoyeon"
     },
     {
-      "id": "8a84",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "738e",
+      "id": "9999",
       "userId": "seoyeon"
     }
   ],
@@ -167,26 +163,6 @@
       "id": "1",
       "scrapId": "124356",
       "userId": "ddd"
-    },
-    {
-      "id": "0ade",
-      "userId": "seoyeon",
-      "scrapId": "377197835"
-    },
-    {
-      "id": "8503",
-      "userId": "seoyeon",
-      "scrapId": "377197835"
-    },
-    {
-      "id": "0e24",
-      "userId": "seoyeon",
-      "scrapId": "377197835"
-    },
-    {
-      "id": "5d62",
-      "userId": "seoyeon",
-      "scrapId": "377197835"
     }
   ]
 }

@@ -15,7 +15,7 @@ const scrapSlice = createSlice({
             console.log(action.payload)
             const scrapIdToDelete = action.payload;
             // 스크랩 목록에서 해당 ID를 가진 스크랩을 찾아 삭제
-            state.scraps = state.scraps.filter(scrap => scrap.scrapId !== scrapIdToDelete);
+            state.scraps = state.scraps.filter(scrap => scrap.id !== scrapIdToDelete);
         }
     }
 });
