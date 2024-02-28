@@ -5,6 +5,7 @@ import { StLayoutBox } from 'components/common/Layout';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/modules/authSlice';
+import '../assets/font.css';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const Header = () => {
     <StHeader>
       <StHeaderTitle onClick={handleTitleClick}>너 납치된 거야</StHeaderTitle>
       <StLayoutBox width="100%" height="100%" align="baseline" gap="16px" justify="flex-end">
-        <StHeaderNickName>{isLogin && `환영합니다 ${nickname}님`}</StHeaderNickName>
+        <StHeaderNickName>{isLogin && `환영합니다 ${nickname}님😊`}</StHeaderNickName>
         <StHeaderButton onClick={handleLoginLogoutClick}>{isLogin ? 'Logout' : 'Login'}</StHeaderButton>
       </StLayoutBox>
     </StHeader>
@@ -39,6 +40,7 @@ const Header = () => {
 export default Header;
 
 export const StHeader = styled.header`
+  font-family: 'JalnanGothic';
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -52,7 +54,7 @@ export const StHeader = styled.header`
   overflow: hidden;
 `;
 export const StHeaderTitle = styled.h1`
-  font-weight: 700;
+  font-weight: 500;
   font-size: 32px;
   color: #ffffff;
   cursor: pointer;
@@ -60,12 +62,14 @@ export const StHeaderTitle = styled.h1`
   align-items: baseline;
 `;
 export const StHeaderNickName = styled.h3`
-  font-weight: 400;
-  font-size: 24px;
+  font-family: 'SUITE-Regular';
+  font-weight: lighter;
+  font-size: 20px;
   color: #ffffff;
 `;
 
 export const StHeaderButton = styled.button`
+  font-family: 'SUITE-Regular';
   font-size: 24px;
   line-height: 29px;
   text-align: right;
