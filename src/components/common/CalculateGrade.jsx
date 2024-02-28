@@ -43,10 +43,13 @@ const CalculateGrade = ({ cafeId }) => {
 
 export const StGradeWrap = styled.div`
   display: flex;
+  justify-content: center;
+
   align-items: flex-end;
   font-size: 14px;
   color: ${colors.mainTextColor};
-  margin-top: auto;
+  margin-top: 100px;
+  margin-right: 30px;
 `;
 
 export default CalculateGrade;

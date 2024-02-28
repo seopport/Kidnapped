@@ -1,8 +1,8 @@
 import { MdLocationOn } from 'react-icons/md';
 import { MdLocalPhone } from 'react-icons/md';
 import { RiGlobalLine } from 'react-icons/ri';
-import styled from 'styled-components';
-import React, { useEffect, useState } from 'react';
+import styled, { css } from 'styled-components';
+import React, { useDebugValue, useEffect, useState } from 'react';
 import Review from './Review';
 import { FaBookmark } from 'react-icons/fa';
 import colors from 'styles/theme';
@@ -17,6 +17,17 @@ const Detail = ({ markers, selectedId }) => {
   const { userId } = useSelector((state) => state.authSlice);
 
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [serverScrapId, SetServerScrapId] = useState(null); // 스크랩 서버에서 받은 고유 아이디
+  const [serverUserId, SetServerUserId] = useState(null); // 유저 서버에서 받은 고유 아이디
+  const [toggleMenu, setToggleMenu] = useState('info');
+
+  // 스크랩 토글 ---------------------------------
+  const handleBookmarkClick = () => {
+    setIsBookmarked((prevIsBookmarked) => {
+      console.log(!prevIsBookmarked);
+      return !prevIsBookmarked;
+    });
+  };
   const [serverScrapId, setServerScrapId] = useState(null); // 스크랩 서버에서 받은 고유 아이디
 
   // 스크랩 토글 유지
@@ -95,27 +106,35 @@ const Detail = ({ markers, selectedId }) => {
 
   const selectedMarker = markers.find((marker) => marker.id === selectedId);
 
-  const [toggleMenu, setToggleMenu] = useState(true);
-
   const toggleMenuHandler = (param) => {
     setToggleMenu(param);
   };
 
   return (
     <>
-      <FaBookmark onClick={handleBookmarkClick} color={isBookmarked ? `${colors.starColor}` : 'white'}></FaBookmark>
       <StInfoContainer>
+        <StBookMark>
+          <FaBookmark onClick={handleBookmarkClick} color={isBookmarked ? `${colors.starColor}` : 'white'}></FaBookmark>
+        </StBookMark>
         <StImageBox>
           <img src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg" alt="방탈출 카페 사진" />
         </StImageBox>
+
         {/* {selectedMarker && <div>{selectedMarker.id}</div>} */}
         <StPlaceName> {selectedMarker.placeName}</StPlaceName>
-        <ButtonBox>
-          <button onClick={() => toggleMenuHandler(true)}>정보</button>
-          <button onClick={() => toggleMenuHandler(false)}>리뷰</button>
-        </ButtonBox>
+        <StButtonBox>
+          <StInfoButton toggleMenu={toggleMenu} onClick={() => toggleMenuHandler('info')}>
+            <p>정보</p>
+            <StHrInfo toggleMenu={toggleMenu} />
+          </StInfoButton>
+          <StReviewButton toggleMenu={toggleMenu} onClick={() => toggleMenuHandler('review')}>
+            <p>리뷰</p>
+            <StHrReview toggleMenu={toggleMenu} />
+          </StReviewButton>
+        </StButtonBox>
+
         <>
-          {toggleMenu ? (
+          {toggleMenu === 'info' ? (
             <>
               <StDetailInfoBox>
                 <MdLocationOn />
@@ -128,6 +147,8 @@ const Detail = ({ markers, selectedId }) => {
               <StDetailInfoBox>
                 <RiGlobalLine />
                 <StLink to={selectedMarker.placeUrl}> {selectedMarker.placeUrl}</StLink>
+              </StDetailInfoBox>
+              <StDetailInfoBox>
                 <CalculateGrade cafeId={selectedId} />
               </StDetailInfoBox>
             </>
@@ -147,7 +168,11 @@ const StInfoContainer = styled.div`
   height: 100%;
   padding-top: 10px;
 `;
-
+const StBookMark = styled.div`
+  position: absolute;
+  right: 40px;
+  font-size: 30px;
+`;
 const StImageBox = styled.div`
   overflow: hidden;
   display: flex;
@@ -167,22 +192,47 @@ const StPlaceName = styled.h1`
   justify-content: center;
 `;
 
-const ButtonBox = styled.div`
+const StButtonBox = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
-
-  & button {
-    background-color: white;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    color: #4f4f4f;
-    font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 20px;
+`;
+const StInfoButton = styled.div`
+  cursor: pointer;
+  color: ${(props) => (props.toggleMenu === 'info' ? colors.subColor : colors.mainTextColor)};
+  font-weight: ${(props) => (props.toggleMenu === 'info' ? 'bold' : '')};
+  padding: 15px;
+  width: 100px;
+  & p {
+    text-align: center;
   }
 `;
+const StReviewButton = styled.div`
+  cursor: pointer;
+  color: ${(props) => (props.toggleMenu === 'info' ? colors.mainTextColor : colors.subColor)};
+  font-weight: ${(props) => (props.toggleMenu === 'info' ? '' : 'bold')};
+  padding: 15px;
+  width: 100px;
+  & p {
+    text-align: center;
+  }
+`;
+const StHrInfo = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  border-bottom: 3px solid ${(props) => (props.toggleMenu === 'info' ? '#4F4F4F' : '#8B8B8B')};
+`;
+const StHrReview = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  border-bottom: 3px solid ${(props) => (props.toggleMenu === 'info' ? '#8B8B8B' : '#4F4F4F')};
+`;
+
 const StDetailInfoBox = styled.div`
   margin-top: 15px;
   margin-left: 30px;

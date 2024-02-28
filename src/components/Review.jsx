@@ -356,11 +356,10 @@ const Review = ({ selectedId }) => {
 };
 
 export const StReviewTapContainer = styled.div`
-  width: 335px;
   background-color: white; //임시
   margin: 0 auto;
   color: ${colors.subColor};
-  padding-bottom: 20px;
+  padding: 20px;
   position: relative;
   height: 430px; /* 높이를 설정하여 컴포넌트가 스크롤 가능하도록 함 */
   overflow-y: auto; /* 세로 스크롤을 활성화함 */
