@@ -10,9 +10,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { addScrap, deleteScrap } from '../redux/modules/scrapSlice';
 import CalculateGrade from './common/CalculateGrade';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { HiChevronLeft } from 'react-icons/hi2';
 
 const Detail = ({ markers, selectedId }) => {
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.authSlice);
 
@@ -104,6 +107,13 @@ const Detail = ({ markers, selectedId }) => {
   return (
     <>
       <StInfoContainer>
+        <StCloseButton
+          onClick={() => {
+            navigate('/detail');
+          }}
+        >
+          <HiChevronLeft />
+        </StCloseButton>
         <StBookMark>
           <FaBookmark onClick={handleBookmarkClick} color={isBookmarked ? `${colors.starColor}` : 'white'}></FaBookmark>
         </StBookMark>
@@ -183,6 +193,12 @@ const StPlaceName = styled.h1`
   justify-content: center;
 `;
 
+const StCloseButton = styled.div`
+  position: absolute;
+  left: 17px;
+  font-size: 36px;
+  color: white;
+`;
 const StButtonBox = styled.div`
   display: flex;
   justify-content: center;
