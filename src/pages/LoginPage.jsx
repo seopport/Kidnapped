@@ -106,6 +106,7 @@ const StLayoutImage = styled.div`
   background-repeat: no-repeat;
   width: 100vw;
   height: 100vh;
+  overflow-y: auto;
 `;
 
 const StLayoutContainer = styled.div`

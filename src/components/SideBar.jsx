@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import colors from 'styles/theme';
 import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
-import Review from './Review';
 import Detail from './Detail';
 
 const SideBar = ({ markers, setMarkers, mapPagination, map }) => {
@@ -25,9 +24,8 @@ const SideBar = ({ markers, setMarkers, mapPagination, map }) => {
       map.setCenter(new kakao.maps.LatLng(lat, lng));
       map.setLevel(3); // 줌 레벨 : 3
       map.setCenter(new kakao.maps.LatLng(selectedMarker.position.lat, selectedMarker.position.lng)); // 마커 중심 좌표로 이동
-
-      setSelectedId(id);
     }
+    setSelectedId(id);
   };
 
   // 키보드 enter 시 검색
