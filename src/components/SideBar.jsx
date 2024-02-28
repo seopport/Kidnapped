@@ -3,11 +3,12 @@ import styled, { css } from 'styled-components';
 import colors from 'styles/theme';
 import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
+import Review from './Review';
 import Detail from './Detail';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
+const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) => {
   const { userId } = useSelector((state) => state.authSlice);
   const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState('');
@@ -20,20 +21,18 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
   // 현재 사용자가 스크랩한 방탈출 카페 아이디를 가져오는 함수
   const getScrapList = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/scraps')
-      const scrapId = response.data.map(item => item.scrapId) // ['124356', '377197835', '1732671994']
-      console.log(scrapId)
+      const response = await axios.get('http://localhost:4000/scraps');
+      const scrapId = response.data.map((item) => item.scrapId); // ['124356', '377197835', '1732671994']
+      console.log(scrapId);
 
-      const userScrapList = response.data
-        .filter(item => item.userId === userId)
-        .map(item => item.scrapId)
+      const userScrapList = response.data.filter((item) => item.userId === userId).map((item) => item.scrapId);
 
-      setUserScrapList(userScrapList)
-      console.log(userScrapList) //['377197835', '1732671994']
+      setUserScrapList(userScrapList);
+      console.log(userScrapList); //['377197835', '1732671994']
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
@@ -47,8 +46,8 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
       map.setLevel(3); // 줌 레벨 : 3
       map.setCenter(new kakao.maps.LatLng(selectedMarker.position.lat, selectedMarker.position.lng)); // 마커 중심 좌표로 이동
     }
+
     setSelectedId(id);
-    console.log(userId)
   };
 
   // 키보드 enter 시 검색
@@ -70,12 +69,12 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
   };
 
   const handleBookmarkClick = () => {
-    setIsBookmarked(prevIsBookmarked => {
+    setIsBookmarked((prevIsBookmarked) => {
       console.log(!prevIsBookmarked);
       return !prevIsBookmarked;
     });
     if (!isBookmarked) {
-      getScrapList()
+      getScrapList();
     }
   };
 
@@ -120,8 +119,8 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
 
         // 검색 결과에 따라 버튼 개수 변경
         const total = pagination.last;
-        const buttonNumber = Array.from({ length: total }, (_, index) => index + 1)
-        setButtonsNumber(buttonNumber)
+        const buttonNumber = Array.from({ length: total }, (_, index) => index + 1);
+        setButtonsNumber(buttonNumber);
       }
     });
   };
@@ -150,27 +149,28 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
         <StMainCardWrapper>
           {selectedId ? (
             <Detail markers={markers} selectedId={selectedId} />
+          ) : isBookmarked ? (
+            <div>북마크 항목을 보여줘 {userScrapList}</div>
           ) : (
-            isBookmarked ? (
-              <div>북마크 항목을 보여줘 {userScrapList}</div>
-            ) : (
-              markers.map((item) => (
-                <React.Fragment key={item.id}>
-                  <StMainCardItem onClick={() => handleCardItemClick(item.id)}>
-                    <StMainCardInfoAndImage>
-                      <StMainCardInfo>
-                        <h1>{item.placeName}</h1>
-                        <p>{item.roadAddress}</p>
-                        <p>{item.phoneNumber}</p>
-                      </StMainCardInfo>
-                      <StImageWrapper>
-                        <img src='https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg' alt='방탈출 카페 사진' />
-                      </StImageWrapper>
-                    </StMainCardInfoAndImage>
-                  </StMainCardItem>
-                </React.Fragment>
-              ))
-            )
+            markers.map((item) => (
+              <React.Fragment key={item.id}>
+                <StMainCardItem onClick={() => handleCardItemClick(item.id)}>
+                  <StMainCardInfoAndImage>
+                    <StMainCardInfo>
+                      <h1>{item.placeName}</h1>
+                      <p>{item.roadAddress}</p>
+                      <p>{item.phoneNumber}</p>
+                    </StMainCardInfo>
+                    <StImageWrapper>
+                      <img
+                        src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
+                        alt="방탈출 카페 사진"
+                      />
+                    </StImageWrapper>
+                  </StMainCardInfoAndImage>
+                </StMainCardItem>
+              </React.Fragment>
+            ))
           )}
         </StMainCardWrapper>
         {!selectedId && (
@@ -188,7 +188,7 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
         )}
         {/* <Review /> 임시 주석처리  */}
       </StContainer>
-    </StSideBar >
+    </StSideBar>
   );
 };
 
@@ -340,4 +340,3 @@ export const StPageButton = styled.button`
     background: ${colors.starColor};
   }
 `;
-
