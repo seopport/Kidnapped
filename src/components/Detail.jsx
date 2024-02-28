@@ -9,7 +9,6 @@ import { addScrap, deleteScrap } from '../redux/modules/scrapSlice';
 
 const Detail = ({ markers, selectedId }) => {
   const dispatch = useDispatch();
-  const scraps = useSelector((state) => state.scrapSlice.scraps)
   const { userId } = useSelector((state) => state.authSlice);
 
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -28,11 +27,9 @@ const Detail = ({ markers, selectedId }) => {
     if (isBookmarked) {
       addScrapAndUser()
     } else {
-      //deleteUsers();
-      // if (serverScrapId) { // serverId가 존재할 때만 삭제 요청 보내기
-      //   deleteScraps(serverScrapId);
-      // }
-
+      if (serverScrapId) { // serverId가 존재할 때만 삭제 요청 보내기
+        deleteScrapAndUser();
+      }
     }
   }, [isBookmarked]);
 
@@ -43,6 +40,7 @@ const Detail = ({ markers, selectedId }) => {
       const userResponse = await axios.post('http://localhost:4000/users', { userId });
       dispatch(addUser({ userId }))
 
+      // 서버에서 생성된 고유한 유저 ID 가져오기
       const serverUserId = userResponse.data.id;
       SetServerUserId(serverUserId)
       console.log(serverUserId)
@@ -55,7 +53,7 @@ const Detail = ({ markers, selectedId }) => {
       const scrapResponse = await axios.post('http://localhost:4000/scraps', newScrap);
       dispatch(addScrap(newScrap))
 
-      // 서버에서 생성된 스크랩 ID 가져오기
+      // 서버에서 생성된 고유한 스크랩 ID 가져오기
       const serverScrapId = scrapResponse.data.id;
       SetServerScrapId(serverScrapId);
       console.log(serverScrapId)
@@ -65,56 +63,20 @@ const Detail = ({ markers, selectedId }) => {
       console.log(error)
     }
   }
-  const addUsers = async () => {
-    const newUSer = {
-      userId: userId,
-    }
+
+  // 유저 삭제 스크랩 삭제----------------------------------
+  const deleteScrapAndUser = async () => {
+    // 유저 삭제
     try {
-      await axios.post('http://localhost:4000/users', newUSer);
-      dispatch(addUser(newUSer))
-      console.log(newUSer);
+      await axios.delete(`http://localhost:4000/users/${serverUserId}`);
+      dispatch(deleteUser(userId))
+      // 스크랩 삭제
+      await axios.delete(`http://localhost:4000/scraps/${serverScrapId}`);
+      dispatch(deleteScrap());
     } catch (error) {
       console.log("error", error)
     }
-  };
-  // // 유저 삭제 ----------------------------------
-  // const deleteUsers = async () => {
-  //   try {
-  //     await axios.delete(`http://localhost:4000/users/${userId}`);
-  //     dispatch(deleteUser(userId))
-  //   } catch (error) {
-  //     console.log("error", error)
-  //   }
-  // };
-
-  // // 스크랩 추가 ----------------------------------
-  // const addScraps = async () => {
-  //   try {
-  //     const response = await axios.post('http://localhost:4000/scraps', {
-  //       userId: userId,
-  //       scrapId: selectedId
-  //     });
-  //     const serverScrapId = response.data.id;
-  //     const serverUserId = response.data.id
-  //     SetServerScrapId(serverId)
-  //     dispatch(addScrap(newScrap))
-  //     console.log(newScrap);
-  //     console.log("Added Scrap ID:", serverId);
-  //   } catch (error) {
-  //     console.log("error", error)
-  //   }
-  // };
-
-  // // 스크랩 삭제 -----------------------------------
-  // const deleteScraps = async () => {
-  //   try {
-  //     await axios.delete(`http://localhost:4000/scraps/${serverScrapId}`);
-  //     dispatch(deleteScrap(serverId));
-  //     console.log(serverId);
-  //   } catch (error) {
-  //     console.log('error', error);
-  //   }
-  // };
+  }
 
   const selectedMarker = markers.find((marker) => marker.id === selectedId);
   return (
