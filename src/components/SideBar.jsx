@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import colors from 'styles/theme';
 import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
-import Review from './Review';
 import Detail from './Detail';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -38,6 +37,16 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
 
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
+    const selectedMarker = markers.find((marker) => marker.id === id);
+
+    if (selectedMarker && map) {
+      // 선택한 마커의 위치로 지도를 이동
+      const { lat, lng } = selectedMarker.position;
+
+      map.setCenter(new kakao.maps.LatLng(lat, lng));
+      map.setLevel(3); // 줌 레벨 : 3
+      map.setCenter(new kakao.maps.LatLng(selectedMarker.position.lat, selectedMarker.position.lng)); // 마커 중심 좌표로 이동
+    }
     setSelectedId(id);
     console.log(userId)
   };

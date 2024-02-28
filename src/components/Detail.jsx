@@ -84,7 +84,7 @@ const Detail = ({ markers, selectedId }) => {
       <FaBookmark onClick={handleBookmarkClick} color={isBookmarked ? `${colors.starColor}` : "white"}></FaBookmark>
       {selectedMarker && <div>{selectedMarker.id}</div>}
 
-      <Review />
+      <Review selectedId={selectedId} />
     </>
   );
 };

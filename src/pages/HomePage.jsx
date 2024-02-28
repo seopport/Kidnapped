@@ -8,12 +8,20 @@ import colors from 'styles/theme';
 const HomePage = () => {
   const [markers, setMarkers] = useState([]);
   const [mapPagination, setMapPagination] = useState(null);
+  const [map, setMap] = useState();
+
   return (
     <div>
       <StContainer>
         <Header />
         <SideBar markers={markers} setMarkers={setMarkers} mapPagination={mapPagination} setMapPagination={setMapPagination} />
-        <MapLoader markers={markers} setMarkers={setMarkers} setMapPagination={setMapPagination} />
+        <MapLoader
+          markers={markers}
+          setMarkers={setMarkers}
+          setMapPagination={setMapPagination}
+          map={map}
+          setMap={setMap}
+        />
       </StContainer>
     </div>
   );
