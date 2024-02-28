@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import colors from 'styles/theme';
 import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
-import Review from './Review';
 import Detail from './Detail';
 import left from 'assets/left.png';
 import right from 'assets/right.png';
@@ -19,6 +18,8 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [userScrapList, setUserScrapList] = useState([]);
+
+  // const scrappedMarker = markers.find((marker) => marker.id === userScrapList);
 
   // 현재 사용자가 스크랩한 방탈출 카페 아이디를 가져오는 함수
   const getScrapList = async () => {
@@ -157,7 +158,30 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
         </StSearchWrapper>
         <StMainCardWrapper>
           {isBookmarked ? (
-            <div>북마크 항목을 보여줘 {userScrapList}</div>
+            (
+              userScrapList.map((scrapId) => {
+                const scrappedMarker = markers.find((marker) => marker.id === scrapId);
+                return (
+                  <React.Fragment key={scrappedMarker.id}>
+                    <StMainCardItem onClick={() => handleCardItemClick(scrappedMarker.id)}>
+                      <StMainCardInfoAndImage>
+                        <StMainCardInfo>
+                          <h1>{scrappedMarker.placeName}</h1>
+                          <p>{scrappedMarker.roadAddress}</p>
+                          <p>{scrappedMarker.phoneNumber}</p>
+                        </StMainCardInfo>
+                        <StImageWrapper>
+                          <img
+                            src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
+                            alt="방탈출 카페 사진"
+                          />
+                        </StImageWrapper>
+                      </StMainCardInfoAndImage>
+                    </StMainCardItem>
+                  </React.Fragment>
+                );
+              })
+            )
           ) : selectedId ? (
             <Detail markers={markers} selectedId={selectedId} />
           ) : (
