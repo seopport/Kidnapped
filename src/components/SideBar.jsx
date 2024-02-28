@@ -6,6 +6,7 @@ import { FaBookmark } from 'react-icons/fa';
 import Review from './Review';
 import Detail from './Detail';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
   const { userId } = useSelector((state) => state.authSlice);
@@ -15,6 +16,25 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
 
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [userScrapList, setUserScrapList] = useState([]);
+
+  // 현재 유저의 스크랩한 방탈출 카페 아이디를 가져오는 함수
+  const getScrapList = async () => {
+    try {
+      const response = await axios.get('http://localhost:4000/scraps')
+      const scrapId = response.data.map(item => item.scrapId) // ['124356', '377197835', '1732671994']
+      console.log(scrapId)
+
+      const userScrapList = response.data
+        .filter(item => item.userId === userId)
+        .map(item => item.scrapId)
+
+      setUserScrapList(userScrapList)
+      console.log(userScrapList) //['377197835', '1732671994']
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
@@ -45,6 +65,9 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
       console.log(!prevIsBookmarked);
       return !prevIsBookmarked;
     });
+    if (!isBookmarked) {
+      getScrapList()
+    }
   };
 
   // 검색 함수
