@@ -78,5 +78,16 @@
       "profileAvatarColor": "#96e7e6"
     }
   ],
-  "scraps": []
+  "scraps": [
+    {
+      "id": "b942",
+      "userId": "seoyeon",
+      "scrapId": "2024880532"
+    },
+    {
+      "id": "4eee",
+      "userId": "seoyeon",
+      "scrapId": "27495854"
+    }
+  ]
 }
