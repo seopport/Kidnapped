@@ -9,8 +9,6 @@ import { logout } from '../redux/modules/authSlice';
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const isLogin = false;
-  // const nickname = '르탄이';
   const { isLogin, nickname } = useSelector((state) => state.authSlice);
 
   const handleTitleClick = () => {
@@ -30,7 +28,7 @@ const Header = () => {
   return (
     <StHeader>
       <StHeaderTitle onClick={handleTitleClick}>너 납치된 거야</StHeaderTitle>
-      <StLayoutBox>
+      <StLayoutBox width="100%" height="100%" align="baseline" gap="16px" justify="flex-end">
         <StHeaderNickName>{isLogin && `환영합니다 ${nickname}님`}</StHeaderNickName>
         <StHeaderButton onClick={handleLoginLogoutClick}>{isLogin ? 'Logout' : 'Login'}</StHeaderButton>
       </StLayoutBox>
@@ -56,9 +54,10 @@ export const StHeader = styled.header`
 export const StHeaderTitle = styled.h1`
   font-weight: 700;
   font-size: 32px;
-  line-height: 39px;
   color: #ffffff;
   cursor: pointer;
+  width: 100%;
+  align-items: baseline;
 `;
 export const StHeaderNickName = styled.h3`
   font-weight: 400;
