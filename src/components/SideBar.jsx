@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import colors from 'styles/theme';
 import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
-import Review from './Review';
 import Detail from './Detail';
 
 const SideBar = ({ markers, setMarkers, mapPagination }) => {

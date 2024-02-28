@@ -7,7 +7,7 @@ const Detail = ({ markers, selectedId }) => {
     <>
       {selectedMarker && <div>{selectedMarker.id}</div>}
 
-      <Review />
+      <Review selectedId={selectedId} />
     </>
   );
 };
