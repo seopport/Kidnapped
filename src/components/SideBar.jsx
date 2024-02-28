@@ -3,20 +3,70 @@ import styled, { css } from 'styled-components';
 import colors from 'styles/theme';
 import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
-import Review from './Review';
 import Detail from './Detail';
+import left from 'assets/left.png';
+import right from 'assets/right.png';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import CalculateGrade from './common/CalculateGrade';
 
-const SideBar = ({ markers, setMarkers, mapPagination }) => {
+
+const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) => {
+  const { userId } = useSelector((state) => state.authSlice);
   const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [userScrapList, setUserScrapList] = useState([]);
+  const [buttonsNumber, setButtonsNumber] = useState([1, 2, 3]);
+  useEffect(() => {
+    if (markers.length > 0) {
+      const total = markers.length / 15 + 1;
+      const buttonNumber = Array.from({ length: total }, (_, index) => index + 1);
+      setButtonsNumber(buttonNumber);
+    }
+  }, [markers]);
+
+  // const scrappedMarker = markers.find((marker) => marker.id === userScrapList);
+
+  // 현재 사용자가 스크랩한 방탈출 카페 아이디를 가져오는 함수
+  const getScrapList = async () => {
+    try {
+      const response = await axios.get('http://localhost:4000/scraps');
+      const scrapId = response.data.map((item) => item.scrapId); // ['124356', '377197835', '1732671994']
+      console.log(scrapId);
+
+      const userScrapList = response.data.filter((item) => item.userId === userId).map((item) => item.scrapId);
+
+      setUserScrapList(userScrapList);
+      console.log(userScrapList); //['377197835', '1732671994']
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [toggle, setToggle] = useState(true);
+
+  const toggleHandler = () => {
+    setToggle(!toggle);
+  };
+
 
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
+    const selectedMarker = markers.find((marker) => marker.id === id);
+
+    if (selectedMarker && map) {
+      // 선택한 마커의 위치로 지도를 이동
+      const { lat, lng } = selectedMarker.position;
+
+      map.setCenter(new kakao.maps.LatLng(lat, lng));
+      map.setLevel(3); // 줌 레벨 : 3
+      map.setCenter(new kakao.maps.LatLng(selectedMarker.position.lat, selectedMarker.position.lng)); // 마커 중심 좌표로 이동
+    }
     setSelectedId(id);
+    console.log(userId);
   };
 
   // 키보드 enter 시 검색
@@ -28,8 +78,6 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
     }
   };
 
-  const buttonsNumber = [1, 2, 3];
-
   // 페이지 번호 클릭 핸들러
   const handlePageChange = (pageNumber) => {
     mapPagination.gotoPage(pageNumber);
@@ -37,14 +85,20 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
   };
 
   const handleBookmarkClick = () => {
-    setIsBookmarked(!isBookmarked);
+    setIsBookmarked((prevIsBookmarked) => {
+      console.log(!prevIsBookmarked);
+      return !prevIsBookmarked;
+    });
+    if (!isBookmarked) {
+      getScrapList();
+    }
   };
 
   // 검색 함수
   const requestSearch = () => {
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch(`${searchTerm} 방탈출`, (data, status, _pagination) => {
+    ps.keywordSearch(`${searchTerm} 방탈출`, (data, status, pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         const bounds = new kakao.maps.LatLngBounds();
         let markers = [];
@@ -59,6 +113,8 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
           const placeUrl = data[i].place_url; // 장소 상세페이지 URL
           const x = data[i].x; // X 좌표 혹은 경도(longitude)
           const y = data[i].y; // Y 좌표 혹은 위도(latitude)
+
+          setMapPagination(pagination);
 
           markers.push({
             position: {
@@ -76,12 +132,26 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
         setMarkers(markers);
         setSelectedId(null);
         setSearchTerm('');
+
+        // 검색 결과에 따라 버튼 개수 변경
+        const total = pagination.last;
+        const buttonNumber = Array.from({ length: total }, (_, index) => index + 1);
+        setButtonsNumber(buttonNumber);
+        console.log(buttonNumber);
       }
     });
   };
 
+  // 카페 이미지 사진
+  const images = [
+    'https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg',
+    'https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/5563425303/B.jpg?714000000',
+    'https://static.hanatour.com/product/2023/07/25/2341eoeon8/default.png',
+    'https://blog.kakaocdn.net/dn/bFlhx4/btrEiNN2HF6/JcA1ME6DMSChLsJzQ25eu0/img.jpg'
+  ];
+
   return (
-    <StSideBar>
+    <StSideBar toggle={toggle}>
       <StContainer>
         <StSearchWrapper>
           <StSearchForm onSubmit={(e) => e.preventDefault()}>
@@ -102,43 +172,76 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
           </StBookmarkButton>
         </StSearchWrapper>
         <StMainCardWrapper>
-          {selectedId ? (
+          {isBookmarked ? (
+            (
+              userScrapList.map((scrapId) => {
+                const scrappedMarker = markers.find((marker) => marker.id === scrapId);
+                return (
+                  <React.Fragment key={scrappedMarker.id}>
+                    <StMainCardItem onClick={() => handleCardItemClick(scrappedMarker.id)}>
+                      <StMainCardInfoAndImage>
+                        <StMainCardInfo>
+                          <h1>{scrappedMarker.placeName}</h1>
+                          <p>{scrappedMarker.roadAddress}</p>
+                          <p>{scrappedMarker.phoneNumber}</p>
+                        </StMainCardInfo>
+                        <StImageWrapper>
+                          <img
+                            src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
+                            alt="방탈출 카페 사진"
+                          />
+                        </StImageWrapper>
+                      </StMainCardInfoAndImage>
+                    </StMainCardItem>
+                  </React.Fragment>
+                );
+              })
+            )
+          ) : selectedId ? (
             <Detail markers={markers} selectedId={selectedId} />
           ) : (
-            markers.map((item) => {
-              return (
+            markers.map((item, index) => (
+              <React.Fragment key={item.id}>
                 <StMainCardItem onClick={() => handleCardItemClick(item.id)}>
                   <StMainCardInfoAndImage>
                     <StMainCardInfo>
                       <h1>{item.placeName}</h1>
                       <p>{item.roadAddress}</p>
                       <p>{item.phoneNumber}</p>
+                      {/* 평점 */}
+                      <CalculateGrade cafeId={item.id} />
                     </StMainCardInfo>
-                    <StImageWrapper>
+                    {/* <StImageWrapper>
                       <img
                         src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
                         alt="방탈출 카페 사진"
-                      ></img>
+                      />
+</StImageWrapper> */}
+                    <StImageWrapper key={index}>
+                      <img src={images[index % 4]} alt="방탈출 카페 사진" />
                     </StImageWrapper>
                   </StMainCardInfoAndImage>
                 </StMainCardItem>
-              );
-            })
+              </React.Fragment>
+            ))
           )}
         </StMainCardWrapper>
-        <StButtonBox>
-          {buttonsNumber.map((buttonNumber) => (
-            <StPageButton
-              index={buttonNumber}
-              onClick={() => handlePageChange(buttonNumber)}
-              $currentPage={currentPage}
-            >
-              {buttonNumber}
-            </StPageButton>
-          ))}
-        </StButtonBox>
+        {!selectedId && (
+          <StButtonBox>
+            {buttonsNumber.map((buttonNumber) => (
+              <StPageButton
+                index={buttonNumber}
+                onClick={() => handlePageChange(buttonNumber)}
+                $currentPage={currentPage}
+              >
+                {buttonNumber}
+              </StPageButton>
+            ))}
+          </StButtonBox>
+        )}
         {/* <Review /> 임시 주석처리  */}
       </StContainer>
+      <StToggleButton onClick={toggleHandler} toggle={toggle} />
     </StSideBar>
   );
 };
@@ -153,11 +256,58 @@ const StSideBar = styled.div`
   height: 100vh;
   background-color: ${colors.subColor};
   z-index: 2;
+  transition-duration: 500ms;
+  // 토글 슬라이드 애니메이션
+
+  ${(props) => {
+    if (props.toggle) {
+      return css`
+        transform: translateX(0%);
+      `;
+    } else {
+      return css`
+        transform: translateX(-100%);
+      `;
+    }
+  }}
 `;
 
 const StContainer = styled.div`
+  position: relative;
   padding: 20px 16px;
   height: calc(100% - 40px);
+`;
+
+const StToggleButton = styled.button`
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 24px;
+  height: 80px;
+  transform: translateY(-50%);
+  z-index: 10;
+  overflow: hidden;
+  display: inline-block;
+  font-size: 1px;
+  line-height: 1px;
+
+  ${(props) => {
+    if (props.toggle) {
+      return css`
+        background-image: url(${left});
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+      `;
+    } else {
+      return css`
+        background-image: url(${right});
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+      `;
+    }
+  }}
 `;
 
 const StSearchWrapper = styled.div`
@@ -239,7 +389,7 @@ const StMainCardInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 20px;
+  gap: 10px;
   & h1 {
     font-weight: 700;
     font-size: 16px;
@@ -253,6 +403,8 @@ const StMainCardInfo = styled.div`
 
 const StImageWrapper = styled.div`
   overflow: hidden;
+width: 150px;
+  height: 100px;
   & img {
     width: 100%;
     height: 100%;
@@ -291,3 +443,11 @@ export const StPageButton = styled.button`
     background: ${colors.starColor};
   }
 `;
+
+// export const StGradeWrap = styled.div`
+//   display: flex;
+//   align-items: flex-end;
+//   font-size: 14px;
+//   color: ${colors.mainTextColor};
+//   margin-top: auto;
+// `;

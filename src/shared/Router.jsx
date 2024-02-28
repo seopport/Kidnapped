@@ -5,14 +5,12 @@ import Detail from 'components/Detail';
 import { useState } from 'react';
 
 const Router = () => {
-  //const isLogin = useSelector((state) => state.authSlice.isLogin);
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="*" element={<Navigate replace to="/" />} />
-        <Route path="/" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   );

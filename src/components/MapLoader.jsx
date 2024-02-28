@@ -5,10 +5,9 @@ import { Link } from 'react-router-dom';
 
 const { kakao } = window;
 
-const Location = ({ markers, setMarkers, setMapPagination }) => {
+const Location = ({ markers, setMarkers, setMapPagination, map, setMap }) => {
   const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
   const [positions, setPositions] = useState([]);
-  const [map, setMap] = useState();
 
   const [state, setState] = useState({
     center: {
@@ -18,53 +17,52 @@ const Location = ({ markers, setMarkers, setMapPagination }) => {
     errMsg: null,
     isLoading: true
   });
-  useEffect(() => {
-    if (!map) return;
 
-    // 장소 검색 객체를 생성
+  // 장소 검색 로직을 별도의 함수로 분리
+  const searchPlaces = (position) => {
+    // 장소 검색 객체 생성
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch('방탈출', (data, status, pagination) => {
-      if (status === kakao.maps.services.Status.OK) {
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-        // LatLngBounds 객체에 좌표를 추가
-        const bounds = new kakao.maps.LatLngBounds();
-        let markers = [];
+    ps.keywordSearch(
+      '방탈출',
+      (data, status, pagination) => {
+        if (status === kakao.maps.services.Status.OK) {
+          const bounds = new kakao.maps.LatLngBounds();
+          let markers = [];
 
-        for (var i = 0; i < data.length; i++) {
-          const id = data[i].id; // 장소 ID
-          const placeName = data[i].place_name; // 장소명
-          const categoryName = data[i].category_name; // 카테고리 이름
-          const phoneNumber = data[i].phone; // 전화번호
-          const jibunAddress = data[i].address_name; // 전체 지번 주소
-          const roadAddress = data[i].road_address_name; // 전체 도로명 주소
-          const placeUrl = data[i].place_url; // 장소 상세페이지 URL
-          const x = data[i].x; // X 좌표 혹은 경도(longitude)
-          const y = data[i].y; // Y 좌표 혹은 위도(latitude)
-
+          // 검색된 장소 정보를 바탕으로 마커 생성
+          for (var i = 0; i < data.length; i++) {
+            markers.push({
+              position: {
+                lat: data[i].y,
+                lng: data[i].x
+              },
+              placeName: data[i].place_name,
+              roadAddress: data[i].road_address_name,
+              phoneNumber: data[i].phone,
+              placeUrl: data[i].place_url,
+              id: data[i].id
+            });
+            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+          }
+          setMarkers(markers);
           setMapPagination(pagination);
-
-          markers.push({
-            position: {
-              lat: data[i].y,
-              lng: data[i].x
-            },
-            placeName,
-            roadAddress,
-            phoneNumber,
-            placeUrl,
-            id
-          });
-          // @ts-ignore
-          bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
         }
-        setMarkers(markers);
+      },
+      {
+        location: new kakao.maps.LatLng(position.lat, position.lng), // 검색 중심 위치 설정
+        radius: 10000 // 10km 반경 내의 장소 검색
       }
-    });
+    );
+  };
+
+  useEffect(() => {
+    if (!map) return;
     if (navigator.geolocation) {
-      // GeoLocation을 이용해서 접속 위치를 얻어온다.
+      // 사용자 위치를 성공적으로 가져올 경우
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          // 상태 업데이트
           setState((prev) => ({
             ...prev,
             center: {
@@ -73,46 +71,56 @@ const Location = ({ markers, setMarkers, setMapPagination }) => {
             },
             isLoading: false
           }));
+          // 사용자 위치를 중심으로 장소 검색
+          searchPlaces({ lat: position.coords.latitude, lng: position.coords.longitude });
         },
+        // 사용자 위치를 가져오지 못할 경우
         (err) => {
+          // 상태 업데이트
           setState((prev) => ({
             ...prev,
             errMsg: err.message,
             isLoading: false
           }));
+          // 기본 위치 설정
+          const defaultPosition = { lat: 37.5665, lng: 126.978 };
+          // 기본 위치를 중심으로 장소 검색
+          searchPlaces(defaultPosition);
         }
       );
     } else {
-      //HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정
       setState((prev) => ({
         ...prev,
         errMsg: 'geolocation을 사용할수 없어요.',
         isLoading: false
       }));
+      // 기본 위치 설정
+      const defaultPosition = { lat: 37.5665, lng: 126.978 };
+      // 기본 위치를 중심으로 장소 검색
+      searchPlaces(defaultPosition);
     }
     setPositions(positions);
   }, [map]);
 
+  // 사용자가 마커를 클릭했을 때 동작
   const handleMarkerClick = (index) => {
     setSelectedMarkerIndex(index);
+    const selectedMarker = markers[index];
+    if (selectedMarker && map) {
+      // 클릭된 마커 위치로도 중심 이동
+      map.setCenter(new kakao.maps.LatLng(selectedMarker.position.lat, selectedMarker.position.lng));
+    }
   };
+
   const handleCloseButtonClick = () => {
     setSelectedMarkerIndex(null);
   };
 
   return (
     <StMapContiner>
-      <StMapSize // 지도를 표시할 Container
-        id="map"
-        center={state.center} // 지도의 중심좌표
-        level={12} // 지도의 확대 레벨
-        onCreate={setMap}
-      >
-        {/* 지도에 컨트롤 올리기 */}
+      <StMapSize id="map" center={state.center} level={12} onCreate={setMap}>
         <ZoomControl position={kakao.maps.ControlPosition.TOPRIGHT} />
         <MapTypeControl position={kakao.maps.ControlPosition.TOPRIGHT} />
-
-        {/* 마커 생성 후 지도에 표시 */}
         <MarkerClusterer averageCenter={true} minLevel={6}>
           {markers.map((marker, index) => (
             <MapMarker
@@ -120,7 +128,6 @@ const Location = ({ markers, setMarkers, setMapPagination }) => {
               position={marker.position}
               onClick={() => handleMarkerClick(index)}
             >
-              {/* 해당 마커에 대한 오버레이 */}
               {index === selectedMarkerIndex && (
                 <CustomOverlay>
                   <StCloseButton onClick={handleCloseButtonClick}>x</StCloseButton>
