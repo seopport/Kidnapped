@@ -3,12 +3,14 @@ import styled, { css } from 'styled-components';
 import colors from 'styles/theme';
 import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
-import Review from './Review';
 import Detail from './Detail';
 import left from 'assets/left.png';
 import right from 'assets/right.png';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import CalculateGrade from './common/CalculateGrade';
+
+
 
 const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) => {
   const { userId } = useSelector((state) => state.authSlice);
@@ -61,8 +63,8 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
       map.setLevel(3); // 줌 레벨 : 3
       map.setCenter(new kakao.maps.LatLng(selectedMarker.position.lat, selectedMarker.position.lng)); // 마커 중심 좌표로 이동
     }
-
     setSelectedId(id);
+    console.log(userId);
   };
 
   // 키보드 enter 시 검색
@@ -173,6 +175,8 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
                       <h1>{item.placeName}</h1>
                       <p>{item.roadAddress}</p>
                       <p>{item.phoneNumber}</p>
+                      {/* 평점 */}
+                      <CalculateGrade cafeId={item.id} />
                     </StMainCardInfo>
                     <StImageWrapper>
                       <img
@@ -349,7 +353,7 @@ const StMainCardInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 20px;
+  gap: 10px;
   & h1 {
     font-weight: 700;
     font-size: 16px;
@@ -401,3 +405,11 @@ export const StPageButton = styled.button`
     background: ${colors.starColor};
   }
 `;
+
+// export const StGradeWrap = styled.div`
+//   display: flex;
+//   align-items: flex-end;
+//   font-size: 14px;
+//   color: ${colors.mainTextColor};
+//   margin-top: auto;
+// `;

@@ -15,13 +15,12 @@ import LoadingSpinner from './common/LoadingSpinner';
 const Review = ({ selectedId }) => {
   const navigate = useNavigate();
 
+  const accessToken = localStorage.getItem('accessToken');
 
   const userInfo = useSelector((state) => state.authSlice);
   const { isLoading, isError, data: reviews } = useQuery('reviews', getReviews);
   const filteredReviews = reviews?.filter((item) => item.cafeId === selectedId);
-
-  console.log('reviews : ', reviews);
-  console.log('userInfo : ', userInfo);
+  console.log(filteredReviews);
 
   const textArea = useRef();
   const modalRef = useRef();
@@ -69,7 +68,7 @@ const Review = ({ selectedId }) => {
   };
 
   const handleCheckLogin = () => {
-    if (!userInfo.userId) {
+    if (!accessToken) {
       if (window.confirm(`로그인 후 이용 가능합니다. \n로그인 페이지로 이동하시겠습니까?`)) {
         navigate('/login');
         return;
@@ -116,6 +115,11 @@ const Review = ({ selectedId }) => {
 
   // 리뷰 등록 ----------------------------------
   const handleAddReviewButtonClick = async () => {
+    if (!accessToken) {
+      alert('로그인 정보가 유효하지 않습니다.');
+      resetForm();
+      return;
+    }
     if (!reviewContent.trim()) {
       alert('리뷰를 작성해주세요.');
       textArea.current.focus();
@@ -236,6 +240,11 @@ const Review = ({ selectedId }) => {
   };
 
   const handleOptionButtonClick = (id) => {
+    if (!accessToken) {
+      alert('로그인 정보가 유효하지 않습니다.');
+      resetForm();
+      return;
+    }
     setClickedReviewId(id);
   };
 
@@ -255,7 +264,7 @@ const Review = ({ selectedId }) => {
           maxLength={250}
           spellCheck={false}
           onClick={handleCheckLogin}
-          readOnly={!userInfo.userId}
+          readOnly={!accessToken}
         />
         <StFormButtonWrap>
           <StGradeWrap>

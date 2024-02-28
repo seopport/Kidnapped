@@ -10,7 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addUser, deleteUser } from '../redux/modules/userSlice';
 import axios from 'axios';
 import { addScrap, deleteScrap } from '../redux/modules/scrapSlice';
+import CalculateGrade from './common/CalculateGrade';
 import { Link } from 'react-router-dom';
+
 
 const Detail = ({ markers, selectedId }) => {
   const dispatch = useDispatch();
@@ -118,13 +120,15 @@ const Detail = ({ markers, selectedId }) => {
               <StDetailInfoBox>
                 <RiGlobalLine />
                 <StLink to={selectedMarker.placeUrl}> {selectedMarker.placeUrl}</StLink>
+                <CalculateGrade cafeId={selectedId} />
               </StDetailInfoBox>
             </>
           ) : (
-            <Review />
+            <Review selectedId={selectedId} />
           )}
         </>
       </StInfoContainer>
+
     </>
   );
 };
