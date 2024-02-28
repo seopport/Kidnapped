@@ -250,7 +250,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
             }
           })()}
         </StMainCardWrapper>
-
         {!selectedId && (
           <StButtonBox>
             {buttonsNumber.map((buttonNumber, idx) => (
@@ -265,7 +264,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
             ))}
           </StButtonBox>
         )}
-        {/* <Review /> 임시 주석처리  */}
       </StContainer>
       <StToggleButton onClick={toggleHandler} toggle={toggle} />
     </StSideBar>
