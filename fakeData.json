@@ -1,17 +1,4 @@
 {
-  "reviews": [
-    {
-      "id": "434d3773-6695-4e0b-8b57-cfd7dc014c5b",
-      "userId": "cccc",
-      "cafeId": "2138418097",
-      "nickname": "냠냠긋",
-      "content": "d",
-      "grade": 1,
-      "createdAt": "2024.02.29 목요일",
-      "dateForOrder": "2024-02-28T15:38:13.385Z",
-      "profileAvatarColor": "#dfde98"
-    }
-  ],
-
+  "reviews": [],
   "scraps": []
 }
