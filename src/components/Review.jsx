@@ -1,20 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import colors from 'styles/theme';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { GoPencil } from 'react-icons/go';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { FaStar } from 'react-icons/fa';
-import reviewApi from 'api/reviewApi';
+import { getReviews, addReview, modifyReview, deleteReview } from 'api/reviewApi';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
-import { useDispatch, useSelector } from 'react-redux';
-import { addReview, deleteReview, modifyReview, setReview } from '../redux/modules/reviewSlice';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import LoadingSpinner from './common/LoadingSpinner';
 
-const Review = () => {
-  console.log('Revies Compo');
-  const dispatch = useDispatch();
-  const reviews = useSelector((state) => state.reviewSlice.reviews);
+const Review = ({ selectedId }) => {
+  const navigate = useNavigate();
+
+
   const userInfo = useSelector((state) => state.authSlice);
+  const { isLoading, isError, data: reviews } = useQuery('reviews', getReviews);
+  const filteredReviews = reviews?.filter((item) => item.cafeId === selectedId);
 
   console.log('reviews : ', reviews);
   console.log('userInfo : ', userInfo);
@@ -30,16 +34,35 @@ const Review = () => {
   const [reviewId, setReviewId] = useState('');
   const [clickedReviewId, setClickedReviewId] = useState(null);
 
-  useEffect(() => {
-    const loadReviews = async () => {
-      const { data: reviewData } = await reviewApi.get('?_sort=-dateForOrder');
-      dispatch(setReview(reviewData));
-    };
+  // 리액트 쿼리 관련 코드
+  const queryClient = useQueryClient();
+  const mutation = useMutation(addReview, {
+    onSuccess: () => {
+      //무엇을 불러왔던 것을 초기화할것인가 => useQuery에 이름으로 부여한 쿼리 키
+      queryClient.invalidateQueries('reviews');
+    }
+  });
 
-    loadReviews();
-  }, [dispatch]);
+  const updateMutation = useMutation(modifyReview, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('reviews');
+      console.log('수정 성공');
+    }
+  });
 
-  const modificationCompleted = () => {
+  const deleteMutation = useMutation(deleteReview, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('reviews');
+      console.log('삭제 성공');
+    }
+  });
+
+  if (isError) {
+    alert('오류가 발생하였습니다. 잠시 후 다시 시도해주세요.');
+    return;
+  }
+
+  const resetForm = () => {
     setIsModifying(false);
     setReviewContent('');
     setGradeStar(0);
@@ -47,9 +70,13 @@ const Review = () => {
 
   const handleCheckLogin = () => {
     if (!userInfo.userId) {
-      alert('로그인 후 이용 가능합니다.');
-      textArea.current.style.outline = 'none';
-      return;
+      if (window.confirm(`로그인 후 이용 가능합니다. \n로그인 페이지로 이동하시겠습니까?`)) {
+        navigate('/login');
+        return;
+      } else {
+        textArea.current.style.outline = 'none';
+        return;
+      }
     }
   };
 
@@ -57,9 +84,13 @@ const Review = () => {
     return date < 10 ? '0' + date : date.toString();
   };
 
-  //이건 Star라는 컴포넌트
-  // 생성된 Star 컴포넌트가 FaStar 컴포넌트를 만들어낸다
-  //생성된 별 아이콘을 클릭했을때 handleStarIconClick가 실행되고 그 클릭된 별아이콘의 인덱스값으로 gradeStar가 set됨
+  const validateAccess = (userId) => {
+    if (userId === userInfo.userId) return true;
+  };
+
+  // EvaluateStar 컴포넌트
+  // EvaluateStar 컴포넌트가 FaStar 컴포넌트를 만들어낸다
+  // 생성된 별 아이콘을 클릭했을때 handleStarIconClick가 실행되고 그 클릭된 별아이콘의 인덱스값으로 gradeStar가 set됨
   const EvaluateStar = ({ selected = false, handleStarIconClick }) => {
     return <FaStar size={16} color={selected ? colors.starColor : 'grey'} onClick={handleStarIconClick} />;
   };
@@ -118,7 +149,7 @@ const Review = () => {
     const newReview = {
       id: crypto.randomUUID(),
       userId: userInfo.userId,
-      cafeId: 'ddd',
+      cafeId: selectedId,
       nickname: userInfo.nickname,
       content: reviewContent,
       grade: gradeStar,
@@ -130,20 +161,14 @@ const Review = () => {
     console.log(newReview);
 
     try {
-      await reviewApi.post('', newReview);
-      dispatch(addReview(newReview));
+      mutation.mutate(newReview);
 
-      setReviewContent('');
-      setGradeStar(0);
+      resetForm();
     } catch (error) {
       alert('오류가 발생했습니다. 잠시후 다시 시도해주세요.');
 
       console.log(error);
     }
-  };
-
-  const validateAccess = (userId) => {
-    if (userId === userInfo.userId) return true;
   };
 
   // 리뷰 삭제 ----------------------------------
@@ -154,12 +179,10 @@ const Review = () => {
     }
     if (window.confirm('리뷰를 삭제하시겠습니끼?')) {
       try {
-        modificationCompleted();
-        await reviewApi.delete(`/${reviewId}`);
-        dispatch(deleteReview(reviewId));
+        deleteMutation.mutate(reviewId);
+        resetForm();
       } catch (error) {
         alert('오류가 발생했습니다. 잠시후 다시 시도해주세요.');
-
         console.log(error);
       }
     } else {
@@ -191,11 +214,9 @@ const Review = () => {
     const newContent = { content: reviewContent, grade: gradeStar };
 
     try {
-      await reviewApi.patch(`/${reviewId}`, newContent);
-      dispatch(modifyReview({ reviewId, newContent }));
-
+      updateMutation.mutate({ reviewId, newContent });
       alert('수정이 완료되었습니다.');
-      modificationCompleted();
+      resetForm();
     } catch (error) {
       alert('오류가 발생했습니다. 잠시후 다시 시도해주세요.');
       console.log(error);
@@ -205,11 +226,11 @@ const Review = () => {
   // 리뷰 수정 취소
   const handleCancelButtonClick = async () => {
     if (reviewContent === modifiedReviewContent && gradeStar === modifiedGradeStar) {
-      modificationCompleted();
+      resetForm();
       return;
     }
     if (window.confirm('수정을 취소하시겠습니까?')) {
-      modificationCompleted();
+      resetForm();
     }
     return;
   };
@@ -224,6 +245,7 @@ const Review = () => {
 
   return (
     <StReviewTapContainer>
+      {/* 리뷰 작성 칸 */}
       <StReviewFormContainer>
         <StReviewTextArea
           ref={textArea}
@@ -239,9 +261,6 @@ const Review = () => {
           <StGradeWrap>
             <span style={{ marginRight: '3px' }}>평점</span>
             <StStarContainer style={{ marginRight: '3px' }}>
-              {/* Star라는 컴포넌트 5개가 만들어짐 */}
-              {/* selected 프롭스는 gradeStar가 index보다 크면  true가 됨 */}
-              {/* handleStarIconClick 함수 프롭스도 넘겨줌 */}
               {[1, 2, 3, 4, 5].map((idx) => {
                 return (
                   <EvaluateStar
@@ -267,19 +286,20 @@ const Review = () => {
             )}
           </div>
         </StFormButtonWrap>
+        {isLoading && <LoadingSpinner />}
       </StReviewFormContainer>
 
-      {/* 리뷰댓글 */}
-      {reviews?.length === 0 && (
+      {/* 리뷰 댓글 부분 */}
+
+      {filteredReviews?.length === 0 && (
         <div style={{ fontSize: '14px', textAlign: 'center' }}>
           작성된 리뷰가 없습니다.
           <br />
           <br /> 첫 번째 리뷰를 남겨보세요!
         </div>
       )}
-      {/* reviews.filter((item) => item.cafeId === reviews.cafeId) */}
-      {/* 아니면 get으로 가져올때 search쿼리로 그 카페 리뷰만 가져오기 */}
-      {reviews?.map((item, idx) => {
+
+      {filteredReviews?.map((item) => {
         return (
           <StReviewContainer key={item.id} onClick={handleModalClose} $reviewLength={reviews.length}>
             <StReviewInfoWrap>
@@ -303,7 +323,7 @@ const Review = () => {
               </StReviewProfileWrap>
             </StReviewInfoWrap>
 
-            {/* 모달!!!!!!!!!!!!!--------- */}
+            {/* 수정, 삭제 모달창 */}
             {clickedReviewId === item.id && (
               <StOptionsMenuModal ref={modalRef}>
                 {/* 수정 */}
@@ -326,7 +346,7 @@ const Review = () => {
           </StReviewContainer>
         );
       })}
-      <StBottomLine $reviewLength={reviews.length} />
+      {!isLoading && <StBottomLine $reviewLength={filteredReviews?.length} />}
     </StReviewTapContainer>
   );
 };

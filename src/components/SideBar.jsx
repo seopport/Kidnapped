@@ -3,25 +3,37 @@ import styled, { css } from 'styled-components';
 import colors from 'styles/theme';
 import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
-import Review from './Review';
 import Detail from './Detail';
 import left from 'assets/left.png';
 import right from 'assets/right.png';
 
-const SideBar = ({ markers, setMarkers, mapPagination }) => {
+const SideBar = ({ markers, setMarkers, mapPagination, map }) => {
   const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+
   const [toggle, setToggle] = useState(true);
 
   const toggleHandler = () => {
     setToggle(!toggle);
   };
 
+
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
+    const selectedMarker = markers.find((marker) => marker.id === id);
+
+    if (selectedMarker && map) {
+      // 선택한 마커의 위치로 지도를 이동
+      const { lat, lng } = selectedMarker.position;
+
+      map.setCenter(new kakao.maps.LatLng(lat, lng));
+      map.setLevel(3); // 줌 레벨 : 3
+      map.setCenter(new kakao.maps.LatLng(selectedMarker.position.lat, selectedMarker.position.lng)); // 마커 중심 좌표로 이동
+    }
+
     setSelectedId(id);
   };
 
@@ -313,6 +325,7 @@ const StImageWrapper = styled.div`
     object-fit: cover;
   }
 `;
+
 export const StButtonBox = styled.div`
   display: flex;
   gap: 10px;

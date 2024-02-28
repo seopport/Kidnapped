@@ -9,12 +9,21 @@ const HomePage = () => {
   const [markers, setMarkers] = useState([]);
   const [mapPagination, setMapPagination] = useState(null);
 
+  const [map, setMap] = useState();
+
+
   return (
     <div>
       <StContainer>
         <Header />
-        <SideBar markers={markers} setMarkers={setMarkers} mapPagination={mapPagination} />
-        <MapLoader markers={markers} setMarkers={setMarkers} setMapPagination={setMapPagination} />
+        <SideBar markers={markers} setMarkers={setMarkers} mapPagination={mapPagination} map={map} />
+        <MapLoader
+          markers={markers}
+          setMarkers={setMarkers}
+          setMapPagination={setMapPagination}
+          map={map}
+          setMap={setMap}
+        />
       </StContainer>
     </div>
   );
