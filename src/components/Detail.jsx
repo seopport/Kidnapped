@@ -103,12 +103,8 @@ const Detail = ({ markers, selectedId }) => {
         {/* {selectedMarker && <div>{selectedMarker.id}</div>} */}
         <StPlaceName> {selectedMarker.placeName}</StPlaceName>
         <StButtonBox>
-          <button toggleMenu={toggleMenu} onClick={() => toggleMenuHandler(true)}>
-            정보
-          </button>
-          <button toggleMenu={toggleMenu} onClick={() => toggleMenuHandler(false)}>
-            리뷰
-          </button>
+          <button onClick={() => toggleMenuHandler(true)}>정보</button>
+          <button onClick={() => toggleMenuHandler(false)}>리뷰</button>
         </StButtonBox>
         <>
           {toggleMenu ? (
