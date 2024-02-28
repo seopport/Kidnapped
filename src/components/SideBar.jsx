@@ -178,7 +178,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
         <StSearchWrapper>
           <StSearchForm onSubmit={(e) => e.preventDefault()}>
             <input
-              onSubmit="return false"
               type="text"
               placeholder="지역 검색"
               onChange={(e) => setSearchTerm(e.target.value)}
