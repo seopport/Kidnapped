@@ -1,3 +1,7 @@
+import { MdLocationOn } from 'react-icons/md';
+import { MdLocalPhone } from 'react-icons/md';
+import { RiGlobalLine } from 'react-icons/ri';
+import styled from 'styled-components';
 import React, { useDebugValue, useEffect, useState } from 'react';
 import Review from './Review';
 import { FaBookmark } from 'react-icons/fa';
@@ -79,12 +83,38 @@ const Detail = ({ markers, selectedId }) => {
   }
 
   const selectedMarker = markers.find((marker) => marker.id === selectedId);
+
+  const [toggleMenu, setToggleMenu] = useState(true);
+
+  const toggleMenuHandler = (param) => {
+    setToggleMenu(param);
+  };
+
   return (
     <>
       <FaBookmark onClick={handleBookmarkClick} color={isBookmarked ? `${colors.starColor}` : "white"}></FaBookmark>
       {selectedMarker && <div>{selectedMarker.id}</div>}
-
-      <Review selectedId={selectedId} />
+      {selectedMarker.placeName}
+      <button onClick={() => toggleMenuHandler(true)}>정보</button>
+      <button onClick={() => toggleMenuHandler(false)}>리뷰</button>
+      {toggleMenu ? (
+        <>
+          <div>
+            <MdLocationOn />
+            {selectedMarker.roadAddress}
+          </div>
+          <div>
+            <MdLocalPhone />
+            {selectedMarker.phoneNumber}
+          </div>
+          <div>
+            <RiGlobalLine />
+            {selectedMarker.placeUrl}
+          </div>
+        </>
+      ) : (
+        <Review />
+      )}
     </>
   );
 };

@@ -15,9 +15,13 @@ import LoadingSpinner from './common/LoadingSpinner';
 const Review = ({ selectedId }) => {
   const navigate = useNavigate();
 
+
   const userInfo = useSelector((state) => state.authSlice);
   const { isLoading, isError, data: reviews } = useQuery('reviews', getReviews);
   const filteredReviews = reviews?.filter((item) => item.cafeId === selectedId);
+
+  console.log('reviews : ', reviews);
+  console.log('userInfo : ', userInfo);
 
   const textArea = useRef();
   const modalRef = useRef();
