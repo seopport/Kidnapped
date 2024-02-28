@@ -51,9 +51,69 @@
       "nickname": "bbbb",
       "content": "리뷰 추가",
       "grade": 1,
-      "createdAt": "2024.02.28 수요일",
-      "dateForOrder": "2024-02-28T02:33:29.237Z",
-      "profileAvatarColor": "#cea69e"
+      "createdAt": "2024.02.26 월요일",
+      "dateForOrder": "2024-02-26T12:51:06.020Z",
+      "profileAvatarColor": "#82b7f4"
+    },
+    {
+      "id": "0085b230-b31c-4c23-a04b-5766950bc76a",
+      "userId": "seoyeon",
+      "cafeId": "ddd",
+      "nickname": "서연이ㄷㄷ",
+      "content": "ㅇㅇ",
+      "grade": 4,
+      "createdAt": "2024.02.27 화요일",
+      "dateForOrder": "2024-02-27T14:00:52.051Z",
+      "profileAvatarColor": "#bf9c9b"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "userId": "ddd"
+    },
+    {
+      "id": "44ff",
+      "userId": "seoyeon"
+    },
+    {
+      "id": "4f19",
+      "userId": "seoyeon"
+    },
+    {
+      "id": "3015",
+      "userId": "seoyeon"
+    },
+    {
+      "id": "2aee",
+      "userId": "seoyeon"
+    }
+  ],
+  "scraps": [
+    {
+      "id": "1",
+      "scrapId": "124356",
+      "userId": "ddd"
+    },
+    {
+      "id": "3638",
+      "userId": "seoyeon",
+      "scrapId": "377197835"
+    },
+    {
+      "id": "8c08",
+      "userId": "seoyeon",
+      "scrapId": "1732671994"
+    },
+    {
+      "id": "9806",
+      "userId": "seoyeon",
+      "scrapId": "1825220691"
+    },
+    {
+      "id": "efdb",
+      "userId": "seoyeon",
+      "scrapId": "377197835"
     }
   ]
 }

@@ -14,4 +14,6 @@ export const StLayoutBox = styled.div`
     height: ${props => props.height ? props.height : "100px"};
     padding: ${props => props.padding ? props.padding : "0"};
     margin: ${props => props.margin ? props.margin : "0"};
+    gap: ${props => props.gap ? props.gap : "0"};
+
 `
