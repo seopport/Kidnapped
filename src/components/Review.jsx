@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import colors from 'styles/theme';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
@@ -10,7 +10,6 @@ import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import Loading from './common/LoadingSpinner';
 import LoadingSpinner from './common/LoadingSpinner';
 
 const Review = ({ selectedId }) => {
