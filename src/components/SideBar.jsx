@@ -389,7 +389,7 @@ const StMainCardWrapper = styled.div`
   gap: 20px;
   overflow-y: auto;
   /* max-height: calc(100vh - 68px - 47px); */
-  height: 45rem;
+  height: 42rem;
   max-height: calc(100vh - 68px - 47px);
 `;
 
