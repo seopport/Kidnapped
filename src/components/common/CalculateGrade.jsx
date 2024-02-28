@@ -48,7 +48,7 @@ export const StGradeWrap = styled.div`
   align-items: flex-end;
   font-size: 14px;
   color: ${colors.mainTextColor};
-  margin-top: 100px;
+  margin-top: auto;
   margin-right: 30px;
 `;
 
