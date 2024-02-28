@@ -56,13 +56,20 @@ const LoginPage = () => {
             <StFormSubTitle>{isLoginMode ? '로그인' : '회원가입'}</StFormSubTitle>
             {isLoginMode ? (
               <>
-                <StLoginInput name="id" value={id} onChange={onChangeHandler} placeholder="아이디" />
-                <StLoginInput name="password" value={password} onChange={onChangeHandler} placeholder="비밀번호" />
+                <StLoginInput name="id" type="text" value={id} onChange={onChangeHandler} placeholder="아이디" />
+                <StLoginInput
+                  name="password"
+                  type="password"
+                  value={password}
+                  onChange={onChangeHandler}
+                  placeholder="비밀번호"
+                />
               </>
             ) : (
               <>
                 <StLoginInput
                   name="id"
+                  type="text"
                   value={id}
                   onChange={onChangeHandler}
                   placeholder="아이디 (4자 이상)"
@@ -71,6 +78,7 @@ const LoginPage = () => {
 
                 <StLoginInput
                   name="password"
+                  type="password"
                   value={password}
                   onChange={onChangeHandler}
                   placeholder="비밀번호 (4자 이상)"
