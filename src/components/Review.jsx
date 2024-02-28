@@ -20,7 +20,6 @@ const Review = ({ selectedId }) => {
   const userInfo = useSelector((state) => state.authSlice);
   const { isLoading, isError, data: reviews } = useQuery('reviews', getReviews);
   const filteredReviews = reviews?.filter((item) => item.cafeId === selectedId);
-  console.log(filteredReviews);
 
   const textArea = useRef();
   const modalRef = useRef();
@@ -45,14 +44,12 @@ const Review = ({ selectedId }) => {
   const updateMutation = useMutation(modifyReview, {
     onSuccess: () => {
       queryClient.invalidateQueries('reviews');
-      console.log('수정 성공');
     }
   });
 
   const deleteMutation = useMutation(deleteReview, {
     onSuccess: () => {
       queryClient.invalidateQueries('reviews');
-      console.log('삭제 성공');
     }
   });
 
@@ -161,8 +158,6 @@ const Review = ({ selectedId }) => {
       dateForOrder,
       profileAvatarColor
     };
-
-    console.log(newReview);
 
     try {
       mutation.mutate(newReview);

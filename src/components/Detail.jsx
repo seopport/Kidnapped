@@ -7,7 +7,6 @@ import Review from './Review';
 import { FaBookmark } from 'react-icons/fa';
 import colors from 'styles/theme';
 import { useDispatch, useSelector } from 'react-redux';
-import { addUser, deleteUser } from '../redux/modules/userSlice';
 import axios from 'axios';
 import { addScrap, deleteScrap } from '../redux/modules/scrapSlice';
 import CalculateGrade from './common/CalculateGrade';
@@ -29,55 +28,75 @@ const Detail = ({ markers, selectedId }) => {
       return !prevIsBookmarked;
     });
   };
+  const [serverScrapId, setServerScrapId] = useState(null); // 스크랩 서버에서 받은 고유 아이디
 
+  // 스크랩 토글 유지
   useEffect(() => {
-    if (isBookmarked) {
-      addScrapAndUser();
-    } else {
-      if (serverScrapId) {
-        // serverId가 존재할 때만 삭제 요청 보내기
-        deleteScrapAndUser();
+    const checkScrapStatus = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4000/scraps`);
+        // 현재 사용자 아이디가 들어있는 데이터
+        const userScrapList = response.data.filter((item) => item.userId === userId);
+
+        // {scrapId : id} 객체 생성
+        const scrapIdToServerIdMap = {};
+        userScrapList.forEach((item) => {
+          scrapIdToServerIdMap[item.scrapId] = item.id;
+        });
+        // scrapId === selectedId 인 id 가져오기
+        if (scrapIdToServerIdMap[selectedId]) {
+          const serverScrapId = scrapIdToServerIdMap[selectedId];
+          setServerScrapId(serverScrapId);
+          setIsBookmarked(true);
+        } else {
+          setIsBookmarked(false);
+        }
+      } catch (error) {
+        console.error('Error checking scrap status:', error);
       }
+    };
+    checkScrapStatus();
+  }, [selectedId, userId]);
+
+  // 스크랩 토글 ---------------------------------
+  const handleBookmarkClick = async () => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      alert('스크랩 기능은 로그인 후 이용하실 수 있습니다.');
+      return;
     }
-  }, [isBookmarked]);
-
-  // 유저 추가 스크랩 추가----------------------------------
-  const addScrapAndUser = async () => {
     try {
-      // 유저 추가
-      const userResponse = await axios.post('http://localhost:4000/users', { userId });
-      dispatch(addUser({ userId }));
+      if (isBookmarked) {
+        await deleteScraps();
+      } else {
+        await addScraps();
+      }
+      setIsBookmarked(!isBookmarked);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
 
-      // 서버에서 생성된 고유한 유저 ID 가져오기
-      const serverUserId = userResponse.data.id;
-      SetServerUserId(serverUserId);
-      console.log(serverUserId);
-
-      // 스크랩 추가
+  // 스크랩 추가----------------------------------
+  const addScraps = async () => {
+    try {
       const newScrap = {
         userId: userId,
         scrapId: selectedId
       };
       const scrapResponse = await axios.post('http://localhost:4000/scraps', newScrap);
       dispatch(addScrap(newScrap));
-
-      // 서버에서 생성된 고유한 스크랩 ID 가져오기
       const serverScrapId = scrapResponse.data.id;
-      SetServerScrapId(serverScrapId);
-      console.log(serverScrapId);
+      setServerScrapId(serverScrapId);
     } catch (error) {
       alert('오류가 발생했습니다');
       console.log(error);
     }
   };
 
-  // 유저 삭제 스크랩 삭제----------------------------------
-  const deleteScrapAndUser = async () => {
-    // 유저 삭제
+  // 스크랩 삭제----------------------------------
+  const deleteScraps = async () => {
     try {
-      await axios.delete(`http://localhost:4000/users/${serverUserId}`);
-      dispatch(deleteUser(userId));
-      // 스크랩 삭제
       await axios.delete(`http://localhost:4000/scraps/${serverScrapId}`);
       dispatch(deleteScrap());
     } catch (error) {
