@@ -41,7 +41,10 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
   };
 
   const handleBookmarkClick = () => {
-    setIsBookmarked(!isBookmarked);
+    setIsBookmarked(prevIsBookmarked => {
+      console.log(!prevIsBookmarked);
+      return !prevIsBookmarked;
+    });
   };
 
   // 검색 함수
@@ -116,9 +119,11 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
           {selectedId ? (
             <Detail markers={markers} selectedId={selectedId} />
           ) : (
-            markers.map((item) => {
-              return (
-                <>
+            isBookmarked ? (
+              <div>북마크 항목을 보여줘</div>
+            ) : (
+              markers.map((item) => (
+                <React.Fragment key={item.id}>
                   <StMainCardItem onClick={() => handleCardItemClick(item.id)}>
                     <StMainCardInfoAndImage>
                       <StMainCardInfo>
@@ -127,16 +132,14 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
                         <p>{item.phoneNumber}</p>
                       </StMainCardInfo>
                       <StImageWrapper>
-                        <img src='https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg' alt='방탈출 카페 사진'></img>
+                        <img src='https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg' alt='방탈출 카페 사진' />
                       </StImageWrapper>
                     </StMainCardInfoAndImage>
                   </StMainCardItem>
-                </>
-              )
-            }
+                </React.Fragment>
+              ))
             )
-          )
-          }
+          )}
         </StMainCardWrapper>
         {!selectedId && (
           <StButtonBox>
@@ -153,7 +156,7 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
         )}
         {/* <Review /> 임시 주석처리  */}
       </StContainer>
-    </StSideBar>
+    </StSideBar >
   );
 };
 
