@@ -1,48 +1,59 @@
 {
   "reviews": [
     {
-      "id": "00be946d-7c84-4fcf-9c2c-81037198da5e",
-      "userId": "bbbb",
-      "cafeId": "377197835",
-      "nickname": "bbbb",
-      "content": "dsf",
-      "grade": 1,
-      "createdAt": "2024.02.27 화요일",
-      "dateForOrder": "2024-02-27T11:52:14.293Z",
-      "profileAvatarColor": "#e3bea7"
-    },
-    {
-      "id": "42f11db6-d690-40e2-a5b8-5d8731b1e0c2",
-      "userId": "bbbb",
-      "cafeId": "377197835",
-      "nickname": "bbbb",
-      "content": "ㅇㄴㄹㅇ",
-      "grade": 3,
-      "createdAt": "2024.02.27 화요일",
-      "dateForOrder": "2024-02-27T12:23:17.093Z",
-      "profileAvatarColor": "#e4abb6"
-    },
-    {
-      "id": "421d5639-edd4-452c-bb3d-f25ac75fcc21",
-      "userId": "bbbb",
-      "cafeId": "377197835",
-      "nickname": "bbbb",
-      "content": "이거추가함ㅁㄴ",
-      "grade": 5,
-      "createdAt": "2024.02.27 화요일",
-      "dateForOrder": "2024-02-27T12:23:26.966Z",
-      "profileAvatarColor": "#dc9085"
-    },
-    {
       "id": "4406c3e9-7c7c-49cf-8e16-56d9813c9bce",
       "userId": "bbbb",
       "cafeId": "377197835",
       "nickname": "bbbb",
       "content": "잘되는거맞죠??그쵸??",
-      "grade": 3,
+      "grade": 1,
       "createdAt": "2024.02.27 화요일",
       "dateForOrder": "2024-02-27T13:19:19.182Z",
       "profileAvatarColor": "#c6c6a8"
+    },
+    {
+      "id": "0a9b0e68-5f8c-49b9-88fa-329e75b0f0b5",
+      "userId": "bbbb",
+      "cafeId": "377197835",
+      "nickname": "bbbb",
+      "content": "ㅇㄴㄹ",
+      "grade": 5,
+      "createdAt": "2024.02.27 화요일",
+      "dateForOrder": "2024-02-27T13:24:00.352Z",
+      "profileAvatarColor": "#b7d9c3"
+    },
+    {
+      "id": "2ee70694-6465-4e07-b810-70889955ae33",
+      "userId": "bbbb",
+      "cafeId": "377197835",
+      "nickname": "bbbb",
+      "content": "ㄴㅇㄹㄴㅇ",
+      "grade": 2,
+      "createdAt": "2024.02.27 화요일",
+      "dateForOrder": "2024-02-27T13:24:03.121Z",
+      "profileAvatarColor": "#eeb99d"
+    },
+    {
+      "id": "3af9b4ea-6730-4c77-835d-3b3c3f920369",
+      "userId": "bbbb",
+      "cafeId": "377197835",
+      "nickname": "bbbb",
+      "content": "ㅀㄴㅇㄹ\n\n",
+      "grade": 2,
+      "createdAt": "2024.02.27 화요일",
+      "dateForOrder": "2024-02-27T13:24:19.935Z",
+      "profileAvatarColor": "#cdc6d0"
+    },
+    {
+      "id": "857166c3-446b-46cb-87af-27d42a89974b",
+      "userId": "bbbb",
+      "cafeId": "377197835",
+      "nickname": "bbbb",
+      "content": "리뷰 추가",
+      "grade": 1,
+      "createdAt": "2024.02.28 수요일",
+      "dateForOrder": "2024-02-28T02:33:29.237Z",
+      "profileAvatarColor": "#cea69e"
     }
   ]
 }
