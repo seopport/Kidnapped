@@ -6,7 +6,7 @@ import { FaBookmark } from 'react-icons/fa';
 import Review from './Review';
 import Detail from './Detail';
 
-const SideBar = ({ markers, setMarkers, mapPagination, map, setMap }) => {
+const SideBar = ({ markers, setMarkers, mapPagination, map }) => {
   const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
