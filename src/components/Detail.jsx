@@ -232,13 +232,13 @@ const StHrInfo = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 10px;
-  border-bottom: 3px solid ${(props) => (props.toggleMenu === 'info' ? '#4F4F4F' : '#8B8B8B')};
+  border-bottom: 3px solid ${(props) => (props.toggleMenu === 'info' ? '#3396FF' : '#8B8B8B')};
 `;
 const StHrReview = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 10px;
-  border-bottom: 3px solid ${(props) => (props.toggleMenu === 'info' ? '#8B8B8B' : '#4F4F4F')};
+  border-bottom: 3px solid ${(props) => (props.toggleMenu === 'info' ? '#8B8B8B' : '#3396FF')};
 `;
 
 const StDetailInfoBox = styled.div`
