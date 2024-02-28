@@ -1,7 +1,6 @@
 import { getReviews } from 'api/reviewApi';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import LoadingSpinner from './LoadingSpinner';
 
 const { FaStar } = require('react-icons/fa');
 const { default: colors } = require('styles/theme');

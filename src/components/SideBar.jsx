@@ -8,9 +8,6 @@ import left from 'assets/left.png';
 import right from 'assets/right.png';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { useQuery } from 'react-query';
-import { getReviews } from 'api/reviewApi';
-import { FaStar } from 'react-icons/fa';
 import CalculateGrade from './common/CalculateGrade';
 
 const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) => {
