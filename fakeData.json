@@ -78,40 +78,5 @@
       "profileAvatarColor": "#96e7e6"
     }
   ],
-  "users": [
-    {
-      "id": "1",
-      "userId": "ddd"
-    },
-    {
-      "id": "44ff",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "4f19",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "3015",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "2aee",
-      "userId": "seoyeon"
-    },
-    {
-      "userId": null,
-      "id": "UIka-ZU"
-    },
-    {
-      "id": "3638",
-      "userId": "seoyeon",
-      "scrapId": "377197835"
-    },
-    {
-      "id": "8c08",
-      "userId": "seoyeon",
-      "scrapId": "929088523"
-    }
-  ]
+  "scraps": []
 }

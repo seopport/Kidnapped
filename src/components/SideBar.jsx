@@ -52,6 +52,7 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
     setToggle(!toggle);
   };
 
+
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
     const selectedMarker = markers.find((marker) => marker.id === id);
@@ -215,7 +216,7 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
                         src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
                         alt="방탈출 카페 사진"
                       />
-                    </StImageWrapper> */}
+</StImageWrapper> */}
                     <StImageWrapper key={index}>
                       <img src={images[index % 4]} alt="방탈출 카페 사진" />
                     </StImageWrapper>
@@ -402,7 +403,7 @@ const StMainCardInfo = styled.div`
 
 const StImageWrapper = styled.div`
   overflow: hidden;
-  width: 150px;
+width: 150px;
   height: 100px;
   & img {
     width: 100%;
