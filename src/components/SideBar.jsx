@@ -36,12 +36,10 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
     try {
       const response = await axios.get('http://localhost:4000/scraps');
       const scrapId = response.data.map((item) => item.scrapId);
-      console.log(scrapId);
 
       const userScrapList = response.data.filter((item) => item.userId === userId).map((item) => item.scrapId);
 
       setUserScrapList(userScrapList);
-      console.log(userScrapList);
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +66,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
       map.setCenter(new kakao.maps.LatLng(selectedMarker.position.lat, selectedMarker.position.lng)); // 마커 중심 좌표로 이동
     }
     setSelectedId(id);
-    console.log(userId);
   };
 
   // 키보드 enter 시 검색
@@ -103,7 +100,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
     }
 
     setIsBookmarked((prevIsBookmarked) => {
-      console.log(!prevIsBookmarked);
       return !prevIsBookmarked;
     });
 
@@ -119,7 +115,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
     const ps = new kakao.maps.services.Places();
 
     ps.keywordSearch(`${searchTerm} 방탈출`, (data, status, pagination) => {
-      console.log(data);
       setIsBookmarked(false);
       if (status === kakao.maps.services.Status.OK) {
         const bounds = new kakao.maps.LatLngBounds();
@@ -159,7 +154,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
         const total = pagination.last;
         const buttonNumber = Array.from({ length: total }, (_, index) => index + 1);
         setButtonsNumber(buttonNumber);
-        console.log(buttonNumber);
       }
     });
   };
