@@ -8,7 +8,9 @@ import left from 'assets/left.png';
 import right from 'assets/right.png';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-
+import { useQuery } from 'react-query';
+import { getReviews } from 'api/reviewApi';
+import { FaStar } from 'react-icons/fa';
 
 const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) => {
   const { userId } = useSelector((state) => state.authSlice);
@@ -18,6 +20,12 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [userScrapList, setUserScrapList] = useState([]);
+
+  const { data: reviews } = useQuery('reviews', getReviews);
+  // 리뷰를 다 바ㅏㄷ아옴
+  // 리뷰에서 map돌면서 각 카페 아이디와 일치하는 grade 배열 생성
+  // 그 카페 아이디배열의
+  reviews?.filter((item) => item.cafeId === '377197835');
 
   // 현재 사용자가 스크랩한 방탈출 카페 아이디를 가져오는 함수
   const getScrapList = async () => {
@@ -40,7 +48,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
   const toggleHandler = () => {
     setToggle(!toggle);
   };
-
 
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
@@ -133,6 +140,30 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
     });
   };
 
+  const CalculateGrade = ({ cafeId }) => {
+    // map return부분에서 받아온 각 cafeId와 리뷰데이터에서 cafeId가 일치하는 부분의 별점 배열을 생성한다.
+    const cafeGrades = reviews?.filter((item) => item.cafeId === cafeId).map((item) => item.grade);
+
+    // 별점 배열의 평균 구하기
+    const gradeAverage =
+      cafeGrades.reduce((acc, cur) => {
+        return acc + cur;
+      }, 0) / cafeGrades.length;
+
+    // 소수점 반올림
+    const roundedGradeAverage = gradeAverage.toFixed(1);
+
+    // 리뷰가 없으면 gradeAverage = Nan = false
+    return gradeAverage ? (
+      <StGradeWrap>
+        <FaStar color={colors.starColor} style={{ marginRight: '5px' }} />
+        {roundedGradeAverage}
+      </StGradeWrap>
+    ) : (
+      <StGradeWrap style={{ fontSize: '12px' }}>등록된 평점이 없습니다. 😕</StGradeWrap>
+    );
+  };
+
   return (
     <StSideBar toggle={toggle}>
       <StContainer>
@@ -168,6 +199,8 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
                       <h1>{item.placeName}</h1>
                       <p>{item.roadAddress}</p>
                       <p>{item.phoneNumber}</p>
+                      {/* 평점 */}
+                      <CalculateGrade cafeId={item.id} />
                     </StMainCardInfo>
                     <StImageWrapper>
                       <img
@@ -344,7 +377,7 @@ const StMainCardInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 20px;
+  gap: 10px;
   & h1 {
     font-weight: 700;
     font-size: 16px;
@@ -395,4 +428,12 @@ export const StPageButton = styled.button`
   &:hover {
     background: ${colors.starColor};
   }
+`;
+
+export const StGradeWrap = styled.div`
+  display: flex;
+  align-items: flex-end;
+  font-size: 14px;
+  color: ${colors.mainTextColor};
+  margin-top: auto;
 `;

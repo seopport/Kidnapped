@@ -21,7 +21,7 @@ const Detail = ({ markers, selectedId }) => {
 
   // 스크랩 토글 ---------------------------------
   const handleBookmarkClick = () => {
-    setIsBookmarked(prevIsBookmarked => {
+    setIsBookmarked((prevIsBookmarked) => {
       console.log(!prevIsBookmarked);
       return !prevIsBookmarked;
     });
@@ -29,9 +29,10 @@ const Detail = ({ markers, selectedId }) => {
 
   useEffect(() => {
     if (isBookmarked) {
-      addScrapAndUser()
+      addScrapAndUser();
     } else {
-      if (serverScrapId) { // serverId가 존재할 때만 삭제 요청 보내기
+      if (serverScrapId) {
+        // serverId가 존재할 때만 삭제 요청 보내기
         deleteScrapAndUser();
       }
     }
@@ -42,45 +43,44 @@ const Detail = ({ markers, selectedId }) => {
     try {
       // 유저 추가
       const userResponse = await axios.post('http://localhost:4000/users', { userId });
-      dispatch(addUser({ userId }))
+      dispatch(addUser({ userId }));
 
       // 서버에서 생성된 고유한 유저 ID 가져오기
       const serverUserId = userResponse.data.id;
-      SetServerUserId(serverUserId)
-      console.log(serverUserId)
+      SetServerUserId(serverUserId);
+      console.log(serverUserId);
 
       // 스크랩 추가
       const newScrap = {
         userId: userId,
         scrapId: selectedId
-      }
+      };
       const scrapResponse = await axios.post('http://localhost:4000/scraps', newScrap);
-      dispatch(addScrap(newScrap))
+      dispatch(addScrap(newScrap));
 
       // 서버에서 생성된 고유한 스크랩 ID 가져오기
       const serverScrapId = scrapResponse.data.id;
       SetServerScrapId(serverScrapId);
-      console.log(serverScrapId)
-
+      console.log(serverScrapId);
     } catch (error) {
-      alert("오류가 발생했습니다")
-      console.log(error)
+      alert('오류가 발생했습니다');
+      console.log(error);
     }
-  }
+  };
 
   // 유저 삭제 스크랩 삭제----------------------------------
   const deleteScrapAndUser = async () => {
     // 유저 삭제
     try {
       await axios.delete(`http://localhost:4000/users/${serverUserId}`);
-      dispatch(deleteUser(userId))
+      dispatch(deleteUser(userId));
       // 스크랩 삭제
       await axios.delete(`http://localhost:4000/scraps/${serverScrapId}`);
       dispatch(deleteScrap());
     } catch (error) {
-      console.log("error", error)
+      console.log('error', error);
     }
-  }
+  };
 
   const selectedMarker = markers.find((marker) => marker.id === selectedId);
 
@@ -92,7 +92,7 @@ const Detail = ({ markers, selectedId }) => {
 
   return (
     <>
-      <FaBookmark onClick={handleBookmarkClick} color={isBookmarked ? `${colors.starColor}` : "white"}></FaBookmark>
+      <FaBookmark onClick={handleBookmarkClick} color={isBookmarked ? `${colors.starColor}` : 'white'}></FaBookmark>
       {selectedMarker && <div>{selectedMarker.id}</div>}
       {selectedMarker.placeName}
       <button onClick={() => toggleMenuHandler(true)}>정보</button>
@@ -113,7 +113,7 @@ const Detail = ({ markers, selectedId }) => {
           </div>
         </>
       ) : (
-        <Review />
+        <Review selectedId={selectedId} />
       )}
     </>
   );
