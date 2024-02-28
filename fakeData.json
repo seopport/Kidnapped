@@ -144,104 +144,26 @@
       "profileAvatarColor": "#bf9c9b"
     }
   ],
+  "users": [
+    {
+      "id": "1",
+      "userId": "ddd"
+    },
+    {
+      "id": "363c",
+      "userId": "seoyeon"
+    }
+  ],
   "scraps": [
     {
-      "id": "f7d8",
-      "userId": "seoyeon",
-      "scrapLists": [
-        "377197835"
-      ]
+      "id": "1",
+      "scrapId": "124356",
+      "userId": "ddd"
     },
     {
-      "id": "8fe0",
+      "id": "172e",
       "userId": "seoyeon",
-      "scrapLists": [
-        "377197835"
-      ]
-    },
-    {
-      "id": "b5cd",
-      "userId": "seoyeon",
-      "scrapLists": [
-        "2024880532"
-      ]
-    },
-    {
-      "id": "c3ce",
-      "userId": "seoyeon",
-      "scrapLists": [
-        "2024880532"
-      ]
-    },
-    {
-      "id": "7153",
-      "userId": "seoyeon",
-      "scrapLists": [
-        "2024880532"
-      ]
-    },
-    {
-      "id": "5bb9",
-      "userId": "seoyeon",
-      "scrapLists": [
-        "2024880532"
-      ]
-    },
-    {
-      "id": "eba2",
-      "userId": "seoyeon",
-      "scrapLists": [
-        "2024880532"
-      ]
-    },
-    {
-      "id": "bb05",
-      "userId": "seoyeon",
-      "scrapLists": [
-        "2024880532"
-      ]
-    },
-    {
-      "id": "1887",
-      "userId": "seoyeon",
-      "scrapLists": [
-        "2024880532"
-      ]
-    },
-    {
-      "id": "619e",
-      "userId": "seoyeon",
-      "scrapLists": [
-        "2024880532"
-      ]
-    },
-    {
-      "id": "205b",
-      "userId": "seoyeon",
-      "scrapLists": [
-        "2024880532"
-      ]
-    },
-    {
-      "id": "5f4a",
-      "userId": "seoyeon",
-      "scrapLists": [
-        "2024880532"
-      ]
-    },
-    {
-      "id": "d01c",
-      "userId": "seoyeon",
-      "scrapLists": [
-        "2024880532"
-      ]
-    },
-    {
-      "id": "16a9",
-      "userId": "seoyeon",
-      "scrapLists": [
-        "2024880532"
-      ]
+      "scrapId": "377197835"
     }
   ]
 }
