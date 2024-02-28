@@ -78,5 +78,16 @@
       "profileAvatarColor": "#96e7e6"
     }
   ],
-  "scraps": []
+  "scraps": [
+    {
+      "id": "4ff7",
+      "userId": null,
+      "scrapId": "1092766492"
+    },
+    {
+      "id": "1d42",
+      "userId": null,
+      "scrapId": "2138418097"
+    }
+  ]
 }
