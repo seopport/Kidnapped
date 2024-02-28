@@ -10,7 +10,6 @@ import right from 'assets/right.png';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-
 const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) => {
   const { userId } = useSelector((state) => state.authSlice);
   const { kakao } = window;
@@ -41,7 +40,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
   const toggleHandler = () => {
     setToggle(!toggle);
   };
-
 
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
@@ -134,6 +132,14 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
     });
   };
 
+  // 카페 이미지 사진
+  const images = [
+    'https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg',
+    'https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/5563425303/B.jpg?714000000',
+    'https://static.hanatour.com/product/2023/07/25/2341eoeon8/default.png',
+    'https://blog.kakaocdn.net/dn/bFlhx4/btrEiNN2HF6/JcA1ME6DMSChLsJzQ25eu0/img.jpg'
+  ];
+
   return (
     <StSideBar toggle={toggle}>
       <StContainer>
@@ -161,7 +167,7 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
           ) : isBookmarked ? (
             <div>북마크 항목을 보여줘 {userScrapList}</div>
           ) : (
-            markers.map((item) => (
+            markers.map((item, index) => (
               <React.Fragment key={item.id}>
                 <StMainCardItem onClick={() => handleCardItemClick(item.id)}>
                   <StMainCardInfoAndImage>
@@ -170,11 +176,14 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
                       <p>{item.roadAddress}</p>
                       <p>{item.phoneNumber}</p>
                     </StMainCardInfo>
-                    <StImageWrapper>
+                    {/* <StImageWrapper>
                       <img
                         src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
                         alt="방탈출 카페 사진"
                       />
+                    </StImageWrapper> */}
+                    <StImageWrapper key={index}>
+                      <img src={images[index % 4]} alt="방탈출 카페 사진" />
                     </StImageWrapper>
                   </StMainCardInfoAndImage>
                 </StMainCardItem>
@@ -359,6 +368,8 @@ const StMainCardInfo = styled.div`
 
 const StImageWrapper = styled.div`
   overflow: hidden;
+  width: 150px;
+  height: 100px;
   & img {
     width: 100%;
     height: 100%;
