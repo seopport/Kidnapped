@@ -14,7 +14,13 @@ const HomePage = () => {
     <div>
       <StContainer>
         <Header />
-        <SideBar markers={markers} setMarkers={setMarkers} mapPagination={mapPagination} setMapPagination={setMapPagination} />
+        <SideBar
+          markers={markers}
+          setMarkers={setMarkers}
+          mapPagination={mapPagination}
+          setMapPagination={setMapPagination}
+          map={map}
+        />
         <MapLoader
           markers={markers}
           setMarkers={setMarkers}
