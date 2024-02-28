@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addUser, deleteUser } from '../redux/modules/userSlice';
 import axios from 'axios';
 import { addScrap, deleteScrap } from '../redux/modules/scrapSlice';
+import { useRouteError } from 'react-router-dom';
 
 const Detail = ({ markers, selectedId }) => {
   const dispatch = useDispatch();
@@ -18,6 +19,26 @@ const Detail = ({ markers, selectedId }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [serverScrapId, SetServerScrapId] = useState(null); // 스크랩 서버에서 받은 고유 아이디
   const [serverUserId, SetServerUserId] = useState(null); // 유저 서버에서 받은 고유 아이디
+
+  // 스크랩 토글 유지
+  useEffect(() => {
+    const checkScrapStatus = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4000/scraps`);
+        const scrapIds = response.data.map(item => item.scrapId);
+        const userScrapList = response.data.filter((item) => item.userId === userId).map((item) => item.scrapId);
+        if (userScrapList.includes(selectedId)) {
+          setIsBookmarked(true);
+        } else {
+          setIsBookmarked(false);
+        }
+      } catch (error) {
+        console.error('Error checking scrap status:', error);
+      }
+    };
+
+    checkScrapStatus();
+  }, [selectedId]); // selectedId가 변경될 때마다 실행
 
   // 스크랩 토글 ---------------------------------
   const handleBookmarkClick = () => {

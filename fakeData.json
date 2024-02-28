@@ -76,7 +76,8 @@
       "createdAt": "2024.02.28 수요일",
       "dateForOrder": "2024-02-28T05:22:45.017Z",
       "profileAvatarColor": "#d7b3ba"
-
+    },
+    {
       "id": "0085b230-b31c-4c23-a04b-5766950bc76a",
       "userId": "seoyeon",
       "cafeId": "ddd",
@@ -108,6 +109,38 @@
     {
       "id": "2aee",
       "userId": "seoyeon"
+    },
+    {
+      "id": "2e47",
+      "userId": "seoyeon"
+    },
+    {
+      "id": "5b18",
+      "userId": "seoyeon"
+    },
+    {
+      "id": "1349",
+      "userId": "seoyeon"
+    },
+    {
+      "id": "28b1",
+      "userId": "seoyeon"
+    },
+    {
+      "id": "8f07",
+      "userId": "seoyeon"
+    },
+    {
+      "id": "f200",
+      "userId": "seoyeon"
+    },
+    {
+      "id": "bf6e",
+      "userId": "seoyeon"
+    },
+    {
+      "id": "80ab",
+      "userId": "seoyeon"
     }
   ],
   "scraps": [
@@ -135,6 +168,46 @@
       "id": "efdb",
       "userId": "seoyeon",
       "scrapId": "377197835"
+    },
+    {
+      "id": "2b04",
+      "userId": "seoyeon",
+      "scrapId": "2024880532"
+    },
+    {
+      "id": "ea76",
+      "userId": "seoyeon",
+      "scrapId": "2024880532"
+    },
+    {
+      "id": "4c6c",
+      "userId": "seoyeon",
+      "scrapId": "2024880532"
+    },
+    {
+      "id": "84bb",
+      "userId": "seoyeon",
+      "scrapId": "2024880532"
+    },
+    {
+      "id": "058b",
+      "userId": "seoyeon",
+      "scrapId": "2024880532"
+    },
+    {
+      "id": "9316",
+      "userId": "seoyeon",
+      "scrapId": "2024880532"
+    },
+    {
+      "id": "a14c",
+      "userId": "seoyeon",
+      "scrapId": "929088523"
+    },
+    {
+      "id": "c400",
+      "userId": "seoyeon",
+      "scrapId": "929088523"
     }
   ]
 }
