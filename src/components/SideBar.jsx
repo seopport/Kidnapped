@@ -350,7 +350,7 @@ const StSearchForm = styled.form`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 10px;
   background-color: white;
   border-radius: 100px;
   padding: 0 16px;
@@ -383,6 +383,7 @@ const StBookmarkButton = styled.div`
   cursor: pointer;
 `;
 const StMainCardWrapper = styled.div`
+  font-family: 'SUITE-Regular';
   display: flex;
   flex-direction: column;
   gap: 20px;

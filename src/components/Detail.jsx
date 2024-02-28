@@ -112,7 +112,7 @@ const Detail = ({ markers, selectedId }) => {
             navigate('/detail');
           }}
         >
-          <HiChevronLeft />
+          <HiChevronLeft style={{ margin: '10px' }} />
         </StCloseButton>
         <StBookMark>
           <FaBookmark onClick={handleBookmarkClick} color={isBookmarked ? `${colors.starColor}` : 'white'}></FaBookmark>
@@ -138,19 +138,19 @@ const Detail = ({ markers, selectedId }) => {
           {toggleMenu === 'info' ? (
             <>
               <StDetailInfoBox>
-                <MdLocationOn />
+                <MdLocationOn size={20} />
                 {selectedMarker.roadAddress}
               </StDetailInfoBox>
               <StDetailInfoBox>
-                <MdLocalPhone />
-                {selectedMarker.phoneNumber}
+                <MdLocalPhone size={20} />
+                {selectedMarker.phoneNumber ? selectedMarker.phoneNumber : '정보 없음'}
               </StDetailInfoBox>
               <StDetailInfoBox>
-                <RiGlobalLine />
+                <RiGlobalLine size={20} />
                 <StLink to={selectedMarker.placeUrl}> {selectedMarker.placeUrl}</StLink>
               </StDetailInfoBox>
               <StDetailInfoBox>
-                <CalculateGrade cafeId={selectedId} style={{ justifyContent: 'flex-start' }} />
+                <CalculateGrade cafeId={selectedId} />
               </StDetailInfoBox>
             </>
           ) : (
@@ -242,6 +242,10 @@ const StHrReview = styled.div`
 `;
 
 const StDetailInfoBox = styled.div`
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
   margin-top: 15px;
   margin-left: 30px;
   color: #8b8b8b;
