@@ -6,7 +6,7 @@ const instance = axios.create({
 
 // 리뷰 데이터 가져오기
 const getReviews = async () => {
-  const response = await instance.get(``);
+  const response = await instance.get('?_sort=-dateForOrder');
   return response.data;
 };
 

@@ -8,6 +8,7 @@ import left from 'assets/left.png';
 import right from 'assets/right.png';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import CalculateGrade from './common/CalculateGrade';
 
 
 const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) => {
@@ -18,6 +19,14 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [userScrapList, setUserScrapList] = useState([]);
+  const [buttonsNumber, setButtonsNumber] = useState([1, 2, 3]);
+  useEffect(() => {
+    if (markers.length > 0) {
+      const total = markers.length / 15 + 1;
+      const buttonNumber = Array.from({ length: total }, (_, index) => index + 1);
+      setButtonsNumber(buttonNumber);
+    }
+  }, [markers]);
 
   // const scrappedMarker = markers.find((marker) => marker.id === userScrapList);
 
@@ -43,7 +52,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
     setToggle(!toggle);
   };
 
-
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
     const selectedMarker = markers.find((marker) => marker.id === id);
@@ -56,8 +64,8 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
       map.setLevel(3); // 줌 레벨 : 3
       map.setCenter(new kakao.maps.LatLng(selectedMarker.position.lat, selectedMarker.position.lng)); // 마커 중심 좌표로 이동
     }
-
     setSelectedId(id);
+    console.log(userId);
   };
 
   // 키보드 enter 시 검색
@@ -68,9 +76,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
       setSearchTerm('');
     }
   };
-
-  const [buttonsNumber, setButtonsNumber] = useState([1, 2, 3]);
-  // const buttonsNumber = [1, 2, 3];
 
   // 페이지 번호 클릭 핸들러
   const handlePageChange = (pageNumber) => {
@@ -131,9 +136,18 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
         const total = pagination.last;
         const buttonNumber = Array.from({ length: total }, (_, index) => index + 1);
         setButtonsNumber(buttonNumber);
+        console.log(buttonNumber);
       }
     });
   };
+
+  // 카페 이미지 사진
+  const images = [
+    'https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg',
+    'https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/5563425303/B.jpg?714000000',
+    'https://static.hanatour.com/product/2023/07/25/2341eoeon8/default.png',
+    'https://blog.kakaocdn.net/dn/bFlhx4/btrEiNN2HF6/JcA1ME6DMSChLsJzQ25eu0/img.jpg'
+  ];
 
   return (
     <StSideBar toggle={toggle}>
@@ -185,7 +199,7 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
           ) : selectedId ? (
             <Detail markers={markers} selectedId={selectedId} />
           ) : (
-            markers.map((item) => (
+            markers.map((item, index) => (
               <React.Fragment key={item.id}>
                 <StMainCardItem onClick={() => handleCardItemClick(item.id)}>
                   <StMainCardInfoAndImage>
@@ -193,12 +207,17 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
                       <h1>{item.placeName}</h1>
                       <p>{item.roadAddress}</p>
                       <p>{item.phoneNumber}</p>
+                      {/* 평점 */}
+                      <CalculateGrade cafeId={item.id} />
                     </StMainCardInfo>
-                    <StImageWrapper>
+                    {/* <StImageWrapper>
                       <img
                         src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
                         alt="방탈출 카페 사진"
                       />
+                    </StImageWrapper> */}
+                    <StImageWrapper key={index}>
+                      <img src={images[index % 4]} alt="방탈출 카페 사진" />
                     </StImageWrapper>
                   </StMainCardInfoAndImage>
                 </StMainCardItem>
@@ -369,7 +388,7 @@ const StMainCardInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 20px;
+  gap: 10px;
   & h1 {
     font-weight: 700;
     font-size: 16px;
@@ -383,6 +402,8 @@ const StMainCardInfo = styled.div`
 
 const StImageWrapper = styled.div`
   overflow: hidden;
+  width: 150px;
+  height: 100px;
   & img {
     width: 100%;
     height: 100%;
@@ -421,3 +442,11 @@ export const StPageButton = styled.button`
     background: ${colors.starColor};
   }
 `;
+
+// export const StGradeWrap = styled.div`
+//   display: flex;
+//   align-items: flex-end;
+//   font-size: 14px;
+//   color: ${colors.mainTextColor};
+//   margin-top: auto;
+// `;

@@ -9,6 +9,9 @@ import colors from 'styles/theme';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { addScrap, deleteScrap } from '../redux/modules/scrapSlice';
+import CalculateGrade from './common/CalculateGrade';
+import { Link } from 'react-router-dom';
+
 
 const Detail = ({ markers, selectedId }) => {
   const dispatch = useDispatch();
@@ -65,17 +68,17 @@ const Detail = ({ markers, selectedId }) => {
       const newScrap = {
         userId: userId,
         scrapId: selectedId
-      }
+      };
       const scrapResponse = await axios.post('http://localhost:4000/scraps', newScrap);
       dispatch(addScrap(newScrap))
       const serverScrapId = scrapResponse.data.id;
       setServerScrapId(serverScrapId)
 
     } catch (error) {
-      alert("오류가 발생했습니다")
-      console.log(error)
+      alert('오류가 발생했습니다');
+      console.log(error);
     }
-  }
+  };
 
   // 스크랩 삭제----------------------------------
   const deleteScraps = async () => {
@@ -83,9 +86,9 @@ const Detail = ({ markers, selectedId }) => {
       await axios.delete(`http://localhost:4000/scraps/${serverScrapId}`);
       dispatch(deleteScrap());
     } catch (error) {
-      console.log("error", error)
+      console.log('error', error);
     }
-  }
+  };
 
   const selectedMarker = markers.find((marker) => marker.id === selectedId);
 
@@ -97,30 +100,92 @@ const Detail = ({ markers, selectedId }) => {
 
   return (
     <>
-      <FaBookmark onClick={handleBookmarkClick} color={isBookmarked ? `${colors.starColor}` : "white"}></FaBookmark>
-      {selectedMarker && <div>{selectedMarker.id}</div>}
-      {selectedMarker.placeName}
-      <button onClick={() => toggleMenuHandler(true)}>정보</button>
-      <button onClick={() => toggleMenuHandler(false)}>리뷰</button>
-      {toggleMenu ? (
+      <FaBookmark onClick={handleBookmarkClick} color={isBookmarked ? `${colors.starColor}` : 'white'}></FaBookmark>
+      <StInfoContainer>
+        <StImageBox>
+          <img src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg" alt="방탈출 카페 사진" />
+        </StImageBox>
+        {/* {selectedMarker && <div>{selectedMarker.id}</div>} */}
+        <StPlaceName> {selectedMarker.placeName}</StPlaceName>
+        <ButtonBox>
+          <button onClick={() => toggleMenuHandler(true)}>정보</button>
+          <button onClick={() => toggleMenuHandler(false)}>리뷰</button>
+        </ButtonBox>
         <>
-          <div>
-            <MdLocationOn />
-            {selectedMarker.roadAddress}
-          </div>
-          <div>
-            <MdLocalPhone />
-            {selectedMarker.phoneNumber}
-          </div>
-          <div>
-            <RiGlobalLine />
-            {selectedMarker.placeUrl}
-          </div>
+          {toggleMenu ? (
+            <>
+              <StDetailInfoBox>
+                <MdLocationOn />
+                {selectedMarker.roadAddress}
+              </StDetailInfoBox>
+              <StDetailInfoBox>
+                <MdLocalPhone />
+                {selectedMarker.phoneNumber}
+              </StDetailInfoBox>
+              <StDetailInfoBox>
+                <RiGlobalLine />
+                <StLink to={selectedMarker.placeUrl}> {selectedMarker.placeUrl}</StLink>
+                <CalculateGrade cafeId={selectedId} />
+              </StDetailInfoBox>
+            </>
+          ) : (
+            <Review selectedId={selectedId} />
+          )}
         </>
-      ) : (
-        <Review />
-      )}
+      </StInfoContainer>
+
     </>
   );
 };
 export default Detail;
+
+const StInfoContainer = styled.div`
+  align-items: center;
+  background-color: white;
+  height: 100%;
+  padding-top: 10px;
+`;
+
+const StImageBox = styled.div`
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  & img {
+    border-radius: 10px;
+    width: 97%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+const StPlaceName = styled.h1`
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+`;
+
+const ButtonBox = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+
+  & button {
+    background-color: white;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    color: #4f4f4f;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+`;
+const StDetailInfoBox = styled.div`
+  margin-top: 15px;
+  margin-left: 30px;
+  color: #8b8b8b;
+`;
+const StLink = styled(Link)`
+  color: #175bb3;
+`;
