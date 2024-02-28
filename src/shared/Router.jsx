@@ -5,8 +5,6 @@ import Detail from 'components/Detail';
 import { useState } from 'react';
 
 const Router = () => {
-  //const isLogin = useSelector((state) => state.authSlice.isLogin);
-
   return (
     <BrowserRouter>
       <Routes>
