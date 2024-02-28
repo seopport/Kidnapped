@@ -3,20 +3,52 @@ import styled, { css } from 'styled-components';
 import colors from 'styles/theme';
 import { IoSearch } from 'react-icons/io5';
 import { FaBookmark } from 'react-icons/fa';
-import Review from './Review';
 import Detail from './Detail';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
-const SideBar = ({ markers, setMarkers, mapPagination }) => {
+const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
+  const { userId } = useSelector((state) => state.authSlice);
   const { kakao } = window;
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [userScrapList, setUserScrapList] = useState([]);
+
+  // 현재 사용자가 스크랩한 방탈출 카페 아이디를 가져오는 함수
+  const getScrapList = async () => {
+    try {
+      const response = await axios.get('http://localhost:4000/scraps')
+      const scrapId = response.data.map(item => item.scrapId) // ['124356', '377197835', '1732671994']
+      console.log(scrapId)
+
+      const userScrapList = response.data
+        .filter(item => item.userId === userId)
+        .map(item => item.scrapId)
+
+      setUserScrapList(userScrapList)
+      console.log(userScrapList) //['377197835', '1732671994']
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
+    const selectedMarker = markers.find((marker) => marker.id === id);
+
+    if (selectedMarker && map) {
+      // 선택한 마커의 위치로 지도를 이동
+      const { lat, lng } = selectedMarker.position;
+
+      map.setCenter(new kakao.maps.LatLng(lat, lng));
+      map.setLevel(3); // 줌 레벨 : 3
+      map.setCenter(new kakao.maps.LatLng(selectedMarker.position.lat, selectedMarker.position.lng)); // 마커 중심 좌표로 이동
+    }
     setSelectedId(id);
+    console.log(userId)
   };
 
   // 키보드 enter 시 검색
@@ -28,7 +60,8 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
     }
   };
 
-  const buttonsNumber = [1, 2, 3];
+  const [buttonsNumber, setButtonsNumber] = useState([1, 2, 3]);
+  // const buttonsNumber = [1, 2, 3];
 
   // 페이지 번호 클릭 핸들러
   const handlePageChange = (pageNumber) => {
@@ -37,14 +70,20 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
   };
 
   const handleBookmarkClick = () => {
-    setIsBookmarked(!isBookmarked);
+    setIsBookmarked(prevIsBookmarked => {
+      console.log(!prevIsBookmarked);
+      return !prevIsBookmarked;
+    });
+    if (!isBookmarked) {
+      getScrapList()
+    }
   };
 
   // 검색 함수
   const requestSearch = () => {
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch(`${searchTerm} 방탈출`, (data, status, _pagination) => {
+    ps.keywordSearch(`${searchTerm} 방탈출`, (data, status, pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         const bounds = new kakao.maps.LatLngBounds();
         let markers = [];
@@ -59,6 +98,8 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
           const placeUrl = data[i].place_url; // 장소 상세페이지 URL
           const x = data[i].x; // X 좌표 혹은 경도(longitude)
           const y = data[i].y; // Y 좌표 혹은 위도(latitude)
+
+          setMapPagination(pagination);
 
           markers.push({
             position: {
@@ -76,6 +117,11 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
         setMarkers(markers);
         setSelectedId(null);
         setSearchTerm('');
+
+        // 검색 결과에 따라 버튼 개수 변경
+        const total = pagination.last;
+        const buttonNumber = Array.from({ length: total }, (_, index) => index + 1)
+        setButtonsNumber(buttonNumber)
       }
     });
   };
@@ -105,41 +151,44 @@ const SideBar = ({ markers, setMarkers, mapPagination }) => {
           {selectedId ? (
             <Detail markers={markers} selectedId={selectedId} />
           ) : (
-            markers.map((item) => {
-              return (
-                <StMainCardItem onClick={() => handleCardItemClick(item.id)}>
-                  <StMainCardInfoAndImage>
-                    <StMainCardInfo>
-                      <h1>{item.placeName}</h1>
-                      <p>{item.roadAddress}</p>
-                      <p>{item.phoneNumber}</p>
-                    </StMainCardInfo>
-                    <StImageWrapper>
-                      <img
-                        src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
-                        alt="방탈출 카페 사진"
-                      ></img>
-                    </StImageWrapper>
-                  </StMainCardInfoAndImage>
-                </StMainCardItem>
-              );
-            })
+            isBookmarked ? (
+              <div>북마크 항목을 보여줘 {userScrapList}</div>
+            ) : (
+              markers.map((item) => (
+                <React.Fragment key={item.id}>
+                  <StMainCardItem onClick={() => handleCardItemClick(item.id)}>
+                    <StMainCardInfoAndImage>
+                      <StMainCardInfo>
+                        <h1>{item.placeName}</h1>
+                        <p>{item.roadAddress}</p>
+                        <p>{item.phoneNumber}</p>
+                      </StMainCardInfo>
+                      <StImageWrapper>
+                        <img src='https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg' alt='방탈출 카페 사진' />
+                      </StImageWrapper>
+                    </StMainCardInfoAndImage>
+                  </StMainCardItem>
+                </React.Fragment>
+              ))
+            )
           )}
         </StMainCardWrapper>
-        <StButtonBox>
-          {buttonsNumber.map((buttonNumber) => (
-            <StPageButton
-              index={buttonNumber}
-              onClick={() => handlePageChange(buttonNumber)}
-              $currentPage={currentPage}
-            >
-              {buttonNumber}
-            </StPageButton>
-          ))}
-        </StButtonBox>
+        {!selectedId && (
+          <StButtonBox>
+            {buttonsNumber.map((buttonNumber) => (
+              <StPageButton
+                index={buttonNumber}
+                onClick={() => handlePageChange(buttonNumber)}
+                $currentPage={currentPage}
+              >
+                {buttonNumber}
+              </StPageButton>
+            ))}
+          </StButtonBox>
+        )}
         {/* <Review /> 임시 주석처리  */}
       </StContainer>
-    </StSideBar>
+    </StSideBar >
   );
 };
 
@@ -259,6 +308,7 @@ const StImageWrapper = styled.div`
     object-fit: cover;
   }
 `;
+
 export const StButtonBox = styled.div`
   display: flex;
   gap: 10px;
@@ -290,3 +340,4 @@ export const StPageButton = styled.button`
     background: ${colors.starColor};
   }
 `;
+
