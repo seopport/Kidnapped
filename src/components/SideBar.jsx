@@ -10,7 +10,6 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import CalculateGrade from './common/CalculateGrade';
 
-
 const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) => {
   const { userId } = useSelector((state) => state.authSlice);
   const { kakao } = window;
@@ -30,19 +29,17 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
     }
   }, [markers]);
 
-  // const scrappedMarker = markers.find((marker) => marker.id === userScrapList);
-
   // 현재 사용자가 스크랩한 방탈출 카페 아이디를 가져오는 함수
   const getScrapList = async () => {
     try {
       const response = await axios.get('http://localhost:4000/scraps');
-      const scrapId = response.data.map((item) => item.scrapId); // ['124356', '377197835', '1732671994']
+      const scrapId = response.data.map((item) => item.scrapId);
       console.log(scrapId);
 
       const userScrapList = response.data.filter((item) => item.userId === userId).map((item) => item.scrapId);
 
       setUserScrapList(userScrapList);
-      console.log(userScrapList); //['377197835', '1732671994']
+      console.log(userScrapList);
     } catch (error) {
       console.log(error);
     }
