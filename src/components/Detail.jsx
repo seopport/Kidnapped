@@ -12,7 +12,6 @@ import { addScrap, deleteScrap } from '../redux/modules/scrapSlice';
 import CalculateGrade from './common/CalculateGrade';
 import { Link } from 'react-router-dom';
 
-
 const Detail = ({ markers, selectedId }) => {
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.authSlice);
@@ -32,33 +31,38 @@ const Detail = ({ markers, selectedId }) => {
         const scrapIdToServerIdMap = {};
         userScrapList.forEach((item) => {
           scrapIdToServerIdMap[item.scrapId] = item.id;
-        })
+        });
         // scrapId === selectedId 인 id 가져오기
         if (scrapIdToServerIdMap[selectedId]) {
           const serverScrapId = scrapIdToServerIdMap[selectedId];
           setServerScrapId(serverScrapId);
-          setIsBookmarked(true)
+          setIsBookmarked(true);
         } else {
-          setIsBookmarked(false)
+          setIsBookmarked(false);
         }
       } catch (error) {
         console.error('Error checking scrap status:', error);
       }
     };
     checkScrapStatus();
-  }, [selectedId.userId]);
+  }, [selectedId, userId]);
 
   // 스크랩 토글 ---------------------------------
   const handleBookmarkClick = async () => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      alert('스크랩 기능은 로그인 후 이용하실 수 있습니다.');
+      return;
+    }
     try {
       if (isBookmarked) {
-        await deleteScraps()
+        await deleteScraps();
       } else {
-        await addScraps()
+        await addScraps();
       }
       setIsBookmarked(!isBookmarked);
     } catch (error) {
-      console.log("error", error)
+      console.log('error', error);
     }
   };
 
@@ -70,10 +74,9 @@ const Detail = ({ markers, selectedId }) => {
         scrapId: selectedId
       };
       const scrapResponse = await axios.post('http://localhost:4000/scraps', newScrap);
-      dispatch(addScrap(newScrap))
+      dispatch(addScrap(newScrap));
       const serverScrapId = scrapResponse.data.id;
-      setServerScrapId(serverScrapId)
-
+      setServerScrapId(serverScrapId);
     } catch (error) {
       alert('오류가 발생했습니다');
       console.log(error);
@@ -133,7 +136,6 @@ const Detail = ({ markers, selectedId }) => {
           )}
         </>
       </StInfoContainer>
-
     </>
   );
 };

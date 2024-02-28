@@ -78,5 +78,11 @@
       "profileAvatarColor": "#96e7e6"
     }
   ],
-  "scraps": []
+  "scraps": [
+    {
+      "id": "2de9",
+      "userId": "bbbb",
+      "scrapId": "2138418097"
+    }
+  ]
 }

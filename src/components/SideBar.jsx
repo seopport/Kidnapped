@@ -10,7 +10,6 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import CalculateGrade from './common/CalculateGrade';
 
-
 const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) => {
   const { userId } = useSelector((state) => state.authSlice);
   const { kakao } = window;
@@ -20,6 +19,9 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
   const [selectedId, setSelectedId] = useState(null);
   const [userScrapList, setUserScrapList] = useState([]);
   const [buttonsNumber, setButtonsNumber] = useState([1, 2, 3]);
+
+  const accessToken = localStorage.getItem('accessToken');
+
   useEffect(() => {
     if (markers.length > 0) {
       const total = markers.length / 15 + 1;
@@ -27,8 +29,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
       setButtonsNumber(buttonNumber);
     }
   }, [markers]);
-
-  // const scrappedMarker = markers.find((marker) => marker.id === userScrapList);
 
   // 현재 사용자가 스크랩한 방탈출 카페 아이디를 가져오는 함수
   const getScrapList = async () => {
@@ -51,7 +51,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
   const toggleHandler = () => {
     setToggle(!toggle);
   };
-
 
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
@@ -85,6 +84,10 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
   };
 
   const handleBookmarkClick = () => {
+    if (!accessToken) {
+      alert('스크랩 기능은 로그인 후 이용하실 수 있습니다.');
+      return;
+    }
     setIsBookmarked((prevIsBookmarked) => {
       console.log(!prevIsBookmarked);
       return !prevIsBookmarked;
@@ -99,6 +102,8 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
     const ps = new kakao.maps.services.Places();
 
     ps.keywordSearch(`${searchTerm} 방탈출`, (data, status, pagination) => {
+      console.log(data);
+      setIsBookmarked(false);
       if (status === kakao.maps.services.Status.OK) {
         const bounds = new kakao.maps.LatLngBounds();
         let markers = [];
@@ -173,30 +178,34 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
         </StSearchWrapper>
         <StMainCardWrapper>
           {isBookmarked ? (
-            (
-              userScrapList.map((scrapId) => {
-                const scrappedMarker = markers.find((marker) => marker.id === scrapId);
-                return (
-                  <React.Fragment key={scrappedMarker.id}>
-                    <StMainCardItem onClick={() => handleCardItemClick(scrappedMarker.id)}>
-                      <StMainCardInfoAndImage>
-                        <StMainCardInfo>
-                          <h1>{scrappedMarker.placeName}</h1>
-                          <p>{scrappedMarker.roadAddress}</p>
-                          <p>{scrappedMarker.phoneNumber}</p>
-                        </StMainCardInfo>
-                        <StImageWrapper>
-                          <img
-                            src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
-                            alt="방탈출 카페 사진"
-                          />
-                        </StImageWrapper>
-                      </StMainCardInfoAndImage>
-                    </StMainCardItem>
-                  </React.Fragment>
-                );
-              })
-            )
+            userScrapList.map((scrapId) => {
+              // 서울을 검색했을 때 원본배열을 바꿔버리고있다.
+              // 서울검색결과에서 filter가되고있다.
+              // 그러면 스크랩목록을 가져올때 전체목록 markers 배열에서 가져와야 한다.
+              // 그럼 전체목록 markers를 바꾸는 곳은 어디? 검색했을때
+              // 전체데이터가 15개밖에 안들어오는데 어떻게 전체에서 스크랩목록을 검색하지?
+              const scrappedMarker = markers.find((marker) => marker.id === scrapId);
+
+              return (
+                <React.Fragment key={scrappedMarker?.id}>
+                  <StMainCardItem onClick={() => handleCardItemClick(scrappedMarker?.id)}>
+                    <StMainCardInfoAndImage>
+                      <StMainCardInfo>
+                        <h1>{scrappedMarker?.placeName}</h1>
+                        <p>{scrappedMarker?.roadAddress}</p>
+                        <p>{scrappedMarker?.phoneNumber}</p>
+                      </StMainCardInfo>
+                      <StImageWrapper>
+                        <img
+                          src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
+                          alt="방탈출 카페 사진"
+                        />
+                      </StImageWrapper>
+                    </StMainCardInfoAndImage>
+                  </StMainCardItem>
+                </React.Fragment>
+              );
+            })
           ) : selectedId ? (
             <Detail markers={markers} selectedId={selectedId} />
           ) : (
@@ -403,7 +412,7 @@ const StMainCardInfo = styled.div`
 
 const StImageWrapper = styled.div`
   overflow: hidden;
-width: 150px;
+  width: 150px;
   height: 100px;
   & img {
     width: 100%;
@@ -443,11 +452,3 @@ export const StPageButton = styled.button`
     background: ${colors.starColor};
   }
 `;
-
-// export const StGradeWrap = styled.div`
-//   display: flex;
-//   align-items: flex-end;
-//   font-size: 14px;
-//   color: ${colors.mainTextColor};
-//   margin-top: auto;
-// `;
