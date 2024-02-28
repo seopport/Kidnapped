@@ -89,125 +89,17 @@
       "profileAvatarColor": "#bf9c9b"
     }
   ],
-  "users": [
-    {
-      "id": "1",
-      "userId": "ddd"
-    },
-    {
-      "id": "44ff",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "4f19",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "3015",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "2aee",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "2e47",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "5b18",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "1349",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "28b1",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "8f07",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "f200",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "bf6e",
-      "userId": "seoyeon"
-    },
-    {
-      "id": "80ab",
-      "userId": "seoyeon"
-    }
-  ],
+  "users": [],
   "scraps": [
     {
-      "id": "1",
-      "scrapId": "124356",
-      "userId": "ddd"
-    },
-    {
-      "id": "3638",
-      "userId": "seoyeon",
-      "scrapId": "377197835"
-    },
-    {
-      "id": "8c08",
-      "userId": "seoyeon",
-      "scrapId": "1732671994"
-    },
-    {
-      "id": "9806",
-      "userId": "seoyeon",
-      "scrapId": "1825220691"
-    },
-    {
-      "id": "efdb",
-      "userId": "seoyeon",
-      "scrapId": "377197835"
-    },
-    {
-      "id": "2b04",
-      "userId": "seoyeon",
-      "scrapId": "2024880532"
-    },
-    {
-      "id": "ea76",
-      "userId": "seoyeon",
-      "scrapId": "2024880532"
-    },
-    {
-      "id": "4c6c",
-      "userId": "seoyeon",
-      "scrapId": "2024880532"
-    },
-    {
-      "id": "84bb",
-      "userId": "seoyeon",
-      "scrapId": "2024880532"
-    },
-    {
-      "id": "058b",
-      "userId": "seoyeon",
-      "scrapId": "2024880532"
-    },
-    {
-      "id": "9316",
-      "userId": "seoyeon",
-      "scrapId": "2024880532"
-    },
-    {
-      "id": "a14c",
+      "id": "3868",
       "userId": "seoyeon",
       "scrapId": "929088523"
     },
     {
-      "id": "c400",
+      "id": "41e2",
       "userId": "seoyeon",
-      "scrapId": "929088523"
+      "scrapId": "27495854"
     }
   ]
 }

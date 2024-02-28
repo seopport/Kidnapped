@@ -156,10 +156,10 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
           </StBookmarkButton>
         </StSearchWrapper>
         <StMainCardWrapper>
-          {selectedId ? (
-            <Detail markers={markers} selectedId={selectedId} />
-          ) : isBookmarked ? (
+          {isBookmarked ? (
             <div>북마크 항목을 보여줘 {userScrapList}</div>
+          ) : selectedId ? (
+            <Detail markers={markers} selectedId={selectedId} />
           ) : (
             markers.map((item) => (
               <React.Fragment key={item.id}>
