@@ -102,13 +102,9 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
         for (var i = 0; i < data.length; i++) {
           const id = data[i].id; // 장소 ID
           const placeName = data[i].place_name; // 장소명
-          const categoryName = data[i].category_name; // 카테고리 이름
           const phoneNumber = data[i].phone; // 전화번호
-          const jibunAddress = data[i].address_name; // 전체 지번 주소
           const roadAddress = data[i].road_address_name; // 전체 도로명 주소
           const placeUrl = data[i].place_url; // 장소 상세페이지 URL
-          const x = data[i].x; // X 좌표 혹은 경도(longitude)
-          const y = data[i].y; // Y 좌표 혹은 위도(latitude)
 
           setMapPagination(pagination);
 
@@ -243,7 +239,7 @@ const StContainer = styled.div`
 const StToggleButton = styled.button`
   position: absolute;
   top: 50%;
-  left: 100%;
+  left: 99.9%;
   width: 24px;
   height: 80px;
   transform: translateY(-50%);
@@ -252,6 +248,8 @@ const StToggleButton = styled.button`
   display: inline-block;
   font-size: 1px;
   line-height: 1px;
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
 
   ${(props) => {
     if (props.toggle) {
