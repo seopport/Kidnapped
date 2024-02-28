@@ -18,7 +18,7 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [userScrapList, setUserScrapList] = useState([]);
 
-  // 현재 유저의 스크랩한 방탈출 카페 아이디를 가져오는 함수
+  // 현재 사용자가 스크랩한 방탈출 카페 아이디를 가져오는 함수
   const getScrapList = async () => {
     try {
       const response = await axios.get('http://localhost:4000/scraps')
@@ -143,7 +143,7 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination }) => {
             <Detail markers={markers} selectedId={selectedId} />
           ) : (
             isBookmarked ? (
-              <div>북마크 항목을 보여줘</div>
+              <div>북마크 항목을 보여줘 {userScrapList}</div>
             ) : (
               markers.map((item) => (
                 <React.Fragment key={item.id}>
