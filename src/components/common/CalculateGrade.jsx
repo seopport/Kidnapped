@@ -47,6 +47,7 @@ export const StGradeWrap = styled.div`
   font-size: 14px;
   color: ${colors.mainTextColor};
   margin-top: auto;
+  margin-right: 30px;
 `;
 
 export default CalculateGrade;

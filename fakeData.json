@@ -1,15 +1,17 @@
 {
-  "reviews": [],
-  "scraps": [
+  "reviews": [
     {
-      "id": "070f",
+      "id": "434d3773-6695-4e0b-8b57-cfd7dc014c5b",
       "userId": "cccc",
-      "scrapId": "2138418097"
-    },
-    {
-      "id": "eebb",
-      "userId": "cccc",
-      "scrapId": "455356224"
+      "cafeId": "2138418097",
+      "nickname": "냠냠긋",
+      "content": "d",
+      "grade": 1,
+      "createdAt": "2024.02.29 목요일",
+      "dateForOrder": "2024-02-28T15:38:13.385Z",
+      "profileAvatarColor": "#dfde98"
     }
-  ]
+  ],
+
+  "scraps": []
 }
