@@ -388,7 +388,7 @@ const StMainCardWrapper = styled.div`
   gap: 20px;
   overflow-y: auto;
   /* max-height: calc(100vh - 68px - 47px); */
-  height: 40rem;
+  height: 45rem;
   max-height: calc(100vh - 68px - 47px);
 `;
 
@@ -409,6 +409,7 @@ const StMainCardInfoAndImage = styled.div`
   justify-content: space-between;
   padding: 20px 16px;
   gap: 20px;
+  width: 100%;
 `;
 
 const StMainCardInfo = styled.div`
