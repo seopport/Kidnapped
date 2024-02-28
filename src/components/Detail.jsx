@@ -1,7 +1,7 @@
 import { MdLocationOn } from 'react-icons/md';
 import { MdLocalPhone } from 'react-icons/md';
 import { RiGlobalLine } from 'react-icons/ri';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import React, { useDebugValue, useEffect, useState } from 'react';
 import Review from './Review';
 import { FaBookmark } from 'react-icons/fa';
@@ -13,7 +13,6 @@ import { addScrap, deleteScrap } from '../redux/modules/scrapSlice';
 import CalculateGrade from './common/CalculateGrade';
 import { Link } from 'react-router-dom';
 
-
 const Detail = ({ markers, selectedId }) => {
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.authSlice);
@@ -21,6 +20,7 @@ const Detail = ({ markers, selectedId }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [serverScrapId, SetServerScrapId] = useState(null); // 스크랩 서버에서 받은 고유 아이디
   const [serverUserId, SetServerUserId] = useState(null); // 유저 서버에서 받은 고유 아이디
+  const [activeTab, setActiveTab] = useState('정보');
 
   // 스크랩 토글 ---------------------------------
   const handleBookmarkClick = () => {
@@ -102,10 +102,14 @@ const Detail = ({ markers, selectedId }) => {
         </StImageBox>
         {/* {selectedMarker && <div>{selectedMarker.id}</div>} */}
         <StPlaceName> {selectedMarker.placeName}</StPlaceName>
-        <ButtonBox>
-          <button onClick={() => toggleMenuHandler(true)}>정보</button>
-          <button onClick={() => toggleMenuHandler(false)}>리뷰</button>
-        </ButtonBox>
+        <StButtonBox>
+          <button toggleMenu={toggleMenu} onClick={() => toggleMenuHandler(true)}>
+            정보
+          </button>
+          <button toggleMenu={toggleMenu} onClick={() => toggleMenuHandler(false)}>
+            리뷰
+          </button>
+        </StButtonBox>
         <>
           {toggleMenu ? (
             <>
@@ -120,6 +124,8 @@ const Detail = ({ markers, selectedId }) => {
               <StDetailInfoBox>
                 <RiGlobalLine />
                 <StLink to={selectedMarker.placeUrl}> {selectedMarker.placeUrl}</StLink>
+              </StDetailInfoBox>
+              <StDetailInfoBox>
                 <CalculateGrade cafeId={selectedId} />
               </StDetailInfoBox>
             </>
@@ -128,7 +134,6 @@ const Detail = ({ markers, selectedId }) => {
           )}
         </>
       </StInfoContainer>
-
     </>
   );
 };
@@ -160,7 +165,7 @@ const StPlaceName = styled.h1`
   justify-content: center;
 `;
 
-const ButtonBox = styled.div`
+const StButtonBox = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
@@ -174,8 +179,21 @@ const ButtonBox = styled.div`
     font-weight: bold;
     font-size: 20px;
     margin-bottom: 20px;
+
+    ${(props) => {
+      if (props.toggleMenu === true) {
+        return css`
+          color: brown;
+        `;
+      } else {
+        return css`
+          color: #8320a1;
+        `;
+      }
+    }}
   }
 `;
+
 const StDetailInfoBox = styled.div`
   margin-top: 15px;
   margin-left: 30px;

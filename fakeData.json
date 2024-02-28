@@ -76,6 +76,17 @@
       "createdAt": "2024.02.28 수요일",
       "dateForOrder": "2024-02-28T09:38:45.180Z",
       "profileAvatarColor": "#96e7e6"
+    },
+    {
+      "id": "355e906b-33cb-4f90-b8c3-1634afbf831c",
+      "userId": "charm516",
+      "cafeId": "1767938917",
+      "nickname": "시은",
+      "content": "재밌게 잘 즐기다 왔습니다!",
+      "grade": 5,
+      "createdAt": "2024.02.28 수요일",
+      "dateForOrder": "2024-02-28T10:18:58.440Z",
+      "profileAvatarColor": "#edb79c"
     }
   ],
   "users": [
@@ -110,6 +121,10 @@
     {
       "userId": null,
       "id": "LPAoo05"
+    },
+    {
+      "userId": "charm516",
+      "id": "6d4tiJN"
     }
   ],
   "scraps": [
@@ -152,6 +167,16 @@
       "userId": null,
       "scrapId": "1767938917",
       "id": "-fT5gax"
+    },
+    {
+      "userId": "charm516",
+      "scrapId": "1767938917",
+      "id": "pxQLC4u"
+    },
+    {
+      "userId": "charm516",
+      "scrapId": "776644226",
+      "id": "7bYM18z"
     }
   ]
 }

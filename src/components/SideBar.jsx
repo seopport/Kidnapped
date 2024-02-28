@@ -10,8 +10,6 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import CalculateGrade from './common/CalculateGrade';
 
-
-
 const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) => {
   const { userId } = useSelector((state) => state.authSlice);
   const { kakao } = window;
