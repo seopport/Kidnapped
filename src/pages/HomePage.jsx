@@ -8,7 +8,9 @@ import colors from 'styles/theme';
 const HomePage = () => {
   const [markers, setMarkers] = useState([]);
   const [mapPagination, setMapPagination] = useState(null);
+
   const [map, setMap] = useState();
+
 
   return (
     <div>
