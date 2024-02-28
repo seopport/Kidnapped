@@ -76,6 +76,17 @@
       "createdAt": "2024.02.28 수요일",
       "dateForOrder": "2024-02-28T09:38:45.180Z",
       "profileAvatarColor": "#96e7e6"
+    },
+    {
+      "id": "efc9b42d-19fe-4696-9385-8c60001ba90a",
+      "userId": "bbbb",
+      "cafeId": "2138418097",
+      "nickname": "bbbb",
+      "content": "잘되나요",
+      "grade": 2,
+      "createdAt": "2024.02.28 수요일",
+      "dateForOrder": "2024-02-28T10:58:35.727Z",
+      "profileAvatarColor": "#8e97e9"
     }
   ],
   "scraps": []
