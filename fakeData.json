@@ -1,93 +1,15 @@
 {
-  "reviews": [
+  "reviews": [],
+  "scraps": [
     {
-      "id": "858715da-57c3-46ea-afff-5daa9096e00b",
-      "userId": "bbbb",
-      "cafeId": "1092766492",
-      "nickname": "bbbb",
-      "content": "sdf",
-      "grade": 4,
-      "createdAt": "2024.02.28 수요일",
-      "dateForOrder": "2024-02-28T07:32:04.169Z",
-      "profileAvatarColor": "#d8a8f4"
+      "id": "070f",
+      "userId": "cccc",
+      "scrapId": "2138418097"
     },
     {
-      "id": "366a8f40-53f6-4b29-b3a3-4c2043790af2",
-      "userId": "bbbb",
-      "cafeId": "2138418097",
-      "nickname": "bbbb",
-      "content": "dsf",
-      "grade": 4,
-      "createdAt": "2024.02.28 수요일",
-      "dateForOrder": "2024-02-28T07:32:40.191Z",
-      "profileAvatarColor": "#98d191"
-    },
-    {
-      "id": "5fa31c46-4882-418d-b685-e8c3280c477f",
-      "userId": "bbbb",
-      "cafeId": "2138418097",
-      "nickname": "bbbb",
-      "content": "dsf",
-      "grade": 5,
-      "createdAt": "2024.02.28 수요일",
-      "dateForOrder": "2024-02-28T07:37:02.847Z",
-      "profileAvatarColor": "#f685e9"
-    },
-    {
-      "id": "4b31c808-582f-4152-a1bb-b9be8ec0f396",
-      "userId": "bbbb",
-      "cafeId": "2138418097",
-      "nickname": "bbbb",
-      "content": "sdf",
-      "grade": 1,
-      "createdAt": "2024.02.28 수요일",
-      "dateForOrder": "2024-02-28T08:17:31.212Z",
-      "profileAvatarColor": "#c19eb9"
-    },
-    {
-      "id": "acbb4448-b246-4139-970f-915d4154f161",
-      "userId": "bbbb",
-      "cafeId": "1992606174",
-      "nickname": "bbbb",
-      "content": "배고프다..",
-      "grade": 2,
-      "createdAt": "2024.02.28 수요일",
-      "dateForOrder": "2024-02-28T08:50:35.964Z",
-      "profileAvatarColor": "#9ae49d"
-    },
-    {
-      "id": "62929ba0-711e-4f83-a8a6-b9201bc2ddfa",
-      "userId": "bbbb",
-      "cafeId": "2138418097",
-      "nickname": "bbbb",
-      "content": "fsdf",
-      "grade": 3,
-      "createdAt": "2024.02.28 수요일",
-      "dateForOrder": "2024-02-28T09:29:22.223Z",
-      "profileAvatarColor": "#88b2c1"
-    },
-    {
-      "id": "a422bf4c-e802-4a1e-9c0f-d80f11a1f12e",
-      "userId": "bbbb",
-      "cafeId": "2138418097",
-      "nickname": "bbbb",
-      "content": "sdfdsf",
-      "grade": 3,
-      "createdAt": "2024.02.28 수요일",
-      "dateForOrder": "2024-02-28T09:38:45.180Z",
-      "profileAvatarColor": "#96e7e6"
-    },
-    {
-      "id": "efc9b42d-19fe-4696-9385-8c60001ba90a",
-      "userId": "bbbb",
-      "cafeId": "2138418097",
-      "nickname": "bbbb",
-      "content": "잘되나요",
-      "grade": 2,
-      "createdAt": "2024.02.28 수요일",
-      "dateForOrder": "2024-02-28T10:58:35.727Z",
-      "profileAvatarColor": "#8e97e9"
+      "id": "eebb",
+      "userId": "cccc",
+      "scrapId": "455356224"
     }
-  ],
-  "scraps": []
+  ]
 }
