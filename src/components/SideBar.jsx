@@ -160,7 +160,7 @@ const StSideBar = styled.div`
   height: 100vh;
   background-color: ${colors.subColor};
   z-index: 2;
-  transition-duration: 600ms;
+  transition-duration: 500ms;
   // 토글 슬라이드 애니메이션
 
   ${(props) => {
