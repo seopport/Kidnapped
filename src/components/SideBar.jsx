@@ -24,7 +24,7 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
   const accessToken = localStorage.getItem('accessToken');
 
   useEffect(() => {
-    if (markers.length > 0) {
+    if (markers.length === 0) {
       const total = markers.length / 15 + 1;
       const buttonNumber = Array.from({ length: total }, (_, index) => index + 1);
       setButtonsNumber(buttonNumber);
