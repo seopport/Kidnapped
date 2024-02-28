@@ -140,7 +140,7 @@ const Detail = ({ markers, selectedId }) => {
                 <StLink to={selectedMarker.placeUrl}> {selectedMarker.placeUrl}</StLink>
               </StDetailInfoBox>
               <StDetailInfoBox>
-                <CalculateGrade cafeId={selectedId} />
+                <CalculateGrade cafeId={selectedId} style={{ justifyContent: 'flex-start' }} />
               </StDetailInfoBox>
             </>
           ) : (
@@ -158,6 +158,7 @@ const StInfoContainer = styled.div`
   background-color: white;
   height: 100%;
   padding-top: 10px;
+  border-radius: 10px;
 `;
 const StBookMark = styled.div`
   position: absolute;
