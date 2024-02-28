@@ -87,6 +87,10 @@
     {
       "id": "2aee",
       "userId": "seoyeon"
+    },
+    {
+      "userId": null,
+      "id": "UIka-ZU"
     }
   ],
   "scraps": [
@@ -114,6 +118,11 @@
       "id": "efdb",
       "userId": "seoyeon",
       "scrapId": "377197835"
+    },
+    {
+      "userId": null,
+      "scrapId": "1609773844",
+      "id": "pM6LAba"
     }
   ]
 }
