@@ -80,13 +80,8 @@
   ],
   "scraps": [
     {
-      "id": "4ff7",
-      "userId": null,
-      "scrapId": "1092766492"
-    },
-    {
-      "id": "1d42",
-      "userId": null,
+      "id": "2de9",
+      "userId": "bbbb",
       "scrapId": "2138418097"
     }
   ]
