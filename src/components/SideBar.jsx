@@ -21,6 +21,8 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
   const [buttonsNumber, setButtonsNumber] = useState([1, 2, 3]);
   const [currentView, setCurrentView] = useState("main")
 
+  const accessToken = localStorage.getItem('accessToken');
+
   useEffect(() => {
     if (markers.length > 0) {
       const total = markers.length / 15 + 1;
@@ -86,6 +88,11 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
 
   // 북마크 버튼 클릭 핸들러
   const handleBookmarkClick = () => {
+    if (!accessToken) {
+      alert('스크랩 기능은 로그인 후 이용하실 수 있습니다.');
+      return;
+    }
+
     setSelectedId(null)
     if (currentView === "main") {
       setCurrentView("scrapList")
@@ -94,10 +101,12 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
     } else {
       setCurrentView("main")
     }
+
     setIsBookmarked((prevIsBookmarked) => {
       console.log(!prevIsBookmarked);
       return !prevIsBookmarked;
     });
+
     if (!isBookmarked) {
       getScrapList();
     }
@@ -110,6 +119,8 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
     const ps = new kakao.maps.services.Places();
 
     ps.keywordSearch(`${searchTerm} 방탈출`, (data, status, pagination) => {
+      console.log(data);
+      setIsBookmarked(false);
       if (status === kakao.maps.services.Status.OK) {
         const bounds = new kakao.maps.LatLngBounds();
         let markers = [];
@@ -224,14 +235,14 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
                         userScrapList.map((scrapId) => {
                           const scrappedMarker = markers.find((marker) => marker.id === scrapId);
                           return (
-                            <React.Fragment key={scrappedMarker.id}>
-                              <StMainCardItem onClick={() => handleCardItemClick(scrappedMarker.id)}>
+                            <React.Fragment key={scrappedMarker?.id}>
+                              <StMainCardItem onClick={() => handleCardItemClick(scrappedMarker?.id)}>
                                 <StMainCardInfoAndImage>
                                   <StMainCardInfo>
-                                    <h1>{scrappedMarker.placeName}</h1>
-                                    <p>{scrappedMarker.roadAddress}</p>
-                                    <p>{scrappedMarker.phoneNumber}</p>
-                                    <CalculateGrade cafeId={scrappedMarker.id} />
+                                    <h1>{scrappedMarker?.placeName}</h1>
+                                    <p>{scrappedMarker?.roadAddress}</p>
+                                    <p>{scrappedMarker?.phoneNumber}</p>
+                                    <CalculateGrade cafeId={scrappedMarker?.id} />
                                   </StMainCardInfo>
                                   <StImageWrapper>
                                     <img
@@ -430,7 +441,7 @@ const StMainCardInfo = styled.div`
 
 const StImageWrapper = styled.div`
   overflow: hidden;
-width: 150px;
+  width: 150px;
   height: 100px;
   & img {
     width: 100%;
@@ -470,11 +481,3 @@ export const StPageButton = styled.button`
     background: ${colors.starColor};
   }
 `;
-
-// export const StGradeWrap = styled.div`
-//   display: flex;
-//   align-items: flex-end;
-//   font-size: 14px;
-//   color: ${colors.mainTextColor};
-//   margin-top: auto;
-// `;
