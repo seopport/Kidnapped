@@ -19,6 +19,10 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
   const [selectedId, setSelectedId] = useState(null);
   const [userScrapList, setUserScrapList] = useState([]);
   const [buttonsNumber, setButtonsNumber] = useState([1, 2, 3]);
+  const [currentView, setCurrentView] = useState('main');
+
+  const accessToken = localStorage.getItem('accessToken');
+
   useEffect(() => {
     if (markers.length > 0) {
       const total = markers.length / 15 + 1;
@@ -27,19 +31,15 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
     }
   }, [markers]);
 
-  // const scrappedMarker = markers.find((marker) => marker.id === userScrapList);
-
   // 현재 사용자가 스크랩한 방탈출 카페 아이디를 가져오는 함수
   const getScrapList = async () => {
     try {
       const response = await axios.get('http://localhost:4000/scraps');
-      const scrapId = response.data.map((item) => item.scrapId); // ['124356', '377197835', '1732671994']
-      console.log(scrapId);
+      const scrapId = response.data.map((item) => item.scrapId);
 
       const userScrapList = response.data.filter((item) => item.userId === userId).map((item) => item.scrapId);
 
       setUserScrapList(userScrapList);
-      console.log(userScrapList); //['377197835', '1732671994']
     } catch (error) {
       console.log(error);
     }
@@ -53,6 +53,8 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
 
   // 클릭 시 선택한 카드의 id 값 받아오기
   const handleCardItemClick = (id) => {
+    setCurrentView('detail');
+    setIsBookmarked(false);
     const selectedMarker = markers.find((marker) => marker.id === id);
 
     if (selectedMarker && map) {
@@ -64,7 +66,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
       map.setCenter(new kakao.maps.LatLng(selectedMarker.position.lat, selectedMarker.position.lng)); // 마커 중심 좌표로 이동
     }
     setSelectedId(id);
-    console.log(userId);
   };
 
   // 키보드 enter 시 검색
@@ -82,11 +83,26 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
     setCurrentPage(pageNumber);
   };
 
+  // 북마크 버튼 클릭 핸들러
   const handleBookmarkClick = () => {
+    if (!accessToken) {
+      alert('스크랩 기능은 로그인 후 이용하실 수 있습니다.');
+      return;
+    }
+
+    setSelectedId(null);
+    if (currentView === 'main') {
+      setCurrentView('scrapList');
+    } else if (currentView === 'detail') {
+      setCurrentView('scrapList');
+    } else {
+      setCurrentView('main');
+    }
+
     setIsBookmarked((prevIsBookmarked) => {
-      console.log(!prevIsBookmarked);
       return !prevIsBookmarked;
     });
+
     if (!isBookmarked) {
       getScrapList();
     }
@@ -94,9 +110,12 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
 
   // 검색 함수
   const requestSearch = () => {
+    setCurrentView('main');
+    setIsBookmarked(false);
     const ps = new kakao.maps.services.Places();
 
     ps.keywordSearch(`${searchTerm} 방탈출`, (data, status, pagination) => {
+      setIsBookmarked(false);
       if (status === kakao.maps.services.Status.OK) {
         const bounds = new kakao.maps.LatLngBounds();
         let markers = [];
@@ -135,7 +154,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
         const total = pagination.last;
         const buttonNumber = Array.from({ length: total }, (_, index) => index + 1);
         setButtonsNumber(buttonNumber);
-        console.log(buttonNumber);
       }
     });
   };
@@ -154,7 +172,6 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
         <StSearchWrapper>
           <StSearchForm onSubmit={(e) => e.preventDefault()}>
             <input
-              onSubmit="return false"
               type="text"
               placeholder="지역 검색"
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -170,62 +187,79 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
           </StBookmarkButton>
         </StSearchWrapper>
         <StMainCardWrapper>
-          {isBookmarked ? (
-            userScrapList.map((scrapId) => {
-              const scrappedMarker = markers.find((marker) => marker.id === scrapId);
-              return (
-                <React.Fragment key={scrappedMarker.id}>
-                  <StMainCardItem onClick={() => handleCardItemClick(scrappedMarker.id)}>
-                    <StMainCardInfoAndImage>
-                      <StMainCardInfo>
-                        <h1>{scrappedMarker.placeName}</h1>
-                        <p>{scrappedMarker.roadAddress}</p>
-                        <p>{scrappedMarker.phoneNumber}</p>
-                      </StMainCardInfo>
-                      <StImageWrapper>
+          {(() => {
+            switch (currentView) {
+              case 'main':
+                return (
+                  <>
+                    {markers.map((item, index) => (
+                      <React.Fragment key={item.id}>
+                        <StMainCardItem onClick={() => handleCardItemClick(item.id)}>
+                          <StMainCardInfoAndImage>
+                            <StMainCardInfo>
+                              <h1>{item.placeName}</h1>
+                              <p>{item.roadAddress}</p>
+                              <p>{item.phoneNumber}</p>
+                              {/* 평점 */}
+                              <CalculateGrade cafeId={item.id} />
+                            </StMainCardInfo>
+                            {/* <StImageWrapper>
                         <img
                           src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
                           alt="방탈출 카페 사진"
                         />
-                      </StImageWrapper>
-                    </StMainCardInfoAndImage>
-                  </StMainCardItem>
-                </React.Fragment>
-              );
-            })
-          ) : selectedId ? (
-            <Detail markers={markers} selectedId={selectedId} />
-          ) : (
-            markers.map((item, index) => (
-              <React.Fragment key={item.id}>
-                <StMainCardItem onClick={() => handleCardItemClick(item.id)}>
-                  <StMainCardInfoAndImage>
-                    <StMainCardInfo>
-                      <h1>{item.placeName}</h1>
-                      <p>{item.roadAddress}</p>
-                      <p>{item.phoneNumber}</p>
-                      {/* 평점 */}
-                      <CalculateGrade cafeId={item.id} />
-                    </StMainCardInfo>
-                    {/* <StImageWrapper>
-                      <img
-                        src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
-                        alt="방탈출 카페 사진"
-                      />
-</StImageWrapper> */}
-                    <StImageWrapper key={index}>
-                      <img src={images[index % 4]} alt="방탈출 카페 사진" />
-                    </StImageWrapper>
-                  </StMainCardInfoAndImage>
-                </StMainCardItem>
-              </React.Fragment>
-            ))
-          )}
+                      </StImageWrapper> */}
+                            <StImageWrapper key={index}>
+                              <img src={images[index % 4]} alt="방탈출 카페 사진" />
+                            </StImageWrapper>
+                          </StMainCardInfoAndImage>
+                        </StMainCardItem>
+                      </React.Fragment>
+                    ))}
+                  </>
+                );
+              case 'detail':
+                return <Detail markers={markers} selectedId={selectedId} />;
+              case 'scrapList':
+                return (
+                  <>
+                    {userScrapList.length !== 0 &&
+                      userScrapList.map((scrapId) => {
+                        const scrappedMarker = markers.find((marker) => marker.id === scrapId);
+                        return (
+                          <React.Fragment key={scrappedMarker?.id}>
+                            <StMainCardItem onClick={() => handleCardItemClick(scrappedMarker?.id)}>
+                              <StMainCardInfoAndImage>
+                                <StMainCardInfo>
+                                  <h1>{scrappedMarker?.placeName}</h1>
+                                  <p>{scrappedMarker?.roadAddress}</p>
+                                  <p>{scrappedMarker?.phoneNumber}</p>
+                                  <CalculateGrade cafeId={scrappedMarker?.id} />
+                                </StMainCardInfo>
+                                <StImageWrapper>
+                                  <img
+                                    src="https://www.datanet.co.kr/news/photo/201706/111912_40939_1141.jpg"
+                                    alt="방탈출 카페 사진"
+                                  />
+                                </StImageWrapper>
+                              </StMainCardInfoAndImage>
+                            </StMainCardItem>
+                          </React.Fragment>
+                        );
+                      })}
+                  </>
+                );
+              default:
+                return null;
+            }
+          })()}
         </StMainCardWrapper>
+
         {!selectedId && (
           <StButtonBox>
-            {buttonsNumber.map((buttonNumber) => (
+            {buttonsNumber.map((buttonNumber, idx) => (
               <StPageButton
+                key={idx}
                 index={buttonNumber}
                 onClick={() => handlePageChange(buttonNumber)}
                 $currentPage={currentPage}
@@ -286,6 +320,7 @@ const StToggleButton = styled.button`
   display: inline-block;
   font-size: 1px;
   line-height: 1px;
+  border-radius: 0 10px 10px 0px;
 
   ${(props) => {
     if (props.toggle) {
@@ -439,11 +474,3 @@ export const StPageButton = styled.button`
     background: ${colors.starColor};
   }
 `;
-
-// export const StGradeWrap = styled.div`
-//   display: flex;
-//   align-items: flex-end;
-//   font-size: 14px;
-//   color: ${colors.mainTextColor};
-//   margin-top: auto;
-// `;

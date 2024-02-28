@@ -7,7 +7,6 @@ const { default: colors } = require('styles/theme');
 
 // 별점 평균 구하기
 const CalculateGrade = ({ cafeId }) => {
-  // console.log(selectedId);
   const { isLoading, isError, data: reviews } = useQuery('reviews', getReviews);
 
   if (isLoading) {
