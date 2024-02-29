@@ -178,3 +178,86 @@ src
 - 사용자는 자신이 등록한 리뷰에 한해 수정 및 삭제 권한을 가집니다.
 - 리뷰를 수정할 때는 리뷰의 내용과 평점 모두 수정이 가능합니다.
 - 리뷰를 등록할 때 입력한 평점은 각 방탈출 카페의 평균 평점 계산에 반영됩니다.
+  <br />
+
+## 🚦 트러블 슈팅
+
+<details>
+<summary> 모달 개별 렌더링 및 모달 바깥 영역 클릭 시 닫힘 기능 구현 </summary>
+
+<div>
+
+1. 문제 상황 <br />
+   댓글 기능을 구현하면서 댓글의 옵션 메뉴를 클릭하면 수정 및 삭제 모달이 뜨도록 하려 했으나, 옵션 버튼을 클릭할 때마다 전체 댓글의 모달이 뜨는 문제가 발생했습니다.
+   <br />
+
+2. 시도 <br />
+   기존 코드에서는 점 버튼을 클릭했을 때 isOptionMenuOpen을 true로 설정하고, 리뷰 전체 컨테이너를 클릭하면 false로 설정하여 렌더링을 관리했습니다. 그러다 보니 각 리뷰 댓글 컴포넌트의 display 속성을 한번에 제어하게 된 것이었습니다.
+
+```js
+export const StOptionsMenuModal = styled.ul`
+  z-index: 999;
+  width: 65px;
+  height: 65px;
+  font-size: 12px;
+  display: ${(props) => (props.$isOptionMenuOpen ? 'flex' : 'none')};
+```
+
+3. 해결방안 <br />
+   3-1. 리뷰 아이디를 저장할 state를 만들고, 점 옵션 버튼을 클릭했을 때 해당 리뷰 아이디로 state를 설정합니다. <br />
+   3-2. 클릭한 리뷰 아이디와 각 댓글의 아이디를 비교하여 해당하는 댓글에 대한 모달만 열리도록 조건부 렌더링을 구현합니다.<br />
+
+```js
+// 클릭한 리뷰 아이디를 저장할 state 선언
+const [clickedReviewId, setClickedReviewId] = useState(null);
+
+const handleOptionButtonClick = (id) => {
+  setClickedReviewId(id);
+};
+
+// 점 메뉴를 클릭 시 클릭한 리뷰 아이디로 setState
+<StHiOutlineDotsVertical onClick={() => handleOptionButtonClick(item.id)} />;
+
+// map 함수 return 부분
+{
+  clickedReviewId === item.id && <StOptionsMenuModal>...</StOptionsMenuModal>;
+}
+```
+
+3-3. 모달 바깥 영역을 클릭했을 때 모달이 닫히도록 구현합니다. <br />
+
+```js
+const handleModalClose = () => {
+  if (modalRef.current) setClickedReviewId(null);
+};
+```
+
+모달창이 열려있는지를 확인하기 위해 modalRef의 값을 사용하였습니다.
+옵션버튼을 클릭하면 모달이 열리면서 DOM node가 생기고, 따라서 modalRef의 참조값이 생겨 null이 아니게 됩니다. <br />옵션버튼은 handleModalClose 이벤트 함수가 걸려있는 컨테이너 안에 있으므로, modalRef값을 검사하는 if 조건을 추가하여 리뷰 컨테이너를 클릭했을 때 모달창이 열려있어야만 클릭한 리뷰 아이디를 null로 설정하여 모달을 닫습니다.
+
+</div>
+</details>
+<details>
+<summary> 지민 </summary>
+<div>
+여기에 내용
+</div>
+</details>
+<details>
+<summary> 시은 </summary>
+<div>
+여기에 내용
+</div>
+</details>
+<details>
+<summary> 지현 </summary>
+<div>
+여기에 내용
+</div>
+</details>
+<details>
+<summary> 서연 </summary>
+<div>
+여기에 내용
+</div>
+</details>
