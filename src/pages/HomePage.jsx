@@ -11,7 +11,6 @@ const HomePage = () => {
 
   const [map, setMap] = useState();
 
-
   return (
     <div>
       <StContainer>

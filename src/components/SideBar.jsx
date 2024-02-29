@@ -25,7 +25,7 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
   const accessToken = localStorage.getItem('accessToken');
 
   useEffect(() => {
-    if (markers.length > 0) {
+    if (markers.length < 0) {
       const total = markers.length / 15 + 1;
       const buttonNumber = Array.from({ length: total }, (_, index) => index + 1);
       setButtonsNumber(buttonNumber);
@@ -390,7 +390,7 @@ const StMainCardWrapper = styled.div`
   gap: 20px;
   overflow-y: auto;
   /* max-height: calc(100vh - 68px - 47px); */
-  height: 45rem;
+  height: 42rem;
   max-height: calc(100vh - 68px - 47px);
 `;
 
