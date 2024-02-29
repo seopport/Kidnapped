@@ -7,11 +7,11 @@ import Review from './Review';
 import { FaBookmark } from 'react-icons/fa';
 import colors from 'styles/theme';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import { addScrap, deleteScrap } from '../redux/modules/scrapSlice';
 import CalculateGrade from './common/CalculateGrade';
 import { Link, useNavigate } from 'react-router-dom';
 import { HiChevronLeft } from 'react-icons/hi2';
+import { scrapApi } from 'api/scrapApi';
 
 const Detail = ({ markers, selectedId }) => {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const Detail = ({ markers, selectedId }) => {
   useEffect(() => {
     const checkScrapStatus = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/scraps`);
+        const response = await scrapApi.get(``);
         // 현재 사용자 아이디가 들어있는 데이터
         const userScrapList = response.data.filter((item) => item.userId === userId);
 
@@ -78,7 +78,7 @@ const Detail = ({ markers, selectedId }) => {
         userId: userId,
         scrapId: selectedId
       };
-      const scrapResponse = await axios.post('http://localhost:4000/scraps', newScrap);
+      const scrapResponse = await scrapApi.post('', newScrap);
       dispatch(addScrap(newScrap));
       const serverScrapId = scrapResponse.data.id;
       setServerScrapId(serverScrapId);
@@ -91,7 +91,7 @@ const Detail = ({ markers, selectedId }) => {
   // 스크랩 삭제----------------------------------
   const deleteScraps = async () => {
     try {
-      await axios.delete(`http://localhost:4000/scraps/${serverScrapId}`);
+      await scrapApi.delete(`/${serverScrapId}`);
       dispatch(deleteScrap());
     } catch (error) {
       console.log('error', error);

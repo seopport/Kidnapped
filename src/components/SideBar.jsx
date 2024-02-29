@@ -9,6 +9,7 @@ import right from 'assets/right.png';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import CalculateGrade from './common/CalculateGrade';
+import { scrapApi } from 'api/scrapApi';
 
 const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) => {
   const { userId } = useSelector((state) => state.authSlice);
@@ -34,7 +35,7 @@ const SideBar = ({ markers, setMarkers, mapPagination, setMapPagination, map }) 
   // 현재 사용자가 스크랩한 방탈출 카페 아이디를 가져오는 함수
   const getScrapList = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/scraps');
+      const response = await scrapApi.get('');
       const scrapId = response.data.map((item) => item.scrapId);
 
       const userScrapList = response.data.filter((item) => item.userId === userId).map((item) => item.scrapId);
