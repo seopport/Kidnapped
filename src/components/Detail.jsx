@@ -1,8 +1,8 @@
 import { MdLocationOn } from 'react-icons/md';
 import { MdLocalPhone } from 'react-icons/md';
 import { RiGlobalLine } from 'react-icons/ri';
-import styled, { css } from 'styled-components';
-import React, { useDebugValue, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
 import Review from './Review';
 import { FaBookmark } from 'react-icons/fa';
 import colors from 'styles/theme';

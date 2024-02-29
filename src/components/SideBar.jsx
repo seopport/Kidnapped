@@ -7,7 +7,6 @@ import Detail from './Detail';
 import left from 'assets/left.png';
 import right from 'assets/right.png';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import CalculateGrade from './common/CalculateGrade';
 import { scrapApi } from 'api/scrapApi';
 

@@ -40,15 +40,6 @@ $ git clone https://github.com/seopport/Kidnapped.git
 $ cd Kidnapped
 ```
 
-#### Frontend
-
-```
-$ cd Kidnapped
-$ yarn install
-$ yarn json
-$ yarn start
-```
-
 #### 환경 변수 설정
 
 root 디렉토리에 .env 파일을 생성하고 환경변수를 입력 후 저장해주세요.
@@ -57,6 +48,15 @@ root 디렉토리에 .env 파일을 생성하고 환경변수를 입력 후 저�
 REACT_APP_KAKAO_KEY = 카카오맵 API Key
 REACT_APP_SERVER_REVIEWS_URL = http://localhost:4000/reviews
 REACT_APP_SERVER_SCRAPS_URL = http://localhost:4000/scraps
+```
+
+#### Frontend
+
+```
+$ cd Kidnapped
+$ yarn install
+$ yarn json
+$ yarn start
 ```
 
 # 📚 Stacks

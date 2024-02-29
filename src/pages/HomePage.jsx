@@ -3,7 +3,6 @@ import SideBar from 'components/SideBar';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import MapLoader from 'components/MapLoader';
-import colors from 'styles/theme';
 
 const HomePage = () => {
   const [markers, setMarkers] = useState([]);

@@ -8,6 +8,7 @@ import { authApi } from 'api';
 import backgroundimg from 'assets/backgroungimg.png';
 import { Link } from 'react-router-dom';
 import '../assets/font.css';
+import colors from 'styles/theme';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -138,7 +139,7 @@ const StHomeLink = styled.span`
   font-size: 25px;
   color: white;
   &:hover {
-    border-bottom: 5px solid #8b8b8b;
+    border-bottom: 5px solid ${colors.mainTextColor};
   }
 `;
 
@@ -184,18 +185,18 @@ const StLoginButton = styled.button`
   margin-top: 70px;
   border: none;
   color: white;
-  background-color: #171e2e;
+  background-color: ${colors.mainColor};
   cursor: pointer;
 `;
 
 const StToggleBox = styled.div`
   margin-top: 15px;
   & span:first-child {
-    color: #8b8b8b;
+    color: ${colors.mainTextColor};
     margin-right: 10px;
   }
   & span:last-child {
-    color: #171e2e;
+    color: ${colors.mainColor};
     text-decoration: underline;
     user-select: none;
     cursor: pointer;
