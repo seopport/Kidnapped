@@ -1,4 +1,22 @@
 {
-  "reviews": [],
-  "scraps": []
+  "reviews": [
+    {
+      "id": "3054f1b3-c080-4f04-9757-e9f27597855c",
+      "userId": "num2",
+      "cafeId": "1992606174",
+      "nickname": "박민영남친",
+      "content": "안녕하세요",
+      "grade": 4,
+      "createdAt": "2024.02.29 목요일",
+      "dateForOrder": "2024-02-29T11:11:48.487Z",
+      "profileAvatarColor": "#ab9ab4"
+    }
+  ],
+  "scraps": [
+    {
+      "id": "ca7c",
+      "userId": "num2",
+      "scrapId": "59939450"
+    }
+  ]
 }
