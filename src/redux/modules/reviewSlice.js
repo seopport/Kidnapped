@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// 리액트 쿼리로 리팩토링
+
 const initialState = {
   reviews: []
 };

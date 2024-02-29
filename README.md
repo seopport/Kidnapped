@@ -18,12 +18,12 @@
 
 ## 🏃 웹개발팀 소개
 
-|                                                 서지원                                                 |                                                 신서연                                                 |                                                 박시은                                                 |                                                 김지민                                                 |                                                 남지현                                                 |
-| :----------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: |
-| ![서지원](https://github.com/seopport/Kidnapped/assets/142903244/4bb1c54f-1873-4f18-8633-2f52841e3cc5) | ![신서연](https://github.com/seopport/Kidnapped/assets/142903244/3ab2f8ea-9381-4654-9432-db772c9b47a6) | ![박시은](https://github.com/seopport/Kidnapped/assets/142903244/d00e45d5-488f-4f94-b263-d4e3baab1521) | ![김지민](https://github.com/seopport/Kidnapped/assets/142903244/97fecd9c-50f9-4776-8c06-877b0eeac371) | ![남지현](https://github.com/seopport/Kidnapped/assets/142903244/6c92f926-2ac0-4a60-b682-18d8ec850624) |
-|                                [@seopport](https://github.com/seopport)                                |                            [@seoyeon-1206](https://github.com/seoyeon-1206)                            |                             [@MyNameSieun](https://github.com/MyNameSieun)                             |                               [@gggimmmin](https://github.com/gggimmmin)                               |                                [@jihyun-N](https://github.com/jihyun-N)                                |
-|                                               Front-End                                                |                                               Front-End                                                |                                               Front-End                                                |                                               Front-End                                                |                                               Front-End                                                |
-|                                                  리더                                                  |                                                  팀원                                                  |                                                  팀원                                                  |                                                  팀원                                                  |                                                  팀원                                                  |
+|                              서지원                              |                              신서연                              |                                                 박시은                                                 |                                                 김지민                                                 |                                                 남지현                                                 |
+| :--------------------------------------------------------------: | :--------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: |
+| ![서지원](https://avatars.githubusercontent.com/u/103973797?v=4) | ![신서연](https://avatars.githubusercontent.com/u/128902050?v=4) | ![박시은](https://github.com/seopport/Kidnapped/assets/142903244/d00e45d5-488f-4f94-b263-d4e3baab1521) | ![김지민](https://github.com/seopport/Kidnapped/assets/142903244/97fecd9c-50f9-4776-8c06-877b0eeac371) | ![남지현](https://github.com/seopport/Kidnapped/assets/142903244/6c92f926-2ac0-4a60-b682-18d8ec850624) |
+|             [@seopport](https://github.com/seopport)             |         [@seoyeon-1206](https://github.com/seoyeon-1206)         |                             [@MyNameSieun](https://github.com/MyNameSieun)                             |                               [@gggimmmin](https://github.com/gggimmmin)                               |                                [@jihyun-N](https://github.com/jihyun-N)                                |
+|                            Front-End                             |                            Front-End                             |                                               Front-End                                                |                                               Front-End                                                |                                               Front-End                                                |
+|                               리더                               |                               팀원                               |                                                  팀원                                                  |                                                  팀원                                                  |                                                  팀원                                                  |
 
 ## 🚩 프로젝트 소개
 
@@ -45,7 +45,18 @@ $ cd Kidnapped
 ```
 $ cd Kidnapped
 $ yarn install
+$ yarn json
 $ yarn start
+```
+
+#### 환경 변수 설정
+
+root 디렉토리에 .env 파일을 생성하고 환경변수를 입력 후 저장해주세요.
+
+```
+REACT_APP_KAKAO_KEY = 카카오맵 API Key
+REACT_APP_SERVER_REVIEWS_URL = http://localhost:4000/reviews
+REACT_APP_SERVER_SCRAPS_URL = http://localhost:4000/scraps
 ```
 
 # 📚 Stacks
@@ -70,13 +81,66 @@ $ yarn start
 
 ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)![Zoom](https://img.shields.io/badge/Zoom-2D8CFF?style=for-the-badge&logo=zoom&logoColor=white)
 
+<br />
+
+## 🗂️ 디렉토리 구조
+
+```
+src
+ ┣ api
+ ┃ ┣ index.js
+ ┃ ┣ reviewApi.js
+ ┃ ┗ scrapApi.js
+ ┣ assets
+ ┃ ┣ backgroungimg.png
+ ┃ ┣ font.css
+ ┃ ┣ left.png
+ ┃ ┗ right.png
+ ┣ components
+ ┃ ┣ common
+ ┃ ┃ ┣ CalculateGrade.jsx
+ ┃ ┃ ┣ Layout.jsx
+ ┃ ┃ ┗ LoadingSpinner.jsx
+ ┃ ┣ Detail.jsx
+ ┃ ┣ Header.jsx
+ ┃ ┣ MapLoader.jsx
+ ┃ ┣ Review.jsx
+ ┃ ┗ SideBar.jsx
+ ┣ hooks
+ ┃ ┗ useForm.js
+ ┣ pages
+ ┃ ┣ HomePage.jsx
+ ┃ ┗ LoginPage.jsx
+ ┣ redux
+ ┃ ┣ config
+ ┃ ┃ ┗ configStore.js
+ ┃ ┗ modules
+ ┃ ┃ ┣ authSlice.js
+ ┃ ┃ ┣ reviewSlice.js
+ ┃ ┃ ┗ scrapSlice.js
+ ┣ shared
+ ┃ ┗ Router.jsx
+ ┣ styles
+ ┃ ┣ GlobalStyle.jsx
+ ┃ ┗ theme.js
+ ┣ util
+ ┣ App.jsx
+ ┣ App.test.js
+ ┣ index.jsx
+ ┣ logo.svg
+ ┣ reportWebVitals.js
+ ┗ setupTests.js
+```
+
+<br />
+
 ## 💻 화면 구성
 
-|                                                 로그인 페이지                                                 |                                                 메인 페이지                                                 |
-| :-----------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------: |
-| ![로그인 페이지](https://github.com/seopport/Kidnapped/assets/142903244/e28e5c00-837b-4c3f-aeb0-7d08831ef47b) | ![메인 페이지](https://github.com/seopport/Kidnapped/assets/142903244/9a16cb04-13c4-4e20-961a-8714181d5c3b) |
-|                                                  상세 페이지                                                  |                                                 리뷰 페이지                                                 |
-|  ![상세 페이지](https://github.com/seopport/Kidnapped/assets/142903244/16450b71-5a44-43bc-b647-0be89fcec309)  | ![리뷰 페이지](https://github.com/seopport/Kidnapped/assets/142903244/9ea1d74b-ad1a-4aa2-8038-9644ff367105) |
+|             로그인 페이지              |              메인 페이지               |
+| :------------------------------------: | :------------------------------------: |
+|  ![LoginPage](./images/LoginPage.png)  |   ![MainPage](./images/MainPage.png)   |
+|              상세 페이지               |              리뷰 페이지               |
+| ![DetailPage](./images/DetailPage.png) | ![ReviewPage](./images/ReviewPage.png) |
 
 ## 📦 주요 기능
 
