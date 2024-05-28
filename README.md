@@ -16,6 +16,10 @@
 
 > 정식 배포 페이지 : https://kidnapped.vercel.app
 
+## 🎥 시연영상
+
+> 시연 영상 주소 : https://www.youtube.com/watch?v=V9a_96mURtw
+
 ## 🏃 웹개발팀 소개
 
 |                              서지원                              |                              신서연                              |                                                 박시은                                                 |                                                 김지민                                                 |                                                 남지현                                                 |
@@ -235,29 +239,5 @@ const handleModalClose = () => {
 모달창이 열려있는지를 확인하기 위해 modalRef의 값을 사용하였습니다.
 옵션버튼을 클릭하면 모달이 열리면서 DOM node가 생기고, 따라서 modalRef의 참조값이 생겨 null이 아니게 됩니다. <br />옵션버튼은 handleModalClose 이벤트 함수가 걸려있는 컨테이너 안에 있으므로, modalRef값을 검사하는 if 조건을 추가하여 리뷰 컨테이너를 클릭했을 때 모달창이 열려있어야만 클릭한 리뷰 아이디를 null로 설정하여 모달을 닫습니다.
 
-</div>
-</details>
-<details>
-<summary> 지민 </summary>
-<div>
-여기에 내용
-</div>
-</details>
-<details>
-<summary> 시은 </summary>
-<div>
-여기에 내용
-</div>
-</details>
-<details>
-<summary> 지현 </summary>
-<div>
-여기에 내용
-</div>
-</details>
-<details>
-<summary> 서연 </summary>
-<div>
-여기에 내용
 </div>
 </details>
